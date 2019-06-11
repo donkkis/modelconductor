@@ -1,0 +1,4 @@
+{
+  "tests.py::FmuTests": true,
+  "tests.py::SklearnTests": true
+}
