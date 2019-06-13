@@ -17,9 +17,63 @@ class MeasurementConfiguration:
     def __init__(self):
         pass
 
+class Experiment:
+    """
+
+    """
+    def __init__(self, runtime=9999, routes=[]):
+        """
+
+        Args:
+            runtime:
+            routes (List(tuple(MeasurementStreamHandler, ModelHandler)):
+        """
+
+        self.max_runtime = runtime
+        self.routes = routes
+
+    @abc.abstractmethod
+    def run(self):
+        pass
+
+    def setup(self):
+        for route in self.routes:
+            src = route[0]  # type: MeasurementStreamHandler
+            mdl = route[1]  # type: ModelHandler
+            src.add_consumer(mdl)
+            mdl.add_source(src)
+
+
+    def add_route(self, route):
+        self.routes.append(route)
+
+class OnlineSingleExperiment(Experiment):
+    """
+    Online single-source, single model experiment
+    """
+
+
+    def __init__(self, runtime, sources, consumers):
+        self.max_runtime = runtime
+        if isinstance(sources, List):
+            self.sources = list(sources[0])
+        elif isinstance(sources, MeasurementStreamHandler):
+            self.sources = list(sources)
+        else:
+            raise TypeError
+
+        if isinstance(consumers, List):
+            self.consumers = list(consumers[0])
+        elif isinstance(consumers, ModelHandler):
+            self.consumers = list(consumers)
+        else:
+            raise TypeError
+
+    def run(self):
+        pass
+
 
 class ModelHandler:
-    sources: List[Any]
 
     def __init__(self, sources=[]):
         """

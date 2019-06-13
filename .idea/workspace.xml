@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="" />
+    <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,17 +43,37 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-381741950">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="1616" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="1616" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/handlers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="-377">
+              <caret line="36" column="12" lean-forward="true" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
-                <marker date="1560265801118" expanded="true" signature="4747:4753" ph="..." />
+                <marker date="1560451548275" expanded="true" signature="743:960" ph="..." />
               </folding>
             </state>
           </provider>
@@ -57,13 +82,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1072">
-              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+            <state relative-caret-position="388">
+              <caret line="89" column="47" selection-start-line="89" selection-start-column="47" selection-end-line="89" selection-end-column="47" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1560265754896" expanded="true" signature="193:194" ph="..." />
-                <marker date="1560265754896" expanded="true" signature="231:240" ph="..." />
-                <marker date="1560265754896" expanded="true" signature="2158:2236" ph="..." />
+                <element signature="e#1810#2105#0" />
+                <element signature="e#2163#2233#0" />
+                <marker date="1560452580540" expanded="true" signature="2210:2823" ph="..." />
               </folding>
             </state>
           </provider>
@@ -71,19 +96,20 @@
       </file>
     </leaf>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/tests.py" />
         <option value="$PROJECT_DIR$/handlers.py" />
+        <option value="$PROJECT_DIR$/tests.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="909" />
-    <option name="y" value="-8" />
-    <option name="width" value="639" />
-    <option name="height" value="439" />
+    <option name="width" value="960" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -94,8 +120,12 @@
         <subPane>
           <expand>
             <path>
-              <item name="modelconductor-handlers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="modelconductor-handlers" type="462c0819:PsiDirectoryNode" />
+              <item name="modelconductor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="modelconductor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="modelconductor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -192,24 +222,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 39m 05s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 39m 12s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 40m 25s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 42m 26s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 43m 03s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 43m 55s.xml">
-      <configuration name="pytest in tests.py" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_tests_sklearn_test_test_iterate_and_plot - 2019.06.11 at 17h 44m 42s.xml">
       <configuration name="Unittests for tests.sklearn_test.test_iterate_and_plot" configurationId="tests" />
     </history-entry>
@@ -222,24 +234,42 @@
     <history-entry file="pytest_in_tests_py - 2019.06.11 at 17h 53m 06s.xml">
       <configuration name="pytest in tests.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 21h 48m 50s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 21h 50m 00s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 21h 50m 35s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 21h 51m 31s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 21h 55m 16s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_tests_py - 2019.06.13 at 22h 03m 01s.xml">
+      <configuration name="pytest in tests.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13645834" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32917467" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3227513" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -251,24 +281,24 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1072">
-          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+        <state relative-caret-position="388">
+          <caret line="89" column="47" selection-start-line="89" selection-start-column="47" selection-end-line="89" selection-end-column="47" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1560265754896" expanded="true" signature="193:194" ph="..." />
-            <marker date="1560265754896" expanded="true" signature="231:240" ph="..." />
-            <marker date="1560265754896" expanded="true" signature="2158:2236" ph="..." />
+            <element signature="e#1810#2105#0" />
+            <element signature="e#2163#2233#0" />
+            <marker date="1560452580540" expanded="true" signature="2210:2823" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="-377">
+          <caret line="36" column="12" lean-forward="true" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-            <marker date="1560265801118" expanded="true" signature="4747:4753" ph="..." />
+            <marker date="1560451548275" expanded="true" signature="743:960" ph="..." />
           </folding>
         </state>
       </provider>
