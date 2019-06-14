@@ -3,6 +3,8 @@ import unittest
 from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener
 from handlers import Experiment
 from handlers import ModelHandler
+from handlers import IncomingMeasurementPoller
+from handlers import OnlineSingleExperiment
 from matplotlib import pyplot as plt
 
 class SklearnTests(unittest.TestCase):
@@ -14,8 +16,8 @@ class SklearnTests(unittest.TestCase):
         with open('..\\src\\data.pickle', 'rb') as pickle_file:
             data = pickle.load(pickle_file)
 
-        X = data[idx].to_numpy()[600:700]
-        y = data["Left_NOx"].to_numpy()[600:700]
+        X = data[idx].to_numpy()[600:625]
+        y = data["Left_NOx"].to_numpy()[600:625]
 
         sk_hand = SklearnModelHandler(
             model_filename='..\\src\\nox_rfregressor.pickle')
@@ -80,16 +82,30 @@ class ExperimentTests(unittest.TestCase):
         self.assertListEqual(ex.routes, [(listen, mdl)])
 
     def test_single_source_and_consumer_setup(self):
-        listen = IncomingMeasurementListener()
-        mdl = ModelHandler()
+        listener = IncomingMeasurementListener()
+        model = ModelHandler()
         ex = Experiment()
-        ex.add_route((listen, mdl))
+        ex.add_route((listener, model))
         ex.setup()
 
-        self.assertIs(mdl.sources[0], listen)
-        self.assertIs(listen.consumers[0], mdl)
+        self.assertIsInstance(ex.routes[0][0], IncomingMeasurementListener)
+        self.assertIsInstance(ex.routes[0][1], ModelHandler)
 
+        self.assertTrue(len(model.sources) == 1)
+        self.assertTrue(len(listener.consumers) == 1)
+        self.assertTrue(len(ex.routes[0][0].consumers) == 1) # IncomingMeasurementListener
+        self.assertTrue(len(ex.routes[0][1].sources) == 1) # ModelHandler
 
+    def test_single_source_and_consumer_run(self):
+        lstnr = IncomingMeasurementPoller(polling_interval=1,
+                                          db_uri='..\\src\\data.db')
+        mdel = SklearnModelHandler(model_filename= '..\\src\\nox_rfregressor.pickle')
+
+        exp = OnlineSingleExperiment()
+        exp.add_route((lstnr, mdel))
+        exp.setup()
+
+        exp.run()
 
 
 if __name__ == '__main__':

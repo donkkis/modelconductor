@@ -8,19 +8,38 @@ import sqlite3
 import pickle
 import random
 import abc
+import threading
+
+
+class Event(list):
+    """Event subscription.
+
+    A list of callable objects. Calling an instance of this will cause a
+    call to each item in the list in ascending order by index.
+
+    """
+    def __call__(self, *args, **kwargs):
+        for f in self:
+            f(*args, **kwargs)
+
+    def __repr__(self):
+        return "Event(%s)" % list.__repr__(self)
 
 
 class MeasurementConfiguration:
     """
     TODO: Make a configuration file that is read on server initiation
     """
+
     def __init__(self):
         pass
+
 
 class Experiment:
     """
 
     """
+
     def __init__(self, runtime=9999, routes=[]):
         """
 
@@ -31,6 +50,7 @@ class Experiment:
 
         self.max_runtime = runtime
         self.routes = routes
+        self.results = []
 
     @abc.abstractmethod
     def run(self):
@@ -43,34 +63,39 @@ class Experiment:
             src.add_consumer(mdl)
             mdl.add_source(src)
 
-
     def add_route(self, route):
         self.routes.append(route)
+
 
 class OnlineSingleExperiment(Experiment):
     """
     Online single-source, single model experiment
     """
 
-
-    def __init__(self, runtime, sources, consumers):
-        self.max_runtime = runtime
-        if isinstance(sources, List):
-            self.sources = list(sources[0])
-        elif isinstance(sources, MeasurementStreamHandler):
-            self.sources = list(sources)
-        else:
-            raise TypeError
-
-        if isinstance(consumers, List):
-            self.consumers = list(consumers[0])
-        elif isinstance(consumers, ModelHandler):
-            self.consumers = list(consumers)
-        else:
-            raise TypeError
-
     def run(self):
-        pass
+        assert(len(self.routes) == 1)
+        # Initiate model
+        mdl: ModelHandler = self.routes[0][1]
+        mdl.spawn()
+
+        # Start polling
+        src: MeasurementStreamHandler = self.routes[0][0]
+        threading.Thread(target=src.poll).start()
+
+        # Whenever new data is received, feed-forward to model
+        while True:
+            if not src.buffer.empty() and mdl.status == "Ready":
+                # simulation step
+
+                 data = mdl.pull()
+                 # debug
+                 print(data)
+
+                 # TODO This fails
+                 # res = mdl.step(data)
+                 # self.results.append(res)
+            else:
+                pass
 
 
 class ModelHandler:
@@ -82,6 +107,7 @@ class ModelHandler:
             associated with this ModelHandler instance
         """
         self.sources = sources
+        self.status = None
 
     def add_source(self, source):
         """
@@ -134,8 +160,8 @@ class MeasurementStreamHandler:
         """
         self.buffer = buffer
         self.consumers = consumers
-        #self.data_source_uri = data_source_uri
-        #self.data_source_is_active = data_source_is_active
+        # self.data_source_uri = data_source_uri
+        # self.data_source_is_active = data_source_is_active
 
     def add_consumer(self, consumer):
         self.consumers.append(consumer)
@@ -168,27 +194,34 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
 
 
 class IncomingMeasurementPoller(MeasurementStreamHandler):
-    def __init__(self, polling_interval, db_uri):
-        super(MeasurementStreamHandler, self).__init__()
+    def __init__(self, polling_interval, db_uri, buffer=Queue(), consumers=[]):
+        super().__init__(buffer, consumers)
+        self.db_uri = db_uri
         self.polling_interval = polling_interval
         self.conn = sqlite3.connect(db_uri)
         self.first_unseen_pk = 0
         self.c = self.conn.cursor()
-    
+
     def handle_single(self, measurement):
         self.buffer.put(measurement)
         print(self.buffer.qsize())
-        
+
     def poll(self):
-        print("Polling database connection at " + str(self.conn) + " at " + str(self.polling_interval) + " s interval, CTRL+C to stop")
+        self.conn = sqlite3.connect(self.db_uri)
+        self.c = self.conn.cursor()
+
+        print("Polling database connection at " + str(self.conn) + " at " + str(
+            self.polling_interval) + " s interval, CTRL+C to stop")
         try:
             while True:
                 sleep(self.polling_interval)
                 self.poll_newest_unseen()
         except KeyboardInterrupt:
             return
-        
+
     def poll_newest_unseen(self):
+        # avoid threading errors
+
         result = self.c.execute("SELECT * FROM data WHERE `index`=" + str(self.first_unseen_pk))
         query_keys = [col[0] for col in result.description]
         result = dict(zip(query_keys, result.fetchall()[0]))
@@ -199,19 +232,22 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
 
 class SklearnModelHandler(ModelHandler):
 
-    def __init__(self, model_filename, input_keys=None, target_keys=None):
-        super(ModelHandler, self).__init__()
+    def __init__(self, model_filename, input_keys=None, target_keys=None, sources=[]):
+        super().__init__(sources)
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
         self.input_keys = input_keys
         self.target_keys = target_keys
-        
+
     def step(self, X):
+        # TODO X could be JSON when calling from run
+        self.status = "Busy"
         result = list(self.model.predict(X))
-        print(result)
+        self.status = "Ready"
 
     def spawn(self):
-        pass
+        self.status = "Ready"
+
 
     def destroy(self):
         pass
@@ -232,10 +268,10 @@ class FMUModelHandler(ModelHandler):
         self.unzipdir = extract(fmu_filename)
         self.fmu = None
         self.vrs = {}
-        
+
         for variable in self.model_description.modelVariables:
             self.vrs[variable.name] = variable.valueReference
-    
+
     def spawn(self):
 
         self.fmu = FMU2Slave(
@@ -243,12 +279,12 @@ class FMUModelHandler(ModelHandler):
             unzipDirectory=self.unzipdir,
             modelIdentifier=self.model_description.coSimulation.modelIdentifier,
             instanceName='instance1')
-    
         self.fmu.instantiate()
         self.fmu.setupExperiment(startTime=self.start_time)
         self.fmu.enterInitializationMode()
         self.fmu.exitInitializationMode()
-        
+
+
     def step(self, vr_input, vr_output, data, time, step_size=None):
         if step_size == None:
             step_size = self.step_size
@@ -298,6 +334,7 @@ def run():
             pass
         elif step[0] == "step_iter_nox":
             pass
+
 
 if __name__ == "__main__":
     run()
