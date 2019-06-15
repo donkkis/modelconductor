@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.cache/v/cache/lastfailed" beforeDir="false" afterPath="$PROJECT_DIR$/.cache/v/cache/lastfailed" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
@@ -47,24 +47,27 @@
         <counts>
           <entry key="project.closed" value="2" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="1616" />
+          <entry key="Python Console" value="205" />
+          <entry key="py" value="2419" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="1616" />
+          <entry key="Python" value="2624" />
         </counts>
       </usages-collector>
     </session>
     <session id="-1052910200">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -87,13 +90,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/handlers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+            <state relative-caret-position="476">
+              <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
-                <marker date="1560518405568" expanded="true" signature="1559:1564" ph="..." />
-                <marker date="1560518405568" expanded="true" signature="6725:6762" ph="..." />
-                <marker date="1560518405568" expanded="true" signature="6780:6789" ph="..." />
               </folding>
             </state>
           </provider>
@@ -102,12 +102,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-185">
-              <caret line="54" column="25" lean-forward="true" selection-start-line="54" selection-start-column="25" selection-end-line="54" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-                <element signature="e#2280#2512#0" />
-              </folding>
+            <state relative-caret-position="291">
+              <caret line="101" column="25" selection-start-line="101" selection-start-column="25" selection-end-line="101" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -126,9 +122,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="width" value="974" />
-    <option name="height" value="1047" />
+    <option name="width" value="960" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -273,34 +268,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 15h 04m 04s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 05s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 15h 05m 20s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 17s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 15h 08m 56s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 25s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 15h 09m 26s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 34s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 15h 22m 30s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 58m 51s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 16h 12m 15s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 34m 35s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 16h 12m 22s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 41m 27s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 16h 12m 57s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 42m 24s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 16h 16m 05s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 43m 21s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.14 at 16h 16m 49s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 45m 49s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
   </component>
@@ -317,12 +312,12 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1085353" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10958904" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2462039" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24593717" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -330,7 +325,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.3286334" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3286334" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.33406836" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -342,24 +337,17 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-185">
-          <caret line="54" column="25" lean-forward="true" selection-start-line="54" selection-start-column="25" selection-end-line="54" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#2280#2512#0" />
-          </folding>
+        <state relative-caret-position="291">
+          <caret line="101" column="25" selection-start-line="101" selection-start-column="25" selection-end-line="101" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+        <state relative-caret-position="476">
+          <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-            <marker date="1560518405568" expanded="true" signature="1559:1564" ph="..." />
-            <marker date="1560518405568" expanded="true" signature="6725:6762" ph="..." />
-            <marker date="1560518405568" expanded="true" signature="6780:6789" ph="..." />
           </folding>
         </state>
       </provider>

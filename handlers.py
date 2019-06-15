@@ -9,7 +9,7 @@ import pickle
 import random
 import abc
 import threading
-
+import numpy as np
 
 class Event(list):
     """Event subscription.
@@ -75,11 +75,11 @@ class OnlineSingleExperiment(Experiment):
     def run(self):
         assert(len(self.routes) == 1)
         # Initiate model
-        mdl: ModelHandler = self.routes[0][1]
+        mdl = self.routes[0][1]  # type: ModelHandler
         mdl.spawn()
 
         # Start polling
-        src: MeasurementStreamHandler = self.routes[0][0]
+        src = self.routes[0][0]  # type: MeasurementStreamHandler
         threading.Thread(target=src.poll).start()
 
         # Whenever new data is received, feed-forward to model
@@ -89,11 +89,11 @@ class OnlineSingleExperiment(Experiment):
 
                  data = mdl.pull()
                  # debug
-                 print(data)
+                 # print(data)
 
                  # TODO This fails
-                 # res = mdl.step(data)
-                 # self.results.append(res)
+                 res = mdl.step(data[0])
+                 self.results.append(res)
             else:
                 pass
 
@@ -174,10 +174,9 @@ class MeasurementStreamHandler:
     def receive_single(self, measurement):
         """
         Args:
-            measurement (object): A single datapoint eg. json string, dict, pd.DataFrame, np.ndarray
+            measurement (dict(key, value)): A single datapoint
         """
         self.buffer.put_nowait(measurement)
-        print(self.buffer.qsize())
 
     def give(self):
         try:
@@ -194,13 +193,15 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
 
 
 class IncomingMeasurementPoller(MeasurementStreamHandler):
-    def __init__(self, polling_interval, db_uri, buffer=Queue(), consumers=[]):
+    def __init__(self, polling_interval, db_uri, query_cols="*", buffer=Queue(), consumers=[]):
         super().__init__(buffer, consumers)
         self.db_uri = db_uri
         self.polling_interval = polling_interval
         self.conn = sqlite3.connect(db_uri)
         self.first_unseen_pk = 0
         self.c = self.conn.cursor()
+        self.query_cols = query_cols
+        self.query = "SELECT " + self.query_cols + " FROM data WHERE `index`=" + str(self.first_unseen_pk)
 
     def handle_single(self, measurement):
         self.buffer.put(measurement)
@@ -221,11 +222,9 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
 
     def poll_newest_unseen(self):
         # avoid threading errors
-
-        result = self.c.execute("SELECT * FROM data WHERE `index`=" + str(self.first_unseen_pk))
+        result = self.c.execute(self.query)
         query_keys = [col[0] for col in result.description]
         result = dict(zip(query_keys, result.fetchall()[0]))
-        print(result)
         self.first_unseen_pk += 1
         self.handle_single(result)
 
@@ -240,10 +239,15 @@ class SklearnModelHandler(ModelHandler):
         self.target_keys = target_keys
 
     def step(self, X):
-        # TODO X could be JSON when calling from run
+        # X is dict when calling from run
         self.status = "Busy"
+        # convert to numpy and sort columns to same order as input_keys
+        # to make sure input is in format that the model expects
+        X = np.array([X[k] for k in self.input_keys], ndmin=2)
         result = list(self.model.predict(X))
         self.status = "Ready"
+        print(result)
+        return result
 
     def spawn(self):
         self.status = "Ready"

@@ -97,9 +97,14 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(len(ex.routes[0][1].sources) == 1) # ModelHandler
 
     def test_single_source_and_consumer_run(self):
+        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+            qcols = pickle.load(f)
+            qcols_string = ', '.join('"{0}"'.format(qcol) for qcol in qcols)
+
         lstnr = IncomingMeasurementPoller(polling_interval=1,
-                                          db_uri='..\\src\\data.db')
-        mdel = SklearnModelHandler(model_filename= '..\\src\\nox_rfregressor.pickle')
+                                          db_uri='..\\src\\data.db',
+                                          query_cols=qcols_string)
+        mdel = SklearnModelHandler(model_filename= '..\\src\\nox_rfregressor.pickle', input_keys=qcols)
 
         exp = OnlineSingleExperiment()
         exp.add_route((lstnr, mdel))
