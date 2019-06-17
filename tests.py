@@ -4,8 +4,14 @@ from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementLi
 from handlers import Experiment
 from handlers import ModelHandler
 from handlers import IncomingMeasurementPoller
-from handlers import OnlineSingleExperiment
+from handlers import OnlineOneToOneExperiment
+from handlers import MeasurementStreamHandler
 from matplotlib import pyplot as plt
+import sqlalchemy as sqla
+import pandas as pd
+from time import sleep
+import os
+import threading
 
 class SklearnTests(unittest.TestCase):
 
@@ -65,11 +71,103 @@ class FmuTests(unittest.TestCase):
             step_size=1
         )
 
+
 class IncominmgMeasurementTests(unittest.TestCase):
+
     def some_test(self):
         meas_hand = IncomingMeasurementListener()
 
+
+class ModelHandlerTests(unittest.TestCase):
+
+    def test_add_source(self):
+        mh = ModelHandler()
+        meas_hand = MeasurementStreamHandler()
+        mh.add_source(meas_hand)
+        self.assertTrue(len(mh.sources) == 1)
+        self.assertEqual(meas_hand, mh.sources[0])
+
+    def test_add_source_raises_typeerror(self):
+        mh = ModelHandler()
+        with self.assertRaises(TypeError):
+            mh.add_source("jou")
+
+    def test_remove_source(self):
+        mh = ModelHandler()
+        meas_hand = MeasurementStreamHandler()
+        mh.add_source(meas_hand)
+        self.assertTrue(len(mh.sources) == 1)
+        self.assertEqual(meas_hand, mh.sources[0])
+        mh.remove_source(mh.sources[0])
+        self.assertTrue(len(mh.sources) == 0)
+
+    def test_pull(self):
+        data1 = {'foo' : 1, 'faa' : 2, 'fuu' : 3}
+        data2 = {'faa' : 3, 'fyy' : 4, 'fee' : 5}
+        mh = ModelHandler()
+        meas_hand = MeasurementStreamHandler()
+        meas_hand.receive_single(data1) # FIFO 1st
+        meas_hand.receive_single(data2) # FIFO 2nd
+        mh.add_source(meas_hand)
+        meas_hand.add_consumer(mh)
+
+        res = mh.pull()
+        self.assertIsInstance(res, list)
+        self.assertTrue(len(res) == 1)
+        self.assertDictEqual(data1, res[0])
+
+        res = mh.pull()
+        self.assertIsInstance(res, list)
+        self.assertTrue(len(res) == 1)
+        self.assertDictEqual(data2, res[0])
+
+    def test_pull_on_empty_buffer_returns_none(self):
+        mh = ModelHandler()
+        meas_hand = MeasurementStreamHandler()
+        mh.add_source(meas_hand)
+        meas_hand.add_consumer(mh)
+
+        res = mh.pull()
+        self.assertIsInstance(res, list)
+        self.assertTrue(len(res) == 1)
+        self.assertIsNone(res[0])
+
+class MeasurementStreamHandlerTests(unittest.TestCase):
+
+    def test_add_consumer(self):
+        meas_hand = MeasurementStreamHandler()
+        mh = ModelHandler()
+        self.assertTrue(len(meas_hand.consumers) == 0)
+        meas_hand.add_consumer(consumer=mh)
+        self.assertTrue(len(meas_hand.consumers) == 1)
+        self.assertIsInstance(meas_hand.consumers[0], ModelHandler)
+
+    def test_remove_consumer(self):
+        meas_hand = MeasurementStreamHandler()
+        mh = ModelHandler()
+        self.assertTrue(len(meas_hand.consumers) == 0)
+        meas_hand.add_consumer(consumer=mh)
+        self.assertTrue(len(meas_hand.consumers) == 1)
+        self.assertIsInstance(meas_hand.consumers[0], ModelHandler)
+        meas_hand.remove_consumer(mh)
+        self.assertTrue(len(meas_hand.consumers) == 0)
+
+
 class ExperimentTests(unittest.TestCase):
+
+    def test_add_route(self):
+        listen = IncomingMeasurementListener()
+        model = ModelHandler()
+        ex = Experiment()
+        ex.add_route((listen, model))
+        self.assertTupleEqual(ex.routes[0], (listen, model))
+
+    def test_add_route_raises_typeerror(self):
+        listen = "foo"
+        model = ModelHandler()
+        ex = Experiment()
+        with self.assertRaises(TypeError):
+            ex.add_route((listen, model))
 
     def test_single_source_and_consumer_can_be_added(self):
         listen = IncomingMeasurementListener()
@@ -101,16 +199,54 @@ class ExperimentTests(unittest.TestCase):
             qcols = pickle.load(f)
             qcols_string = ', '.join('"{0}"'.format(qcol) for qcol in qcols)
 
-        lstnr = IncomingMeasurementPoller(polling_interval=1,
-                                          db_uri='..\\src\\data.db',
-                                          query_cols=qcols_string)
-        mdel = SklearnModelHandler(model_filename= '..\\src\\nox_rfregressor.pickle', input_keys=qcols)
+        lstnr = IncomingMeasurementPoller(polling_interval=0.1,
+                                          db_uri='..\\src\\data_small.db',
+                                          query_cols=qcols_string,
+                                          first_unseen_pk=5000)
+        mdel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle', input_keys=qcols)
 
-        exp = OnlineSingleExperiment()
+        exp = OnlineOneToOneExperiment(runtime=0.5)
         exp.add_route((lstnr, mdel))
         exp.setup()
+        exp_ok = exp.run()
+        self.assertTrue(len(exp.results) == 51)
+        self.assertTrue(exp_ok)
 
-        exp.run()
+
+    def test_concurrent_read_write_ops(self):
+        # consumer
+        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+            qcolss = pickle.load(f)
+            qcolss_string = ', '.join('"{0}"'.format(qcol) for qcol in qcolss)
+
+        mdeel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle', input_keys=qcolss)
+
+        # source
+        data = pd.read_csv("..\\src\\NRTC_laskenta\\Raakadata_KAIKKI\\nrtc1_ref_10052019.csv", delimiter=";")
+        print(data.head())
+
+        def simulate_writes():
+            engine = sqla.create_engine('sqlite:///test.db')
+            conn = engine.connect()
+
+            def write_row(row: pd.DataFrame):
+                row.to_sql('data', con=conn, if_exists='append')
+
+            for _, row in data.iterrows():
+                write_row(pd.DataFrame(row).transpose())
+                sleep(0.1)
+
+        lstner = IncomingMeasurementPoller(polling_interval=0.5,
+                                          db_uri='test.db',
+                                          query_cols=qcolss_string,
+                                          first_unseen_pk=0)
+
+        exp = OnlineOneToOneExperiment(runtime=0.5)
+        exp.add_route((lstner, mdeel))
+        exp.setup()
+
+        threading.Thread(target=exp.run).start()
+        threading.Thread(target=simulate_writes).start()
 
 
 if __name__ == '__main__':

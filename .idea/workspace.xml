@@ -54,13 +54,25 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="205" />
-          <entry key="py" value="2419" />
+          <entry key="Python Console" value="738" />
+          <entry key="dummy" value="15" />
+          <entry key="py" value="7783" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="2624" />
+          <entry key="PLAIN_TEXT" value="15" />
+          <entry key="Python" value="8521" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="2" />
         </counts>
       </usages-collector>
     </session>
@@ -86,29 +98,43 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/handlers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="101" column="25" selection-start-line="101" selection-start-column="25" selection-end-line="101" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.49367756">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/handlers.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="427">
+                  <caret line="236" selection-start-line="236" selection-end-line="236" />
+                  <folding>
+                    <element signature="e#0#28#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="475">
+                  <caret line="248" column="27" selection-start-line="248" selection-start-column="27" selection-end-line="248" selection-end-column="27" />
+                  <folding>
+                    <element signature="e#0#13#0" expanded="true" />
+                    <marker date="1560778124528" expanded="true" signature="2736:2846" ph="..." />
+                    <marker date="1560778124528" expanded="true" signature="4229:4990" ph="..." />
+                    <marker date="1560778124528" expanded="true" signature="5313:5484" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -122,8 +148,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="466" />
+    <option name="y" value="-10" />
     <option name="width" value="960" />
-    <option name="height" value="1040" />
+    <option name="height" value="728" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -179,7 +207,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_setup" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.MeasurementStreamHandlerTests" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -189,11 +217,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_single_source_and_consumer_setup&quot;" />
+      <option name="_new_target" value="&quot;tests.MeasurementStreamHandlerTests&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.sklearn_test.test_iterate_and_plot" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.ModelHandlerTests" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -203,11 +231,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.sklearn_test.test_iterate_and_plot&quot;" />
+      <option name="_new_target" value="&quot;tests.ModelHandlerTests&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for tests.SklearnModelHandlerTests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.ModelHandlerTests.test_add_source_raises_typeerror" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -216,13 +244,12 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.SklearnModelHandlerTests&quot;" />
+      <option name="_new_target" value="&quot;tests.ModelHandlerTests.test_add_source_raises_typeerror&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in tests.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.ModelHandlerTests.test_remove_source" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -231,26 +258,25 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;tests.ModelHandlerTests.test_remove_source&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python tests.pytest for tests.SklearnModelHandlerTests" />
-      <item itemvalue="Python tests.pytest in tests.py" />
-      <item itemvalue="Python tests.Unittests for tests.sklearn_test.test_iterate_and_plot" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_setup" />
+      <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests" />
+      <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests" />
+      <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_remove_source" />
+      <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_add_source_raises_typeerror" />
       <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_setup" />
-        <item itemvalue="Python tests.pytest in tests.py" />
-        <item itemvalue="Python tests.Unittests for tests.sklearn_test.test_iterate_and_plot" />
-        <item itemvalue="Python tests.pytest for tests.SklearnModelHandlerTests" />
+        <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_add_source_raises_typeerror" />
+        <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests" />
+        <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests" />
+        <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_remove_source" />
       </list>
     </recent_temporary>
   </component>
@@ -268,34 +294,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 05s.xml">
+    <history-entry file="Unittests_for_tests_ModelHandlerTests - 2019.06.17 at 15h 19m 33s.xml">
+      <configuration name="Unittests for tests.ModelHandlerTests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_ModelHandlerTests - 2019.06.17 at 15h 41m 10s.xml">
+      <configuration name="Unittests for tests.ModelHandlerTests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_MeasurementStreamHandlerTests - 2019.06.17 at 15h 41m 28s.xml">
+      <configuration name="Unittests for tests.MeasurementStreamHandlerTests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_ModelHandlerTests_test_add_source_raises_typeerror - 2019.06.17 at 15h 59m 24s.xml">
+      <configuration name="Unittests for tests.ModelHandlerTests.test_add_source_raises_typeerror" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 14m 00s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 17s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 19m 08s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 25s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 23m 31s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 56m 34s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 26m 15s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 13h 58m 51s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 27m 42s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 34m 35s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 41m 27s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 42m 24s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 43m 21s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.15 at 21h 45m 49s.xml">
+    <history-entry file="Unittests_for_tests_ExperimentTests_test_single_source_and_consumer_run - 2019.06.17 at 16h 29m 15s.xml">
       <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" configurationId="tests" />
     </history-entry>
   </component>
@@ -312,42 +338,67 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10958904" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837664" weight="0.0" />
+      <window_info id="Structure" order="1" sideWeight="0.5016234" side_tool="true" weight="0.0" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24593717" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24918744" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3296582" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3286334" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32745314" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.33406836" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.33261105" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837664" weight="0.0" />
+      <window_info id="Structure" order="1" sideWeight="0.5016234" side_tool="true" weight="0.0" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.24918744" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3296582" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32745314" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.33261105" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests.py">
+    <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="101" column="25" selection-start-line="101" selection-start-column="25" selection-end-line="101" selection-end-column="25" />
+        <state relative-caret-position="427">
+          <caret line="236" selection-start-line="236" selection-end-line="236" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handlers.py">
+    <entry file="file://$PROJECT_DIR$/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="91" column="19" selection-start-line="91" selection-start-column="19" selection-end-line="91" selection-end-column="19" />
+        <state relative-caret-position="475">
+          <caret line="248" column="27" selection-start-line="248" selection-start-column="27" selection-end-line="248" selection-end-column="27" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1560778124528" expanded="true" signature="2736:2846" ph="..." />
+            <marker date="1560778124528" expanded="true" signature="4229:4990" ph="..." />
+            <marker date="1560778124528" expanded="true" signature="5313:5484" ph="..." />
           </folding>
         </state>
       </provider>

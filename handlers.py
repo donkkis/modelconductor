@@ -3,27 +3,16 @@ from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
 import shutil
 from queue import Queue
+from queue import Empty
 from time import sleep
+from datetime import datetime as dt
+from datetime import timedelta
 import sqlite3
 import pickle
 import random
 import abc
 import threading
 import numpy as np
-
-class Event(list):
-    """Event subscription.
-
-    A list of callable objects. Calling an instance of this will cause a
-    call to each item in the list in ascending order by index.
-
-    """
-    def __call__(self, *args, **kwargs):
-        for f in self:
-            f(*args, **kwargs)
-
-    def __repr__(self):
-        return "Event(%s)" % list.__repr__(self)
 
 
 class MeasurementConfiguration:
@@ -32,7 +21,7 @@ class MeasurementConfiguration:
     """
 
     def __init__(self):
-        pass
+        raise NotImplementedError
 
 
 class Experiment:
@@ -40,16 +29,19 @@ class Experiment:
 
     """
 
-    def __init__(self, runtime=9999, routes=[]):
+    def __init__(self, start_time=dt.now(),
+                 routes=None,
+                 runtime=10):
         """
 
         Args:
-            runtime:
+            stop_time:
             routes (List(tuple(MeasurementStreamHandler, ModelHandler)):
         """
 
-        self.max_runtime = runtime
-        self.routes = routes
+        self.start_time = start_time
+        self.stop_time = self.start_time + timedelta(minutes=runtime)
+        self.routes = routes if routes is not None else []
         self.results = []
 
     @abc.abstractmethod
@@ -64,10 +56,12 @@ class Experiment:
             mdl.add_source(src)
 
     def add_route(self, route):
+        if not isinstance(route[0], MeasurementStreamHandler) or not isinstance(route[1], ModelHandler):
+            raise TypeError
         self.routes.append(route)
 
 
-class OnlineSingleExperiment(Experiment):
+class OnlineOneToOneExperiment(Experiment):
     """
     Online single-source, single model experiment
     """
@@ -83,7 +77,7 @@ class OnlineSingleExperiment(Experiment):
         threading.Thread(target=src.poll).start()
 
         # Whenever new data is received, feed-forward to model
-        while True:
+        while dt.now() < self.stop_time:
             if not src.buffer.empty() and mdl.status == "Ready":
                 # simulation step
 
@@ -91,22 +85,25 @@ class OnlineSingleExperiment(Experiment):
                  # debug
                  # print(data)
 
-                 # TODO This fails
                  res = mdl.step(data[0])
                  self.results.append(res)
             else:
-                pass
+                continue
+
+        src._stopevent = threading.Event()
+        print("Process exited due to experiment time out")
+        return True
 
 
 class ModelHandler:
 
-    def __init__(self, sources=[]):
+    def __init__(self, sources=None):
         """
         Args:
             sources (List[MeasurementStreamHandler]): A list of MeasurementStreamHandler objects
             associated with this ModelHandler instance
         """
-        self.sources = sources
+        self.sources = sources if sources is not None else []
         self.status = None
 
     def add_source(self, source):
@@ -117,6 +114,9 @@ class ModelHandler:
         Returns:
             self.sources:
         """
+        if not isinstance(source, MeasurementStreamHandler):
+            t = str(type(source))
+            raise TypeError("Expected a MeasurementStreamHandler type, got {} instead".format(t))
         self.sources.append(source)
         return source
 
@@ -126,13 +126,13 @@ class ModelHandler:
 
     def pull(self):
         """
-        Request the newest available datapoint from all sources
+        Request the next FIFO-queued datapoint from all sources
         TODO: should be able to handle subsets of sources
         Returns: List[object]
 
         """
         # TODO Might return None
-        res = [datapoint.give() for datapoint in self.sources]
+        res = [source.give() for source in self.sources]
         return res
 
     @abc.abstractmethod
@@ -150,7 +150,7 @@ class ModelHandler:
 
 class MeasurementStreamHandler:
 
-    def __init__(self, buffer=Queue(), consumers=[]):
+    def __init__(self, buffer=None, consumers=None):
         """
 
         Args:
@@ -158,12 +158,21 @@ class MeasurementStreamHandler:
             MeasurementStreamHandler instance
             buffer (Queue) : A FIFO queue of measurement objects
         """
-        self.buffer = buffer
-        self.consumers = consumers
-        # self.data_source_uri = data_source_uri
-        # self.data_source_is_active = data_source_is_active
+
+        # https://stackoverflow.com/questions/13525842/variable-scope-in-python-unittest
+        # DO NOT use mutable types as default arguments
+        self.buffer = buffer if buffer is not None else Queue()
+        self.consumers = consumers if consumers is not None else []
 
     def add_consumer(self, consumer):
+        """
+        Args:
+            consumer (ModelHandler): a ModelHandler instance who is to consume the data
+            in current buffer
+        """
+        if not isinstance(consumer, ModelHandler):
+            t = str(type(consumer))
+            raise TypeError("Expected a ModelHandler type, got {}".format(t))
         self.consumers.append(consumer)
         return consumer
 
@@ -181,7 +190,7 @@ class MeasurementStreamHandler:
     def give(self):
         try:
             return self.buffer.get_nowait()
-        except Queue.Empty:
+        except Empty:
             return None
 
 
@@ -193,19 +202,16 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
 
 
 class IncomingMeasurementPoller(MeasurementStreamHandler):
-    def __init__(self, polling_interval, db_uri, query_cols="*", buffer=Queue(), consumers=[]):
+    def __init__(self, polling_interval, db_uri, first_unseen_pk=0, query_cols="*", buffer=None, consumers=None):
         super().__init__(buffer, consumers)
         self.db_uri = db_uri
         self.polling_interval = polling_interval
         self.conn = sqlite3.connect(db_uri)
-        self.first_unseen_pk = 0
+        self.first_unseen_pk = first_unseen_pk
         self.c = self.conn.cursor()
         self.query_cols = query_cols
         self.query = "SELECT " + self.query_cols + " FROM data WHERE `index`=" + str(self.first_unseen_pk)
-
-    def handle_single(self, measurement):
-        self.buffer.put(measurement)
-        print(self.buffer.qsize())
+        self._stopevent = None
 
     def poll(self):
         self.conn = sqlite3.connect(self.db_uri)
@@ -214,11 +220,20 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
         print("Polling database connection at " + str(self.conn) + " at " + str(
             self.polling_interval) + " s interval, CTRL+C to stop")
         try:
-            while True:
+            while not isinstance(self._stopevent, type(threading.Event())):
                 sleep(self.polling_interval)
-                self.poll_newest_unseen()
-        except KeyboardInterrupt:
-            return
+                try:
+                    self.poll_newest_unseen()
+                except IndexError:
+                    print("No more records available, sleeping...")
+                    sleep(0.5)
+                except sqlite3.OperationalError:
+                    print("Waiting for database to become operational...")
+                    sleep(5)
+        except Exception:
+            raise Exception("Unknown error")
+        print("Polling thread excited due to stopevent")
+        return True
 
     def poll_newest_unseen(self):
         # avoid threading errors
@@ -226,12 +241,13 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
         query_keys = [col[0] for col in result.description]
         result = dict(zip(query_keys, result.fetchall()[0]))
         self.first_unseen_pk += 1
-        self.handle_single(result)
+        self.query = "SELECT " + self.query_cols + " FROM data WHERE `index`=" + str(self.first_unseen_pk)
+        self.receive_single(result)
 
 
 class SklearnModelHandler(ModelHandler):
 
-    def __init__(self, model_filename, input_keys=None, target_keys=None, sources=[]):
+    def __init__(self, model_filename, input_keys=None, target_keys=None, sources=None):
         super().__init__(sources)
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
