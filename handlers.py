@@ -13,7 +13,7 @@ import random
 import abc
 import threading
 import numpy as np
-
+import sqlalchemy
 
 class MeasurementConfiguration:
     """
@@ -187,6 +187,14 @@ class MeasurementStreamHandler:
         """
         self.buffer.put_nowait(measurement)
 
+    def receive_batch(self, measurements):
+        """
+
+        Args:
+            measurements (list[dict(key, value)):  A list of measurement datapoints
+        """
+        [self.buffer.put_nowait(measurement) for measurement in measurements]
+
     def give(self):
         try:
             return self.buffer.get_nowait()
@@ -201,7 +209,71 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
     pass
 
 
-class IncomingMeasurementPoller(MeasurementStreamHandler):
+class MeasurementStreamPoller(MeasurementStreamHandler):
+
+    @abc.abstractmethod
+    def poll(self):
+        pass
+
+    @abc.abstractmethod
+    def poll_batch(self):
+        pass
+
+
+class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
+    def __init__(self, db_uri, query_path, polling_interval=90, polling_window = 60, start_time=None,
+                 stop_time=None, query_cols="*", buffer=None, consumers=None):
+        super().__init__(buffer, consumers)
+        self.db_uri = db_uri
+        self.polling_interval = polling_interval
+        self.start_time = dt.now() if start_time is None else start_time
+        self.stop_time = self.start_time + timedelta(minutes=10) if stop_time is None else stop_time
+        self.query_cols = query_cols
+        self.polling_window = polling_window
+        self._stopevent = None
+        self.engine = None
+        self.conn = None
+        self.polling_start_timestamp = self.start_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.polling_stop_timestamp = \
+            (self.start_time + timedelta(seconds=self.polling_window)).strftime("%Y-%m-%d %H:%M:%S")
+        with open(query_path, 'rb') as f:
+            self.query = f.read().decode().replace("\r\n", " ")
+
+    def poll(self):
+        self.engine = sqlalchemy.create_engine(self.db_uri)
+        self.conn = self.engine.connect()
+        assert(self.conn.closed is False)
+
+        # debug
+        # print("Polling database connection at " + str(self.conn) + " at " + str(
+        #     self.polling_interval) + " s interval, CTRL+C to stop")
+        try:
+            while not isinstance(self._stopevent, type(threading.Event())):
+                sleep(self.polling_interval)
+                try:
+                    self.poll_batch()
+                except IndexError:
+                    print("No more records available, sleeping...")
+                    sleep(0.5)
+                except sqlite3.OperationalError:
+                    print("Waiting for database to become operational...")
+                    sleep(5)
+        except Exception:
+            raise Exception("Unknown error")
+        print("Polling thread excited due to stopevent")
+        return True
+
+    def poll_batch(self):
+        # avoid threading errors
+        q = self.query.format(self.polling_start_timestamp, self.polling_stop_timestamp)
+        res: sqlalchemy.engine.ResultProxy = self.conn.execute(q)
+        data = res.fetchall()
+        data = [dict(zip(tuple(res.keys()), datum)) for datum in data]
+        self.receive_batch(data)
+        return data
+
+
+class IncomingMeasurementPoller(MeasurementStreamPoller):
     def __init__(self, polling_interval, db_uri, first_unseen_pk=0, query_cols="*", buffer=None, consumers=None):
         super().__init__(buffer, consumers)
         self.db_uri = db_uri
@@ -223,7 +295,7 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
             while not isinstance(self._stopevent, type(threading.Event())):
                 sleep(self.polling_interval)
                 try:
-                    self.poll_newest_unseen()
+                    self.poll_batch()
                 except IndexError:
                     print("No more records available, sleeping...")
                     sleep(0.5)
@@ -235,7 +307,7 @@ class IncomingMeasurementPoller(MeasurementStreamHandler):
         print("Polling thread excited due to stopevent")
         return True
 
-    def poll_newest_unseen(self):
+    def poll_batch(self):
         # avoid threading errors
         result = self.c.execute(self.query)
         query_keys = [col[0] for col in result.description]

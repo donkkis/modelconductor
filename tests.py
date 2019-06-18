@@ -1,17 +1,22 @@
 import pickle
+import queue
 import unittest
+import sqlalchemy
 from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener
 from handlers import Experiment
 from handlers import ModelHandler
 from handlers import IncomingMeasurementPoller
 from handlers import OnlineOneToOneExperiment
 from handlers import MeasurementStreamHandler
+from handlers import MeasurementStreamPoller
+from handlers import IncomingMeasurementBatchPoller
 from matplotlib import pyplot as plt
 import sqlalchemy as sqla
 import pandas as pd
 from time import sleep
 import os
 import threading
+from datetime import datetime as dt
 
 class SklearnTests(unittest.TestCase):
 
@@ -152,6 +157,16 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
         meas_hand.remove_consumer(mh)
         self.assertTrue(len(meas_hand.consumers) == 0)
 
+    def test_receive_batch(self):
+        data = [{'foo': 3, 'faa': 4}, {'foo': 6, 'faa': 7}]
+        meas_hand = MeasurementStreamHandler()
+        meas_hand.receive_batch(data)
+        self.assertTrue(meas_hand.buffer.qsize() == 2)
+        self.assertIs(meas_hand.buffer.get_nowait(), data[0])
+        self.assertIs(meas_hand.buffer.get_nowait(), data[1])
+        with self.assertRaises(queue.Empty):
+            meas_hand.buffer.get_nowait()
+
 
 class ExperimentTests(unittest.TestCase):
 
@@ -247,6 +262,9 @@ class ExperimentTests(unittest.TestCase):
 
         threading.Thread(target=exp.run).start()
         threading.Thread(target=simulate_writes).start()
+
+
+
 
 
 if __name__ == '__main__':

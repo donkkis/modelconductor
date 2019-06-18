@@ -1,2 +1,5 @@
 .idea/
 .cache/
+customtests.py
+test_query
+dummy_query
