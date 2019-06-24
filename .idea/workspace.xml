@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,22 +46,22 @@
         <counts>
           <entry key="project.closed" value="3" />
           <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="738" />
+          <entry key="Python Console" value="788" />
           <entry key="dummy" value="15" />
-          <entry key="py" value="7783" />
+          <entry key="py" value="10117" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="15" />
-          <entry key="Python" value="8521" />
+          <entry key="Python" value="10905" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -80,7 +78,7 @@
     <session id="-1052910200">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.opened" value="2" />
@@ -120,29 +118,20 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.49367756">
+    <splitter split-orientation="horizontal" split-proportion="0.45414296">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/handlers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="383">
-                  <caret line="240" lean-forward="true" selection-start-line="240" selection-end-line="240" />
+                <state relative-caret-position="216">
+                  <caret line="370" column="69" selection-start-line="370" selection-start-column="69" selection-end-line="370" selection-end-column="69" />
                   <folding>
                     <element signature="e#0#28#0" expanded="true" />
-                    <marker date="1560872140443" expanded="true" signature="5403:5610" ph="..." />
-                    <marker date="1560872140443" expanded="true" signature="5951:6076" ph="..." />
-                    <marker date="1560872140443" expanded="true" signature="6138:8447" ph="..." />
+                    <marker date="1561401065656" expanded="true" signature="8966:8975" ph="..." />
+                    <marker date="1561401065656" expanded="true" signature="12435:12444" ph="..." />
+                    <marker date="1561401065656" expanded="true" signature="12505:12511" ph="..." />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/gitignore">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="64">
-                  <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -150,7 +139,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/dummy_query">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="16">
+                <state relative-caret-position="17">
                   <caret line="1" selection-start-line="1" selection-end-line="1" />
                 </state>
               </provider>
@@ -159,7 +148,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test_query">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="527">
+                <state relative-caret-position="2805">
                   <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
                 </state>
               </provider>
@@ -169,11 +158,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="385">
-                  <caret line="249" column="21" selection-start-line="249" selection-start-column="21" selection-end-line="249" selection-end-column="21" />
+                <state relative-caret-position="335">
+                  <caret line="195" selection-start-line="195" selection-end-line="195" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -181,11 +170,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/customtests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="288">
-                  <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
+                <state relative-caret-position="587">
+                  <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -206,23 +195,24 @@
         <option value="$PROJECT_DIR$/dummy_query" />
         <option value="$PROJECT_DIR$/test_query" />
         <option value="$PROJECT_DIR$/tests.py" />
+        <option value="$PROJECT_DIR$/gitignore" />
         <option value="$PROJECT_DIR$/customtests.py" />
         <option value="$PROJECT_DIR$/handlers.py" />
-        <option value="$PROJECT_DIR$/gitignore" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="17" />
-    <option name="y" value="-8" />
-    <option name="width" value="974" />
-    <option name="height" value="1047" />
+    <option name="x" value="375" />
+    <option name="y" value="-18" />
+    <option name="width" value="960" />
+    <option name="height" value="728" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -238,7 +228,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -257,8 +246,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer">
-    <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start">
+    <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -268,11 +257,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database&quot;" />
+      <option name="_new_target" value="&quot;customtests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -282,11 +271,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.IncomingMeasurementBatchPollerTests.test_poll_batch&quot;" />
+      <option name="_new_target" value="&quot;customtests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -296,11 +285,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer&quot;" />
+      <option name="_new_target" value="&quot;customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -310,11 +299,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly&quot;" />
+      <option name="_new_target" value="&quot;customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.MeasurementStreamHandlerTests.test_receive_batch" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -324,24 +313,24 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.MeasurementStreamHandlerTests.test_receive_batch&quot;" />
+      <option name="_new_target" value="&quot;customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" />
-      <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" />
-      <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" />
-      <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_receive_batch" />
-      <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer" />
+      <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" />
+      <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" />
+      <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" />
+      <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end" />
+      <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer" />
-        <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_receive_batch" />
-        <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" />
-        <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" />
-        <item itemvalue="Python tests.Unittests for tests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" />
+        <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start" />
+        <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end" />
+        <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" />
+        <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" />
+        <item itemvalue="Python tests.Unittests for customtests.IncomingMeasurementBatchPollerTests.test_query_string_is_parsed_correctly" />
       </list>
     </recent_temporary>
   </component>
@@ -359,35 +348,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_can_be_connected_to_database - 2019.06.18 at 17h 24m 57s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_can_be_connected_to_database - 2019.06.24 at 18h 59m 16s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_can_be_connected_to_database - 2019.06.18 at 17h 25m 49s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 19h 24m 43s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_can_be_connected_to_database - 2019.06.18 at 17h 26m 29s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_can_be_connected_to_database" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 19h 30m 34s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch - 2019.06.18 at 17h 28m 16s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 19h 32m 48s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch - 2019.06.18 at 17h 29m 17s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 19h 33m 45s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch - 2019.06.18 at 17h 33m 14s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 19h 49m 27s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch - 2019.06.18 at 17h 34m 58s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps - 2019.06.24 at 20h 28m 34s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch - 2019.06.18 at 18h 11m 22s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps_on_exceeding_end - 2019.06.24 at 20h 33m 12s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_MeasurementStreamHandlerTests_test_receive_batch - 2019.06.18 at 18h 17m 35s.xml">
-      <configuration name="Unittests for tests.MeasurementStreamHandlerTests.test_receive_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps_on_exceeding_end - 2019.06.24 at 20h 33m 39s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_end" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_IncomingMeasurementBatchPollerTests_test_poll_batch_result_is_added_to_buffer - 2019.06.18 at 18h 26m 15s.xml">
-      <configuration name="Unittests for tests.IncomingMeasurementBatchPollerTests.test_poll_batch_result_is_added_to_buffer" configurationId="tests" />
+    <history-entry file="Unittests_for_customtests_IncomingMeasurementBatchPollerTests_test_update_timestamps_on_exceeding_start - 2019.06.24 at 20h 44m 01s.xml">
+      <configuration name="Unittests for customtests.IncomingMeasurementBatchPollerTests.test_update_timestamps_on_exceeding_start" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -400,23 +389,23 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49837664" visible="true" weight="0.1670179" />
-      <window_info id="Structure" order="1" sideWeight="0.5016234" side_tool="true" weight="0.0" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4964438" visible="true" weight="0.1670179" />
+      <window_info id="Structure" order="1" sideWeight="0.5035562" side_tool="true" visible="true" weight="0.1670179" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32917467" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.24856046" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2383532" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3296582" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32745314" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32719395" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.33205375" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.33152762" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -445,34 +434,41 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test_query">
+    <entry file="file://$PROJECT_DIR$/gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+        <state relative-caret-position="64">
+          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dummy_query">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
+        <state relative-caret-position="17">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/customtests.py">
+    <entry file="file://$PROJECT_DIR$/test_query">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
+        <state relative-caret-position="2805">
+          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="195" selection-start-line="195" selection-end-line="195" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests.py">
+    <entry file="file://$PROJECT_DIR$/customtests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="249" column="21" selection-start-line="249" selection-start-column="21" selection-end-line="249" selection-end-column="21" />
+        <state relative-caret-position="587">
+          <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
@@ -481,21 +477,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="240" lean-forward="true" selection-start-line="240" selection-end-line="240" />
+        <state relative-caret-position="216">
+          <caret line="370" column="69" selection-start-line="370" selection-start-column="69" selection-end-line="370" selection-end-column="69" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
-            <marker date="1560872140443" expanded="true" signature="5403:5610" ph="..." />
-            <marker date="1560872140443" expanded="true" signature="5951:6076" ph="..." />
-            <marker date="1560872140443" expanded="true" signature="6138:8447" ph="..." />
+            <marker date="1561401065656" expanded="true" signature="8966:8975" ph="..." />
+            <marker date="1561401065656" expanded="true" signature="12435:12444" ph="..." />
+            <marker date="1561401065656" expanded="true" signature="12505:12511" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
         </state>
       </provider>
     </entry>

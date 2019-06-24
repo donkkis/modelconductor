@@ -220,8 +220,12 @@ class MeasurementStreamPoller(MeasurementStreamHandler):
         pass
 
 
+class ExperimentDurationExceededException(Exception):
+    pass
+
+
 class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
-    def __init__(self, db_uri, query_path, polling_interval=90, polling_window = 60, start_time=None,
+    def __init__(self, db_uri, query_path, polling_interval=90, polling_window=60, start_time=None,
                  stop_time=None, query_cols="*", buffer=None, consumers=None):
         super().__init__(buffer, consumers)
         self.db_uri = db_uri
@@ -266,11 +270,37 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
     def poll_batch(self):
         # avoid threading errors
         q = self.query.format(self.polling_start_timestamp, self.polling_stop_timestamp)
-        res: sqlalchemy.engine.ResultProxy = self.conn.execute(q)
+        res = self.conn.execute(q) # sqlalchemy.engine.ResultProxy
         data = res.fetchall()
         data = [dict(zip(tuple(res.keys()), datum)) for datum in data]
         self.receive_batch(data)
         return data
+
+    def update_timestamps(self, old_start_timestamp=None):
+        """
+        Update next batch polling end/stop timestamps according to polling window
+        Args:
+            old_start_timestamp: Beginning timestamp of the previous batch
+        Returns:
+            self.polling_start_timestamp: Updated timestamp where the next batch should begin
+            self.polling_stop_timestamp: Updated timestamp where the next batch should end
+        """
+
+        form = "%Y-%m-%d %H:%M:%S"
+        if old_start_timestamp is None:
+            old_start_timestamp = self.polling_start_timestamp
+        next_start = \
+            (dt.strptime(old_start_timestamp, form) + timedelta(seconds=self.polling_window))
+        next_end = \
+            (dt.strptime(old_start_timestamp, form) + timedelta(seconds=2*self.polling_window))
+        if next_end > self.stop_time:
+            next_end = self.stop_time
+        if next_start >= self.stop_time:
+            raise ExperimentDurationExceededException("Updated start timestamp exceeds experiment duration")
+
+        self.polling_start_timestamp = next_start.strftime(form)
+        self.polling_stop_timestamp = next_end.strftime(form)
+        return self.polling_start_timestamp, self.polling_stop_timestamp
 
 
 class IncomingMeasurementPoller(MeasurementStreamPoller):
@@ -336,6 +366,10 @@ class SklearnModelHandler(ModelHandler):
         self.status = "Ready"
         print(result)
         return result
+
+    def fit(self, X):
+        # TODO need something like partial_fit from scickit-multiflow
+        pass
 
     def spawn(self):
         self.status = "Ready"
