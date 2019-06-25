@@ -1,8 +1,12 @@
 import pickle
 import queue
 import unittest
+from io import TextIOWrapper
+import os
+import numpy as np
 import sqlalchemy
-from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener
+from keras.layers import Dense, Activation
+from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener, KerasModelHandler, Measurement
 from handlers import Experiment
 from handlers import ModelHandler
 from handlers import IncomingMeasurementPoller
@@ -17,6 +21,8 @@ from time import sleep
 import os
 import threading
 from datetime import datetime as dt
+import pprint
+import uuid
 
 class SklearnTests(unittest.TestCase):
 
@@ -168,7 +174,124 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
             meas_hand.buffer.get_nowait()
 
 
+class KerasModelHandlerTests(unittest.TestCase):
+
+    def test_keras_modelhandler_can_be_initiated_from_scratch(self):
+        layers = [
+            Dense(32, input_shape=(784,)),
+            Activation('relu'),
+            Dense(10),
+            Activation('softmax')]
+        model = KerasModelHandler(layers=layers)
+        self.assertIsInstance(model, KerasModelHandler)
+
+    def test_keras_model_can_be_spawned(self):
+        layers = [
+            Dense(32, input_shape=(784,)),
+            Activation('relu'),
+            Dense(10),
+            Activation('softmax')]
+        model = KerasModelHandler(layers=layers)
+        model.spawn()
+
+    def test_fit_single_batch(self):
+        layers = [
+            Dense(9, input_shape=(3,)),
+            Activation('relu'),
+            Dense(1)]
+
+        meas = Measurement({"foo" : 3, "faa" : 4, "fuu" : 5, "fee" : 6})
+        input_keys = ["foo", "fee", "fuu"]
+        target_keys = ["faa"]
+
+        model = KerasModelHandler(layers=layers,
+                                  input_keys=input_keys,
+                                  target_keys=target_keys)
+        model.spawn()
+        model.fit(measurement=meas)
+
+
+
+
+
 class ExperimentTests(unittest.TestCase):
+
+    def test_initiate_logging(self):
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        path = "experiment_{}.log".format(tic)
+        ex = Experiment()
+        log = ex.initiate_logging(path=path)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+        log.close()
+        self.assertTrue(log.closed)
+        os.remove(path)
+
+    def test_terminate_logging(self):
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        path = "experiment_{}.log".format(tic)
+        ex = Experiment()
+        log = ex.initiate_logging(path=path)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+        ex.terminate_logging()
+        self.assertTrue(log.closed)
+        os.remove(path)
+
+    def test_headers_are_written_correctly(self):
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        path = "experiment_{}.log".format(tic)
+        headers = ["meas1", "meas2", "meas3"]
+        ex = Experiment()
+        log = ex.initiate_logging(path=path, headers=headers)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+        ex.terminate_logging()
+        self.assertTrue(log.closed)
+        with open(path, 'r') as f:
+            self.assertEqual(f.readline(), "meas1,meas2,meas3\n")
+        os.remove(path)
+
+    def test_log_row(self):
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        path = "experiment_{}.log".format(tic)
+        ex = Experiment()
+        log = ex.initiate_logging(path=path)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+
+        row1 = ["1", "2", "3", "4"]
+        row2 = ["5", "6", "7", "8"]
+        ex.log_row(row1)
+        ex.log_row(row2)
+        log.close()
+        self.assertTrue(log.closed)
+
+        with open(path, 'r') as f:
+            self.assertEqual(f.readline(), "1,2,3,4\n")
+            self.assertEqual(f.readline(), "5,6,7,8\n")
+
+    def test_log_row_with_headers(self):
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        path = "experiment_{}.log".format(tic)
+        headers = ["timestamp", "meas1", "meas2", "meas3"]
+        ex = Experiment()
+        log = ex.initiate_logging(path=path, headers=headers)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+
+        row1 = ["1", "2", "3", "4"]
+        row2 = ["5", "6", "7", "8"]
+        ex.log_row(row1)
+        ex.log_row(row2)
+        log.close()
+        self.assertTrue(log.closed)
+
+        with open(path, 'r') as f:
+            self.assertEqual(f.readline(), "timestamp,meas1,meas2,meas3\n")
+            self.assertEqual(f.readline(), "1,2,3,4\n")
+            self.assertEqual(f.readline(), "5,6,7,8\n")
+
 
     def test_add_route(self):
         listen = IncomingMeasurementListener()
@@ -232,9 +355,14 @@ class ExperimentTests(unittest.TestCase):
         # consumer
         with open('..\\src\\nox_idx.pickle', 'rb') as f:
             qcolss = pickle.load(f)
-            qcolss_string = ', '.join('"{0}"'.format(qcol) for qcol in qcolss)
+            qcolss_string = ', '.join('"{}"'.format(qcol) for qcol in qcolss)
 
-        mdeel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle', input_keys=qcolss)
+        qcolss_string += ', "Left_NOx", "Time"'
+
+        # TODO implement timestamp field generalization
+        mdeel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle',
+                                    input_keys=qcolss,
+                                    target_keys=["Left_NOx"])
 
         # source
         data = pd.read_csv("..\\src\\NRTC_laskenta\\Raakadata_KAIKKI\\nrtc1_ref_10052019.csv", delimiter=";")
@@ -248,6 +376,11 @@ class ExperimentTests(unittest.TestCase):
                 row.to_sql('data', con=conn, if_exists='append')
 
             for _, row in data.iterrows():
+                if dt.now() >= exp.stop_time:
+                    # Test only, do not use in production
+                    # This is only to gracefully stop writing when experiment times out
+                    conn.close()
+                    break
                 write_row(pd.DataFrame(row).transpose())
                 sleep(0.1)
 
@@ -256,12 +389,37 @@ class ExperimentTests(unittest.TestCase):
                                           query_cols=qcolss_string,
                                           first_unseen_pk=0)
 
-        exp = OnlineOneToOneExperiment(runtime=0.5)
+        exp = OnlineOneToOneExperiment(runtime=0.5,
+                                       logging=True,
+                                       log_path="_test_exp_{}.log".format(str(uuid.uuid1())))
         exp.add_route((lstner, mdeel))
         exp.setup()
 
-        threading.Thread(target=exp.run).start()
-        threading.Thread(target=simulate_writes).start()
+        try:
+            threading.Thread(target=exp.run).start()
+            simulate_writes()
+        except Exception:
+            raise RuntimeError("Something went horribly wrong")
+        finally:
+            with open(exp.log_path, 'r') as f:
+                self.assertEqual(f.readline(), "timestamp,Left_NOx_meas,Left_NOx_pred\n")
+                self.assertGreater(len(f.readline()), 10)
+                self.assertGreater(len(f.readline()), 10)
+                self.assertGreater(len(f.readline()), 10)
+
+
+class MeasurementTests(unittest.TestCase):
+
+    def test_measurement_can_be_initiated(self):
+        meas = Measurement()
+        self.assertIsInstance(meas, dict)
+
+    def test_to_numpy(self):
+        meas = Measurement({"foo" : 4, "faa" : 6, "fuu" : 7})
+        keys = ["fuu", "foo"]
+        np_meas = meas.to_numpy(keys=keys)
+        self.assertIsInstance(np_meas, np.ndarray)
+        np.testing.assert_array_equal(np_meas, np.array([[7, 4]]))
 
 
 

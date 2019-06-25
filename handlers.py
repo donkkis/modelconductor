@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List
 from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
 import shutil
@@ -9,11 +9,14 @@ from datetime import datetime as dt
 from datetime import timedelta
 import sqlite3
 import pickle
-import random
 import abc
 import threading
 import numpy as np
 import sqlalchemy
+from keras import Sequential
+from warnings import warn
+import os.path
+import uuid
 
 class MeasurementConfiguration:
     """
@@ -31,7 +34,9 @@ class Experiment:
 
     def __init__(self, start_time=dt.now(),
                  routes=None,
-                 runtime=10):
+                 runtime=10,
+                 logging=False,
+                 log_path=None):
         """
 
         Args:
@@ -43,6 +48,64 @@ class Experiment:
         self.stop_time = self.start_time + timedelta(minutes=runtime)
         self.routes = routes if routes is not None else []
         self.results = []
+        self.log_path = log_path
+        self.logging = logging
+        self.logger = None
+
+    def __str__(self):
+        return str(type(self))
+
+    def initiate_logging(self, path=None, headers=None):
+        """
+
+        Args:
+            path (String): Path where the outfile will be written
+            headers (List[String]): Headers for the generated csv file
+
+        Returns:
+
+        """
+        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+        if path is None:
+            self.log_path = "experiment_{}.log".format(tic)
+        else:
+            self.log_path = path
+        if os.path.isfile(self.log_path):
+            self.log_path = (str(uuid.uuid1()))[0:9] + self.log_path
+        f = open(self.log_path, 'w+')
+        self.logger = f
+        if headers:
+            print(",".join(headers), file=f)
+        return f
+
+    def terminate_logging(self, file=None):
+        """
+
+        Args:
+            file (file object): File object instance to be finalized
+
+        Returns:
+
+        """
+        if file is None:
+            file = self.logger
+        file.close()
+        return file
+
+    def log_row(self, row):
+        """
+
+        Args:
+            row (List(String)):
+
+        Returns:
+
+        """
+        try:
+            print(",".join(row), file=self.logger)
+            self.logger.flush()
+        except Exception:
+            warn("Log file could not be written", ResourceWarning)
 
     @abc.abstractmethod
     def run(self):
@@ -66,6 +129,7 @@ class OnlineOneToOneExperiment(Experiment):
     Online single-source, single model experiment
     """
 
+
     def run(self):
         assert(len(self.routes) == 1)
         # Initiate model
@@ -76,17 +140,36 @@ class OnlineOneToOneExperiment(Experiment):
         src = self.routes[0][0]  # type: MeasurementStreamHandler
         threading.Thread(target=src.poll).start()
 
+        # Initiate logging if applicable
+        if self.logging:
+            # TODO should move most of this stuff to initiate_logging?
+            assert(len(mdl.target_keys) == 1)
+            gt_title = "{}_meas".format(mdl.target_keys[0])
+            pred_title = "{}_pred".format(mdl.target_keys[0])
+            self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
+
         # Whenever new data is received, feed-forward to model
         while dt.now() < self.stop_time:
             if not src.buffer.empty() and mdl.status == "Ready":
                 # simulation step
 
-                 data = mdl.pull()
-                 # debug
-                 # print(data)
+                data = mdl.pull()
+                # debug
+                # print(data)
 
-                 res = mdl.step(data[0])
-                 self.results.append(res)
+                res = mdl.step(data[0])
+                self.results.append(res)
+
+                if self.logging:
+                    # TODO need to generalize the measurement timestamp
+                    timestamp_key = "Time"
+
+                    row = [str(data[0][timestamp_key]),
+                           str(data[0][mdl.target_keys[0]]),
+                           str(res[0])]
+
+                    print(row)
+                    self.log_row(row)
             else:
                 continue
 
@@ -97,12 +180,14 @@ class OnlineOneToOneExperiment(Experiment):
 
 class ModelHandler:
 
-    def __init__(self, sources=None):
+    def __init__(self, sources=None, input_keys=None, target_keys=None):
         """
         Args:
             sources (List[MeasurementStreamHandler]): A list of MeasurementStreamHandler objects
             associated with this ModelHandler instance
         """
+        self.input_keys = input_keys
+        self.target_keys = target_keys
         self.sources = sources if sources is not None else []
         self.status = None
 
@@ -126,9 +211,9 @@ class ModelHandler:
 
     def pull(self):
         """
-        Request the next FIFO-queued datapoint from all sources
+        Request the next FIFO-queued datapoint from each of the sources
         TODO: should be able to handle subsets of sources
-        Returns: List[object]
+        Returns: List[Measurement]
 
         """
         # TODO Might return None
@@ -147,6 +232,32 @@ class ModelHandler:
     def destroy(self):
         """Remove the model instance from the current configuration and delete self"""
 
+
+class Measurement(dict):
+    pass
+
+    def to_numpy(self, keys=None):
+        """
+
+        Args:
+            keys: Ordered list, a subset of the Measurement object's dict keys
+            to be taken in to account when creating the numpy array
+
+        Returns:
+            numpy_meas: A subset of the measurement as a numpy array
+
+        """
+        if keys is None:
+            keys = self.keys()
+        numpy_meas = np.array([self[k] for k in keys], ndmin=2)
+        return numpy_meas
+
+
+class TrainableModelHandler(ModelHandler):
+
+    @abc.abstractmethod
+    def fit(self):
+        """Fit the model's trainable parameters"""
 
 class MeasurementStreamHandler:
 
@@ -183,7 +294,7 @@ class MeasurementStreamHandler:
     def receive_single(self, measurement):
         """
         Args:
-            measurement (dict(key, value)): A single datapoint
+            measurement (Measurement): A single datapoint dict
         """
         self.buffer.put_nowait(measurement)
 
@@ -191,7 +302,7 @@ class MeasurementStreamHandler:
         """
 
         Args:
-            measurements (list[dict(key, value)):  A list of measurement datapoints
+            measurements (list[Measurement]):  A list of measurement datapoints
         """
         [self.buffer.put_nowait(measurement) for measurement in measurements]
 
@@ -341,30 +452,34 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
         # avoid threading errors
         result = self.c.execute(self.query)
         query_keys = [col[0] for col in result.description]
-        result = dict(zip(query_keys, result.fetchall()[0]))
+        result = Measurement(dict(zip(query_keys, result.fetchall()[0])))
         self.first_unseen_pk += 1
         self.query = "SELECT " + self.query_cols + " FROM data WHERE `index`=" + str(self.first_unseen_pk)
         self.receive_single(result)
 
 
-class SklearnModelHandler(ModelHandler):
+class SklearnModelHandler(TrainableModelHandler):
 
-    def __init__(self, model_filename, input_keys=None, target_keys=None, sources=None):
-        super().__init__(sources)
+    def __init__(self,
+                 model_filename,
+                 input_keys=None,
+                 target_keys=None,
+                 sources=None):
+        super().__init__(sources=sources,
+                         input_keys=input_keys,
+                         target_keys=target_keys)
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
-        self.input_keys = input_keys
-        self.target_keys = target_keys
 
     def step(self, X):
         # X is dict when calling from run
         self.status = "Busy"
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
-        X = np.array([X[k] for k in self.input_keys], ndmin=2)
+        X = X.to_numpy(self.input_keys)
         result = list(self.model.predict(X))
         self.status = "Ready"
-        print(result)
+        # print(result)
         return result
 
     def fit(self, X):
@@ -377,6 +492,88 @@ class SklearnModelHandler(ModelHandler):
 
     def destroy(self):
         pass
+
+
+class KerasModelHandler(TrainableModelHandler):
+
+
+    def __init__(self,
+                 sources=None,
+                 input_keys=None,
+                 target_keys=None,
+                 model=None,
+                 layers=None):
+        """
+
+        Args:
+            layers (List[layer]): a sequential list of keras layers
+
+            Example:
+
+            layers = [
+            Dense(32, input_shape=(784,)),
+            Activation('relu'),
+            Dense(10),
+            Activation('softmax'),]
+
+        """
+        super().__init__(sources=sources, input_keys=input_keys, target_keys=target_keys)
+        if model is None and layers is None:
+            raise Exception("Keras model or layer description excpected")
+        if model:
+            self.model = model
+        else:
+            self.model = Sequential(layers)
+
+    def step(self, X):
+        """
+        Predict a single output step.
+
+        Args:
+            X (Measurement): A measurement (k, v) dict object
+
+        Returns:
+            result: The resulting prediction(s) from the associated model
+
+        """
+        # X is dict when calling from run
+        self.status = "Busy"
+        # convert to numpy and sort columns to same order as input_keys
+        # to make sure input is in format that the model expects
+        X = X.to_numpy(self.input_keys)
+        result = list(self.model.predict(X))
+        self.status = "Ready"
+        print(result)
+        return result
+
+
+    def spawn(self):
+        self.model.compile(optimizer='rmsprop',
+                           loss='mae',
+                           metrics=['accuracy'])
+        return self.model
+
+    def destroy(self):
+        pass
+
+    def fit(self, measurement):
+        """
+        Train the associated model on minibatch
+
+        Args:
+            measurement (Measurement): A measurement object from which the inputs and targets
+            will be parsed
+        Returns:
+
+        """
+        self.status = "Busy"
+        X = measurement.to_numpy(keys=self.input_keys)
+        y = measurement.to_numpy(keys=self.target_keys)
+        self.model.train_on_batch(X, y)
+        yield self.model
+        self.status = "Ready"
+
+
 
 
 class FMUModelHandler(ModelHandler):
