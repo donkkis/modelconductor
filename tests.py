@@ -24,6 +24,8 @@ from datetime import datetime as dt
 import pprint
 import uuid
 
+# TODO cleanup generated dummy log and db files after testing
+
 class SklearnTests(unittest.TestCase):
 
     def test_iterate_and_plot(self):
@@ -193,8 +195,10 @@ class KerasModelHandlerTests(unittest.TestCase):
             Activation('softmax')]
         model = KerasModelHandler(layers=layers)
         model.spawn()
+        self.assertIsInstance(model, KerasModelHandler)
+        self.assertEqual("Ready", model.status)
 
-    def test_fit_single_batch(self):
+    def test_fit_single(self):
         layers = [
             Dense(9, input_shape=(3,)),
             Activation('relu'),
@@ -209,10 +213,80 @@ class KerasModelHandlerTests(unittest.TestCase):
                                   target_keys=target_keys)
         model.spawn()
         model.fit(measurement=meas)
+        self.assertEqual("Ready", model.status)
 
+    def test_measurements_to_numpy(self):
+        layers = [
+            Dense(9, input_shape=(3,)),
+            Activation('relu'),
+            Dense(1)]
 
+        meas = Measurement({"foo" : 3, "faa" : 4, "fuu" : 5, "fee" : 6})
+        meas2 = Measurement({"foo" : 12, "faa" : 3, "fuu" : 32, "fee" : 56})
+        meas3 = Measurement({"foo" : 43, "faa" : 23, "fuu" : 76, "fee" : 64})
+        meas4 = Measurement({"foo" : 1, "faa" : 12, "fuu" : 86, "fee" : 23})
+        input_keys = ["foo", "fee", "fuu"]
+        target_keys = ["faa"]
 
+        model = KerasModelHandler(layers=layers,
+                                  input_keys=input_keys,
+                                  target_keys=target_keys)
+        model.spawn()
+        X, y = model.measurements_to_numpy(measurements=[meas, meas2, meas3, meas4])
+        # print(X.shape)  # debug (4, 3)
+        # print(y.shape)  # debug (4, 1)
+        self.assertTupleEqual(X.shape, (4, 3))
+        self.assertTupleEqual(y.shape, (4, 1))
+        X_true = np.array([
+            [3, 6, 5],
+            [12, 56, 32],
+            [43, 64, 76],
+            [1, 23, 86]
+        ])
+        y_true = np.array([[4], [3], [23], [12]])
+        np.testing.assert_array_equal(X, X_true)
+        np.testing.assert_array_equal(y, y_true)
 
+    def test_fit_batch(self):
+        layers = [
+            Dense(9, input_shape=(3,)),
+            Activation('relu'),
+            Dense(1)]
+
+        meas = Measurement({"foo" : 3, "faa" : 4, "fuu" : 5, "fee" : 6})
+        meas2 = Measurement({"foo" : 12, "faa" : 3, "fuu" : 32, "fee" : 56})
+        meas3 = Measurement({"foo" : 43, "faa" : 23, "fuu" : 76, "fee" : 64})
+        meas4 = Measurement({"foo" : 1, "faa" : 12, "fuu" : 86, "fee" : 23})
+        input_keys = ["foo", "fee", "fuu"]
+        target_keys = ["faa"]
+
+        model = KerasModelHandler(layers=layers,
+                                  input_keys=input_keys,
+                                  target_keys=target_keys)
+        model.spawn()
+        measurements = [meas, meas2, meas3, meas4]
+        weights_pre = model.model.get_weights()  # List[np.ndarray]
+        for i in range(len(weights_pre)):
+            np.testing.assert_array_equal(weights_pre[i], model.model.get_weights()[i])
+
+        model.fit_batch(measurements)
+        self.assertEqual("Ready", model.status)
+
+    def test_fit_batch_learning(self):
+        pass
+        """
+        weights_post = model.model.get_weights()
+        for i in range(len(weights_post)):
+            np.testing.assert_array_equal(weights_post[i], model.model.get_weights()[i])
+
+        with self.assertRaises(Exception):
+            for i in range(len(weights_pre)):
+                np.testing.assert_array_equal(weights_pre[i], weights_post[i])
+
+        print(model.model.total_loss)
+        print(model.model.to_json())
+        print(model.model.to_yaml())
+        """
 
 class ExperimentTests(unittest.TestCase):
 
@@ -248,7 +322,7 @@ class ExperimentTests(unittest.TestCase):
         self.assertFalse(log.closed)
         ex.terminate_logging()
         self.assertTrue(log.closed)
-        with open(path, 'r') as f:
+        with open(ex.log_path, 'r') as f:
             self.assertEqual(f.readline(), "meas1,meas2,meas3\n")
         os.remove(path)
 
@@ -267,9 +341,11 @@ class ExperimentTests(unittest.TestCase):
         log.close()
         self.assertTrue(log.closed)
 
-        with open(path, 'r') as f:
+        with open(ex.log_path, 'r') as f:
             self.assertEqual(f.readline(), "1,2,3,4\n")
             self.assertEqual(f.readline(), "5,6,7,8\n")
+
+        os.remove(ex.log_path)
 
     def test_log_row_with_headers(self):
         tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -292,6 +368,7 @@ class ExperimentTests(unittest.TestCase):
             self.assertEqual(f.readline(), "1,2,3,4\n")
             self.assertEqual(f.readline(), "5,6,7,8\n")
 
+        os.remove(ex.log_path)
 
     def test_add_route(self):
         listen = IncomingMeasurementListener()
@@ -343,13 +420,16 @@ class ExperimentTests(unittest.TestCase):
                                           first_unseen_pk=5000)
         mdel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle', input_keys=qcols)
 
+        # print("now", dt.now())  #  debug
         exp = OnlineOneToOneExperiment(runtime=0.5)
+        # print("start", exp.start_time)  # debug
+        # print("stop", exp.stop_time)  # debug
         exp.add_route((lstnr, mdel))
         exp.setup()
         exp_ok = exp.run()
+        # print(len(exp.results))  # debug
         self.assertTrue(len(exp.results) == 51)
         self.assertTrue(exp_ok)
-
 
     def test_concurrent_read_write_ops(self):
         # consumer
@@ -420,9 +500,6 @@ class MeasurementTests(unittest.TestCase):
         np_meas = meas.to_numpy(keys=keys)
         self.assertIsInstance(np_meas, np.ndarray)
         np.testing.assert_array_equal(np_meas, np.array([[7, 4]]))
-
-
-
 
 
 if __name__ == '__main__':

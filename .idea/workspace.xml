@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handlers.py" beforeDir="false" afterPath="$PROJECT_DIR$/handlers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
@@ -50,36 +48,37 @@
     <session id="-381741950">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.5" value="4" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="1075" />
           <entry key="dummy" value="15" />
-          <entry key="py" value="17704" />
+          <entry key="py" value="21017" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="15" />
-          <entry key="Python" value="18779" />
+          <entry key="Python" value="22092" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="log" value="11" />
+          <entry key="log" value="14" />
           <entry key="log151859e2-" value="1" />
           <entry key="py" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="PLAIN_TEXT" value="15" />
           <entry key="Python" value="7" />
         </counts>
       </usages-collector>
@@ -127,25 +126,17 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4794434">
+    <splitter split-orientation="horizontal" split-proportion="0.45382166">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/handlers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="323">
-                  <caret line="73" column="68" selection-start-line="73" selection-start-column="68" selection-end-line="73" selection-end-column="68" />
+                <state relative-caret-position="187">
+                  <caret line="266" selection-start-line="266" selection-end-line="266" />
                   <folding>
                     <element signature="e#0#23#0" expanded="true" />
-                    <marker date="1561489731768" expanded="true" signature="1259:1296" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="2371:2566" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="3162:3168" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="6514:6982" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="7024:7121" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="12052:12061" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="15620:15629" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="15703:15709" ph="..." />
-                    <marker date="1561489731768" expanded="true" signature="15844:15845" ph="..." />
+                    <marker date="1561577175437" expanded="true" signature="1295:1332" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -158,14 +149,13 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/tests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="6936">
-                  <caret line="408" lean-forward="true" selection-start-line="408" selection-end-line="408" />
+                <state relative-caret-position="374">
+                  <caret line="22" column="35" lean-forward="true" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
                   <folding>
-                    <element signature="e#0#13#0" expanded="true" />
-                    <marker date="1561489390092" expanded="true" signature="5807:6933" ph="..." />
-                    <marker date="1561489390092" expanded="true" signature="8303:8308" ph="..." />
-                    <marker date="1561489390092" expanded="true" signature="8331:8340" ph="..." />
-                    <marker date="1561489390092" expanded="true" signature="9697:9702" ph="..." />
+                    <marker date="1561577475840" expanded="true" signature="5870:9995" ph="..." />
+                    <marker date="1561577475840" expanded="true" signature="11372:11377" ph="..." />
+                    <marker date="1561577475840" expanded="true" signature="11400:11409" ph="..." />
+                    <marker date="1561577475840" expanded="true" signature="12836:12841" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -174,6 +164,11 @@
         </leaf>
       </split-second>
     </splitter>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>exp</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -185,16 +180,16 @@
         <option value="$PROJECT_DIR$/test_query" />
         <option value="$PROJECT_DIR$/gitignore" />
         <option value="$PROJECT_DIR$/customtests.py" />
-        <option value="$PROJECT_DIR$/tests.py" />
         <option value="$PROJECT_DIR$/handlers.py" />
+        <option value="$PROJECT_DIR$/tests.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="508" />
-    <option name="y" value="-13" />
-    <option name="width" value="960" />
-    <option name="height" value="728" />
+    <option name="x" value="106" />
+    <option name="y" value="-11" />
+    <option name="width" value="1922" />
+    <option name="height" value="691" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -236,7 +231,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python tests.Unittests in tests.py">
-    <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -246,11 +241,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_concurrent_read_write_ops&quot;" />
+      <option name="_new_target" value="&quot;tests.ExperimentTests.test_single_source_and_consumer_run&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.ExperimentTests.test_headers_are_written_correctly" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -260,11 +255,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_headers_are_written_correctly&quot;" />
+      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_fit_batch&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.ExperimentTests.test_log_row" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -274,11 +269,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_log_row&quot;" />
+      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_keras_model_can_be_spawned&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.ExperimentTests.test_log_row_with_headers" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -288,7 +283,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_log_row_with_headers&quot;" />
+      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_measurements_to_numpy&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -307,19 +302,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_headers_are_written_correctly" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_log_row" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_log_row_with_headers" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" />
       <item itemvalue="Python tests.Unittests in tests.py" />
+      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
+      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" />
+      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_fit_batch" />
+      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Unittests in tests.py" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_log_row_with_headers" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_log_row" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_headers_are_written_correctly" />
+        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" />
+        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_fit_batch" />
+        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" />
+        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
       </list>
     </recent_temporary>
   </component>
@@ -337,34 +332,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_initiate_logging - 2019.06.25 at 21h 37m 04s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_initiate_logging" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 04m 01s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_terminate_logging - 2019.06.25 at 21h 37m 10s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_terminate_logging" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 06m 09s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_headers_are_written_correctly - 2019.06.25 at 21h 37m 15s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_headers_are_written_correctly" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 09m 21s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_log_row - 2019.06.25 at 21h 37m 21s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_log_row" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 16m 20s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_log_row_with_headers - 2019.06.25 at 21h 37m 29s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_log_row_with_headers" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 20m 30s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_concurrent_read_write_ops - 2019.06.25 at 21h 46m 06s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 21m 31s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_concurrent_read_write_ops - 2019.06.25 at 21h 53m 22s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 23m 42s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_concurrent_read_write_ops - 2019.06.25 at 22h 02m 01s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 23m 58s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_concurrent_read_write_ops - 2019.06.25 at 22h 03m 45s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_keras_model_can_be_spawned - 2019.06.26 at 22h 26m 18s.xml">
+      <configuration name="Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.06.25 at 22h 04m 44s.xml">
+    <history-entry file="Unittests_in_tests_py - 2019.06.26 at 22h 29m 11s.xml">
       <configuration name="Unittests in tests.py" configurationId="tests" />
     </history-entry>
   </component>
@@ -381,8 +376,8 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4951246" visible="true" weight="0.20600632" />
-      <window_info id="Structure" order="1" sideWeight="0.5048754" side_tool="true" visible="true" weight="0.20600632" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49404117" visible="true" weight="0.16332982" />
+      <window_info id="Structure" order="1" sideWeight="0.50595886" side_tool="true" visible="true" weight="0.16332982" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
@@ -458,9 +453,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_16-40-47.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_16-40-47.log" />
     <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/site-packages/sqlalchemy/engine/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
@@ -468,69 +461,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_20-55-42.log">
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_20-55-42.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_20-42-12.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-02-39.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-03-20.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-06-56.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-08-45.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-18-44.log" />
+    <entry file="file://$PROJECT_DIR$/_test_exp_6bdf982c-9779-11e9-a65a-005056c00008.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-33-14.log" />
+    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_22-04-39.log151859e2-" />
+    <entry file="file://$PROJECT_DIR$/d1d579e8-experiment_2019-06-25_22-09-56.log" />
+    <entry file="file://$PROJECT_DIR$/d1caf274-experiment_2019-06-25_22-09-56.log" />
+    <entry file="file://$PROJECT_DIR$/_test_exp_287a6148-983b-11e9-9e7f-005056c00008.log">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_20-42-12.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-02-39.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-03-20.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-06-56.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-08-45.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-18-44.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_test_exp_6bdf982c-9779-11e9-a65a-005056c00008.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-33-14.log">
+    <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+        <state relative-caret-position="187">
+          <caret line="266" selection-start-line="266" selection-end-line="266" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1561577175437" expanded="true" signature="1295:1332" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6936">
-          <caret line="408" lean-forward="true" selection-start-line="408" selection-end-line="408" />
+        <state relative-caret-position="374">
+          <caret line="22" column="35" lean-forward="true" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <marker date="1561489390092" expanded="true" signature="5807:6933" ph="..." />
-            <marker date="1561489390092" expanded="true" signature="8303:8308" ph="..." />
-            <marker date="1561489390092" expanded="true" signature="8331:8340" ph="..." />
-            <marker date="1561489390092" expanded="true" signature="9697:9702" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_22-04-39.log151859e2-">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/handlers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="73" column="68" selection-start-line="73" selection-start-column="68" selection-end-line="73" selection-end-column="68" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1561489731768" expanded="true" signature="1259:1296" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="2371:2566" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="3162:3168" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="6514:6982" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="7024:7121" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="12052:12061" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="15620:15629" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="15703:15709" ph="..." />
-            <marker date="1561489731768" expanded="true" signature="15844:15845" ph="..." />
+            <marker date="1561577475840" expanded="true" signature="5870:9995" ph="..." />
+            <marker date="1561577475840" expanded="true" signature="11372:11377" ph="..." />
+            <marker date="1561577475840" expanded="true" signature="11400:11409" ph="..." />
+            <marker date="1561577475840" expanded="true" signature="12836:12841" ph="..." />
           </folding>
         </state>
       </provider>

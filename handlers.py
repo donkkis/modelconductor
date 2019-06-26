@@ -32,7 +32,7 @@ class Experiment:
 
     """
 
-    def __init__(self, start_time=dt.now(),
+    def __init__(self, start_time=None,
                  routes=None,
                  runtime=10,
                  logging=False,
@@ -44,7 +44,7 @@ class Experiment:
             routes (List(tuple(MeasurementStreamHandler, ModelHandler)):
         """
 
-        self.start_time = start_time
+        self.start_time = start_time if start_time is not None else dt.now()
         self.stop_time = self.start_time + timedelta(minutes=runtime)
         self.routes = routes if routes is not None else []
         self.results = []
@@ -149,15 +149,21 @@ class OnlineOneToOneExperiment(Experiment):
             self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
 
         # Whenever new data is received, feed-forward to model
+        print("now ", dt.now())  # debug
         while dt.now() < self.stop_time:
             if not src.buffer.empty() and mdl.status == "Ready":
                 # simulation step
-
                 data = mdl.pull()
+                try:
+                    assert(data is not None)
+                except AssertionError:
+                    warn("ModelHandler.pull called on empty buffer", UserWarning)
+                    continue
                 # debug
                 # print(data)
 
                 res = mdl.step(data[0])
+                # print(res)  # debug
                 self.results.append(res)
 
                 if self.logging:
@@ -168,7 +174,7 @@ class OnlineOneToOneExperiment(Experiment):
                            str(data[0][mdl.target_keys[0]]),
                            str(res[0])]
 
-                    print(row)
+                    # print(row) #  debug
                     self.log_row(row)
             else:
                 continue
@@ -258,6 +264,7 @@ class TrainableModelHandler(ModelHandler):
     @abc.abstractmethod
     def fit(self):
         """Fit the model's trainable parameters"""
+
 
 class MeasurementStreamHandler:
 
@@ -551,14 +558,15 @@ class KerasModelHandler(TrainableModelHandler):
         self.model.compile(optimizer='rmsprop',
                            loss='mae',
                            metrics=['accuracy'])
+        self.status = "Ready"
         return self.model
 
     def destroy(self):
         pass
 
-    def fit(self, measurement):
+    def fit(self, measurement=None, X=None, y=None):
         """
-        Train the associated model on minibatch
+        Train the associated model on single training example
 
         Args:
             measurement (Measurement): A measurement object from which the inputs and targets
@@ -572,6 +580,45 @@ class KerasModelHandler(TrainableModelHandler):
         self.model.train_on_batch(X, y)
         yield self.model
         self.status = "Ready"
+
+    def measurements_to_numpy(self, measurements):
+        """
+
+        Args:
+            measurements (List[Measurement]): A list of measurement objects frow which the inputs and
+            targets will be parsed
+
+
+        Returns:
+            X (np.ndarray): 2d Numpy array where each row represents the feature vector
+            of a single example
+            y (np.ndarray): 2d Numpy array where each row repsents a target vector
+        """
+        X_shape = (len(measurements), len(self.input_keys))
+        y_shape = (len(measurements), len(self.target_keys))
+
+        X = np.array([meas.to_numpy(keys=self.input_keys) for meas in measurements]).reshape(X_shape)
+        y = np.array([meas.to_numpy(keys=self.target_keys) for meas in measurements]).reshape(y_shape)
+        return X, y
+
+    def fit_batch(self, measurements):
+        """
+        Train the associated model on minibatch
+
+        Args:
+            measurements (List[Measurement]): A list of measurement objects frow which the inputs and
+            targets will be parsed
+
+        Returns:
+
+        """
+        # TODO Should integrate this into fit
+        self.status = "Busy"
+        X, y = self.measurements_to_numpy(measurements)
+        self.model.train_on_batch(X, y)
+        yield self.model
+        self.status = "Ready"
+
 
 
 
