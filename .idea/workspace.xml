@@ -48,38 +48,44 @@
     <session id="-381741950">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.5" value="4" />
-          <entry key="project.open.time.6" value="1" />
+          <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="1075" />
+          <entry key="Python Console" value="1126" />
+          <entry key="data_query" value="39" />
           <entry key="dummy" value="15" />
-          <entry key="py" value="21017" />
+          <entry key="py" value="24770" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="15" />
-          <entry key="Python" value="22092" />
+          <entry key="Python" value="25896" />
+          <entry key="SQL" value="39" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="data_query" value="1" />
+          <entry key="dummy_query" value="1" />
           <entry key="log" value="14" />
           <entry key="log151859e2-" value="1" />
-          <entry key="py" value="7" />
+          <entry key="py" value="10" />
+          <entry key="test_query" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="15" />
-          <entry key="Python" value="7" />
+          <entry key="PLAIN_TEXT" value="17" />
+          <entry key="Python" value="10" />
+          <entry key="SQL" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -126,18 +132,29 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.45382166">
+    <splitter split-orientation="horizontal" split-proportion="0.5112486">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/handlers.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="187">
-                  <caret line="266" selection-start-line="266" selection-end-line="266" />
+                <state relative-caret-position="218">
+                  <caret line="680" lean-forward="true" selection-start-line="680" selection-end-line="680" />
                   <folding>
-                    <element signature="e#0#23#0" expanded="true" />
-                    <marker date="1561577175437" expanded="true" signature="1295:1332" ph="..." />
+                    <element signature="e#0#39#0" expanded="true" />
+                    <marker date="1561661771612" expanded="true" signature="1335:1372" ph="..." />
+                    <marker date="1561661771612" expanded="true" signature="5230:7977" ph="..." />
+                    <marker date="1561661771612" expanded="true" signature="6083:6088" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data_query">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <caret column="24" selection-start-column="24" selection-end-column="24" />
                 </state>
               </provider>
             </entry>
@@ -149,14 +166,45 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/tests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="374">
-                  <caret line="22" column="35" lean-forward="true" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+                <state relative-caret-position="215">
+                  <caret line="572" column="18" lean-forward="true" selection-start-line="572" selection-start-column="18" selection-end-line="572" selection-end-column="18" />
                   <folding>
-                    <marker date="1561577475840" expanded="true" signature="5870:9995" ph="..." />
-                    <marker date="1561577475840" expanded="true" signature="11372:11377" ph="..." />
-                    <marker date="1561577475840" expanded="true" signature="11400:11409" ph="..." />
-                    <marker date="1561577475840" expanded="true" signature="12836:12841" ph="..." />
+                    <element signature="e#0#13#0" expanded="true" />
+                    <marker date="1561662112195" expanded="true" signature="6934:6943" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="7432:12436" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="11051:11900" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="13813:13818" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="13841:13850" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="15277:15282" ph="..." />
+                    <marker date="1561662112195" expanded="true" signature="20060:21335" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/customtests.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="196">
+                  <caret line="83" column="48" selection-start-line="83" selection-start-column="48" selection-end-line="83" selection-end-column="48" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/site-packages/keras/engine/sequential.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-1253">
+                  <caret line="131" selection-start-line="131" selection-end-line="131" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test_query">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="525">
+                  <caret line="165" selection-start-line="165" selection-end-line="165" />
                 </state>
               </provider>
             </entry>
@@ -168,6 +216,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>exp</find>
+      <find>yield</find>
+      <find>Sklearn</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -180,14 +230,15 @@
         <option value="$PROJECT_DIR$/test_query" />
         <option value="$PROJECT_DIR$/gitignore" />
         <option value="$PROJECT_DIR$/customtests.py" />
+        <option value="$PROJECT_DIR$/data_query" />
         <option value="$PROJECT_DIR$/handlers.py" />
         <option value="$PROJECT_DIR$/tests.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="106" />
-    <option name="y" value="-11" />
+    <option name="x" value="221" />
+    <option name="y" value="-10" />
     <option name="width" value="1922" />
     <option name="height" value="691" />
   </component>
@@ -196,6 +247,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -211,7 +263,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -231,7 +282,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python tests.Unittests in tests.py">
-    <configuration name="Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.MeasurementStreamHandlerTests.test_give" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -241,11 +292,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_single_source_and_consumer_run&quot;" />
+      <option name="_new_target" value="&quot;tests.MeasurementStreamHandlerTests.test_give&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.MeasurementStreamHandlerTests.test_give_batch" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -255,11 +306,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_fit_batch&quot;" />
+      <option name="_new_target" value="&quot;tests.MeasurementStreamHandlerTests.test_give_batch&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.ModelHandlerTests.test_pull_batch_on_single_source" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -269,11 +320,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_keras_model_can_be_spawned&quot;" />
+      <option name="_new_target" value="&quot;tests.ModelHandlerTests.test_pull_batch_on_single_source&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor-handlers" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -283,7 +334,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.KerasModelHandlerTests.test_measurements_to_numpy&quot;" />
+      <option name="_new_target" value="&quot;tests.OnlineBatchTrainableExperimentTests.test_run&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -302,19 +353,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_give" />
+      <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_give_batch" />
+      <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_pull_batch_on_single_source" />
       <item itemvalue="Python tests.Unittests in tests.py" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
-      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" />
-      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_fit_batch" />
-      <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" />
+      <item itemvalue="Python tests.Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Unittests in tests.py" />
-        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" />
-        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_fit_batch" />
-        <item itemvalue="Python tests.Unittests for tests.KerasModelHandlerTests.test_measurements_to_numpy" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_single_source_and_consumer_run" />
+        <item itemvalue="Python tests.Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" />
+        <item itemvalue="Python tests.Unittests for tests.ModelHandlerTests.test_pull_batch_on_single_source" />
+        <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_give_batch" />
+        <item itemvalue="Python tests.Unittests for tests.MeasurementStreamHandlerTests.test_give" />
       </list>
     </recent_temporary>
   </component>
@@ -332,34 +383,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 04m 01s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 21h 45m 10s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 06m 09s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 21h 56m 34s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 09m 21s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 21h 56m 54s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 16m 20s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 21h 58m 27s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 20m 30s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 21h 59m 10s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 21m 31s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 22h 00m 40s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 23m 42s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 22h 01m 10s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_fit_batch - 2019.06.26 at 22h 23m 58s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_fit_batch" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 22h 01m 21s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_KerasModelHandlerTests_test_keras_model_can_be_spawned - 2019.06.26 at 22h 26m 18s.xml">
-      <configuration name="Unittests for tests.KerasModelHandlerTests.test_keras_model_can_be_spawned" configurationId="tests" />
+    <history-entry file="Unittests_for_tests_OnlineBatchTrainableExperimentTests_test_run - 2019.06.27 at 22h 01m 59s.xml">
+      <configuration name="Unittests for tests.OnlineBatchTrainableExperimentTests.test_run" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.06.26 at 22h 29m 11s.xml">
+    <history-entry file="Unittests_in_tests_py - 2019.06.27 at 22h 03m 01s.xml">
       <configuration name="Unittests in tests.py" configurationId="tests" />
     </history-entry>
   </component>
@@ -374,15 +425,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49404117" visible="true" weight="0.16332982" />
-      <window_info id="Structure" order="1" sideWeight="0.50595886" side_tool="true" visible="true" weight="0.16332982" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4907909" visible="true" weight="0.1654373" />
+      <window_info id="Structure" order="1" sideWeight="0.5092091" side_tool="true" visible="true" weight="0.1654373" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.12351029" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49947312" weight="0.2383532" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
@@ -394,25 +444,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49837664" weight="0.0" />
-      <window_info id="Structure" order="1" sideWeight="0.5016234" side_tool="true" weight="0.0" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.24918744" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.3296582" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32745314" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" visible="true" weight="0.33261105" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -422,27 +453,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="64">
           <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/customtests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="98" column="18" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_query">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="864">
-          <caret line="165" column="41" selection-start-line="165" selection-start-column="41" selection-end-line="165" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dummy_query">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
@@ -473,29 +483,75 @@
     <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_22-04-39.log151859e2-" />
     <entry file="file://$PROJECT_DIR$/d1d579e8-experiment_2019-06-25_22-09-56.log" />
     <entry file="file://$PROJECT_DIR$/d1caf274-experiment_2019-06-25_22-09-56.log" />
-    <entry file="file://$PROJECT_DIR$/_test_exp_287a6148-983b-11e9-9e7f-005056c00008.log">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/_test_exp_287a6148-983b-11e9-9e7f-005056c00008.log" />
+    <entry file="file://$PROJECT_DIR$/dummy_query">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3446">
+          <caret line="604" selection-start-line="604" selection-end-line="604" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_query">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="165" selection-start-line="165" selection-end-line="165" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/site-packages/keras/engine/sequential.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1253">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/customtests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="83" column="48" selection-start-line="83" selection-start-column="48" selection-end-line="83" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data_query">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="24" selection-start-column="24" selection-end-column="24" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/handlers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="266" selection-start-line="266" selection-end-line="266" />
+        <state relative-caret-position="218">
+          <caret line="680" lean-forward="true" selection-start-line="680" selection-end-line="680" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1561577175437" expanded="true" signature="1295:1332" ph="..." />
+            <element signature="e#0#39#0" expanded="true" />
+            <marker date="1561661771612" expanded="true" signature="1335:1372" ph="..." />
+            <marker date="1561661771612" expanded="true" signature="5230:7977" ph="..." />
+            <marker date="1561661771612" expanded="true" signature="6083:6088" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="35" lean-forward="true" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+        <state relative-caret-position="215">
+          <caret line="572" column="18" lean-forward="true" selection-start-line="572" selection-start-column="18" selection-end-line="572" selection-end-column="18" />
           <folding>
-            <marker date="1561577475840" expanded="true" signature="5870:9995" ph="..." />
-            <marker date="1561577475840" expanded="true" signature="11372:11377" ph="..." />
-            <marker date="1561577475840" expanded="true" signature="11400:11409" ph="..." />
-            <marker date="1561577475840" expanded="true" signature="12836:12841" ph="..." />
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1561662112195" expanded="true" signature="6934:6943" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="7432:12436" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="11051:11900" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="13813:13818" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="13841:13850" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="15277:15282" ph="..." />
+            <marker date="1561662112195" expanded="true" signature="20060:21335" ph="..." />
           </folding>
         </state>
       </provider>

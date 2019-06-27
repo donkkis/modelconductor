@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import List
 from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
@@ -123,7 +124,6 @@ class Experiment:
             raise TypeError
         self.routes.append(route)
 
-
 class OnlineOneToOneExperiment(Experiment):
     """
     Online single-source, single model experiment
@@ -149,7 +149,7 @@ class OnlineOneToOneExperiment(Experiment):
             self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
 
         # Whenever new data is received, feed-forward to model
-        print("now ", dt.now())  # debug
+        # print("now ", dt.now())  # debug
         while dt.now() < self.stop_time:
             if not src.buffer.empty() and mdl.status == "Ready":
                 # simulation step
@@ -182,6 +182,91 @@ class OnlineOneToOneExperiment(Experiment):
         src._stopevent = threading.Event()
         print("Process exited due to experiment time out")
         return True
+
+class OnlineBatchTrainableExperiment(Experiment):
+
+    def __init__(self, start_time=None,
+                 routes=None,
+                 runtime=10,
+                 logging=False,
+                 log_path=None,
+                 batch_size=10):
+
+        super().__init__(start_time,
+                         routes,
+                         runtime,
+                         logging)
+        self.batch_size = batch_size
+        self.log_path = log_path
+
+    def log_batch(self, data, logged_key, result,):
+        """
+
+        Args:
+            data List[Measurement]:
+            result List:
+
+        Returns:
+
+        """
+        for datum, result in zip(data, result):
+            timestamp_key = "Time"
+
+            row = [str(data[timestamp_key]),
+                   str(data[0][logged_key]),
+                   str(result[0])]
+
+            # print(row) #  debug
+            self.log_row(row)
+
+    def run(self):
+        assert(len(self.routes) == 1)
+        # Initiate model
+        mdl = self.routes[0][1]  # type: TrainableModelHandler
+        mdl.spawn()
+
+        # Start polling
+        src = self.routes[0][0]  # type: IncomingMeasurementBatchPoller
+        threading.Thread(target=src.poll).start()
+
+        # Initiate logging if applicable
+        if self.logging:
+            # TODO should move most of this stuff to initiate_logging?
+            assert(len(mdl.target_keys) == 1)
+            gt_title = "{}_meas".format(mdl.target_keys[0])
+            pred_title = "{}_pred".format(mdl.target_keys[0])
+            self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
+
+        # Whenever new data is received, feed-forward to model
+        while dt.now() < self.stop_time:
+            print(src.buffer.qsize())  #  debug
+            # Check that new batch is available and the model is ready
+            if src.buffer.qsize() >= self.batch_size and mdl.status == "Ready":
+                # simulation step
+                data = mdl.pull_batch(self.batch_size)  # List[List[Measurement]]
+                data = data[0]  # List[Measurement]
+                try:
+                    assert(data is not None)
+                except AssertionError:
+                    warn("ModelHandler.pull called on empty buffer", UserWarning)
+                    continue
+                # debug
+                print(data)
+
+                _, res = mdl.step_fit_batch(data)  # _, List
+                print(res)  # debug
+                self.results += res
+
+                if self.logging:
+                    # TODO implement and test batch logging
+                    pass
+            else:
+                continue
+
+        src._stopevent = threading.Event()
+        print("Process exited due to experiment time out")
+        return True
+
 
 
 class ModelHandler:
@@ -226,6 +311,19 @@ class ModelHandler:
         res = [source.give() for source in self.sources]
         return res
 
+    def pull_batch(self, batch_size):
+        """
+
+        Args:
+            batch_size: Request the next batch_size FIFO-queued datapoints
+            from each of the sources
+
+        Returns: List[List[Measurement]]
+
+        """
+        res = [source.give_batch(batch_size=batch_size) for source in self.sources]
+        return res
+
     @abc.abstractmethod
     def step(self):
         """Feed-forward the associated model with the latest datapoint and return the response"""
@@ -237,6 +335,8 @@ class ModelHandler:
     @abc.abstractmethod
     def destroy(self):
         """Remove the model instance from the current configuration and delete self"""
+
+
 
 
 class Measurement(dict):
@@ -259,11 +359,27 @@ class Measurement(dict):
         return numpy_meas
 
 
-class TrainableModelHandler(ModelHandler):
+class TrainableModelHandler(ModelHandler, metaclass=ABCMeta):
 
     @abc.abstractmethod
     def fit(self):
         """Fit the model's trainable parameters"""
+        pass
+
+    @abc.abstractmethod
+    def fit_batch(self, measurements):
+        """
+        Train the associated model on minibatch
+        Args:
+            measurements (List[Measurement]): A list of measurement objects frow which the inputs and
+            targets will be parsed
+        Returns:
+        """
+        pass
+
+    @abc.abstractmethod
+    def step_fit_batch(self, measurements):
+        pass
 
 
 class MeasurementStreamHandler:
@@ -314,11 +430,22 @@ class MeasurementStreamHandler:
         [self.buffer.put_nowait(measurement) for measurement in measurements]
 
     def give(self):
+        """
+        Get a single measurement element from the FIFO buffer
+        """
         try:
-            return self.buffer.get_nowait()
+            measurement = self.buffer.get_nowait()
+            return measurement
         except Empty:
             return None
 
+    def give_batch(self, batch_size):
+        """
+        Get a list of batch_size first measurement elements in the FIFO buffer
+        """
+
+        measurements = [self.give() for i in range(batch_size)]
+        return measurements
 
 class IncomingMeasurementListener(MeasurementStreamHandler):
     """Should distribute the incoming
@@ -342,7 +469,12 @@ class ExperimentDurationExceededException(Exception):
     pass
 
 
+# FORM = "%Y-%m-%d %H:%M:%S"
+FORM = "%d.%m.%Y %H:%M:%S"
+
 class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
+
+
     def __init__(self, db_uri, query_path, polling_interval=90, polling_window=60, start_time=None,
                  stop_time=None, query_cols="*", buffer=None, consumers=None):
         super().__init__(buffer, consumers)
@@ -355,9 +487,9 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         self._stopevent = None
         self.engine = None
         self.conn = None
-        self.polling_start_timestamp = self.start_time.strftime("%Y-%m-%d %H:%M:%S")
+        self.polling_start_timestamp = self.start_time.strftime(FORM)
         self.polling_stop_timestamp = \
-            (self.start_time + timedelta(seconds=self.polling_window)).strftime("%Y-%m-%d %H:%M:%S")
+            (self.start_time + timedelta(seconds=self.polling_window)).strftime(FORM)
         with open(query_path, 'rb') as f:
             self.query = f.read().decode().replace("\r\n", " ")
 
@@ -374,6 +506,7 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
                 sleep(self.polling_interval)
                 try:
                     self.poll_batch()
+                    self.update_timestamps()
                 except IndexError:
                     print("No more records available, sleeping...")
                     sleep(0.5)
@@ -388,10 +521,12 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
     def poll_batch(self):
         # avoid threading errors
         q = self.query.format(self.polling_start_timestamp, self.polling_stop_timestamp)
+        # print(q)  # debug
         res = self.conn.execute(q) # sqlalchemy.engine.ResultProxy
         data = res.fetchall()
         data = [dict(zip(tuple(res.keys()), datum)) for datum in data]
         self.receive_batch(data)
+        # print(data)  # debug
         return data
 
     def update_timestamps(self, old_start_timestamp=None):
@@ -404,20 +539,19 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
             self.polling_stop_timestamp: Updated timestamp where the next batch should end
         """
 
-        form = "%Y-%m-%d %H:%M:%S"
         if old_start_timestamp is None:
             old_start_timestamp = self.polling_start_timestamp
         next_start = \
-            (dt.strptime(old_start_timestamp, form) + timedelta(seconds=self.polling_window))
+            (dt.strptime(old_start_timestamp, FORM) + timedelta(seconds=self.polling_window))
         next_end = \
-            (dt.strptime(old_start_timestamp, form) + timedelta(seconds=2*self.polling_window))
+            (dt.strptime(old_start_timestamp, FORM) + timedelta(seconds=2*self.polling_window))
         if next_end > self.stop_time:
             next_end = self.stop_time
         if next_start >= self.stop_time:
             raise ExperimentDurationExceededException("Updated start timestamp exceeds experiment duration")
 
-        self.polling_start_timestamp = next_start.strftime(form)
-        self.polling_stop_timestamp = next_end.strftime(form)
+        self.polling_start_timestamp = next_start.strftime(FORM)
+        self.polling_stop_timestamp = next_end.strftime(FORM)
         return self.polling_start_timestamp, self.polling_stop_timestamp
 
 
@@ -477,6 +611,12 @@ class SklearnModelHandler(TrainableModelHandler):
                          target_keys=target_keys)
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
+
+    def fit_batch(self, measurements):
+        raise NotImplementedError
+
+    def step_fit_batch(self, measurements):
+        raise NotImplementedError
 
     def step(self, X):
         # X is dict when calling from run
@@ -547,6 +687,8 @@ class KerasModelHandler(TrainableModelHandler):
         self.status = "Busy"
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
+        if isinstance(X, dict):
+            X = Measurement(X)
         X = X.to_numpy(self.input_keys)
         result = list(self.model.predict(X))
         self.status = "Ready"
@@ -578,8 +720,8 @@ class KerasModelHandler(TrainableModelHandler):
         X = measurement.to_numpy(keys=self.input_keys)
         y = measurement.to_numpy(keys=self.target_keys)
         self.model.train_on_batch(X, y)
-        yield self.model
         self.status = "Ready"
+        return self.model
 
     def measurements_to_numpy(self, measurements):
         """
@@ -614,12 +756,23 @@ class KerasModelHandler(TrainableModelHandler):
         """
         # TODO Should integrate this into fit
         self.status = "Busy"
+        # TODO fix ugly hack
+        if isinstance(measurements[0], dict):
+            print("jee")
+            measurements = [Measurement(measurement) for measurement in measurements]
         X, y = self.measurements_to_numpy(measurements)
         self.model.train_on_batch(X, y)
-        yield self.model
         self.status = "Ready"
+        return self.model
 
-
+    def step_fit_batch(self, measurements):
+        self.status = "Busy"
+        self.fit_batch(measurements)
+        results = []
+        for measurement in measurements:
+            results.append(self.step(measurement))
+        self.status = "Ready"
+        return self.model, results
 
 
 

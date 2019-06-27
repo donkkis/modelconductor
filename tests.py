@@ -6,7 +6,8 @@ import os
 import numpy as np
 import sqlalchemy
 from keras.layers import Dense, Activation
-from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener, KerasModelHandler, Measurement
+from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener, KerasModelHandler, Measurement, \
+    OnlineBatchTrainableExperiment
 from handlers import Experiment
 from handlers import ModelHandler
 from handlers import IncomingMeasurementPoller
@@ -145,6 +146,28 @@ class ModelHandlerTests(unittest.TestCase):
         self.assertTrue(len(res) == 1)
         self.assertIsNone(res[0])
 
+    def test_pull_batch_on_single_source(self):
+        mh = ModelHandler()
+
+        meas_hand = MeasurementStreamHandler()
+        mh.add_source(meas_hand)
+        meas_hand.add_consumer(mh)
+
+        data1 = Measurement({'foo' : 1, 'faa' : 2, 'fuu' : 3})
+        data2 = Measurement({'faa' : 3, 'fyy' : 4, 'fee' : 5})
+        data3 = Measurement({'foo' : 6, 'fyy' : 7, 'fee' : 8})
+        meas_hand.receive_single(data1)  # FIFO 1st
+        meas_hand.receive_single(data2)  # FIFO 2nd
+        meas_hand.receive_single(data3)  # FIFO 3rd
+
+        res = mh.pull_batch(batch_size=2)  # Excpect [[data1, data2]]
+        self.assertTrue(len(res) == 1)
+        self.assertTrue(len(res[0]) == 2)
+        self.assertIs(res[0][0], data1)
+        self.assertIs(res[0][1], data2)
+
+
+
 class MeasurementStreamHandlerTests(unittest.TestCase):
 
     def test_add_consumer(self):
@@ -166,7 +189,7 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
         self.assertTrue(len(meas_hand.consumers) == 0)
 
     def test_receive_batch(self):
-        data = [{'foo': 3, 'faa': 4}, {'foo': 6, 'faa': 7}]
+        data = [Measurement({'foo': 3, 'faa': 4}), Measurement({'foo': 6, 'faa': 7})]
         meas_hand = MeasurementStreamHandler()
         meas_hand.receive_batch(data)
         self.assertTrue(meas_hand.buffer.qsize() == 2)
@@ -174,6 +197,24 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
         self.assertIs(meas_hand.buffer.get_nowait(), data[1])
         with self.assertRaises(queue.Empty):
             meas_hand.buffer.get_nowait()
+
+    def test_give(self):
+        data = [Measurement({'foo': 3, 'faa': 4}), Measurement({'foo': 6, 'faa': 7})]
+        meas_hand = MeasurementStreamHandler()
+        meas_hand.receive_batch(data)
+        self.assertIs(meas_hand.give(), data[0])
+
+    def test_give_batch(self):
+        data = [Measurement({'foo': 3, 'faa': 4}),
+                Measurement({'foo': 6, 'faa': 7}),
+                Measurement({'foo' : 8, 'faa' : 9})]
+        meas_hand = MeasurementStreamHandler()
+        meas_hand.receive_batch(data)
+        batch_size = 2
+        res = meas_hand.give_batch(batch_size=batch_size)
+        self.assertTrue(len(res) == batch_size)
+        self.assertIs(res[0], data[0])
+        self.assertIs(res[1], data[1])
 
 
 class KerasModelHandlerTests(unittest.TestCase):
@@ -271,6 +312,27 @@ class KerasModelHandlerTests(unittest.TestCase):
 
         model.fit_batch(measurements)
         self.assertEqual("Ready", model.status)
+
+    def test_step_fit_batch(self):
+        layers = [
+            Dense(9, input_shape=(3,)),
+            Activation('relu'),
+            Dense(1)]
+
+        meas = Measurement({"foo" : 3, "faa" : 4, "fuu" : 5, "fee" : 6})
+        meas2 = Measurement({"foo" : 12, "faa" : 3, "fuu" : 32, "fee" : 56})
+        meas3 = Measurement({"foo" : 43, "faa" : 23, "fuu" : 76, "fee" : 64})
+        meas4 = Measurement({"foo" : 1, "faa" : 12, "fuu" : 86, "fee" : 23})
+        input_keys = ["foo", "fee", "fuu"]
+        target_keys = ["faa"]
+
+        model = KerasModelHandler(layers=layers,
+                                  input_keys=input_keys,
+                                  target_keys=target_keys)
+        model.spawn()
+        measurements = [meas, meas2, meas3, meas4]
+        _, results = model.step_fit_batch(measurements=measurements)
+        self.assertTrue(len(results) == 4)
 
     def test_fit_batch_learning(self):
         pass
@@ -487,6 +549,43 @@ class ExperimentTests(unittest.TestCase):
                 self.assertGreater(len(f.readline()), 10)
                 self.assertGreater(len(f.readline()), 10)
 
+class OnlineBatchTrainableExperimentTests(unittest.TestCase):
+
+    def test_run(self):
+        # TODO Fix the test so it terminates in finite time
+        return
+        # consumer
+        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+            qcols = pickle.load(f)
+
+        ex = OnlineBatchTrainableExperiment(batch_size=60)
+
+        start_time = dt(2019, 5, 10, 11, 18, 33)
+        stop_time = dt(2019, 5, 10, 11, 19, 3)
+
+        poller = IncomingMeasurementBatchPoller(db_uri='sqlite:///..\\src\\data.db',
+                                                query_path='data_query',
+                                                polling_interval=1,
+                                                polling_window=1,
+                                                start_time=start_time,
+                                                stop_time=stop_time)
+
+        layers = [
+            Dense(128, input_shape=(len(qcols),)),
+            Activation('relu'),
+            Dense(64),
+            Activation('relu'),
+            Dense(32),
+            Activation('relu'),
+            Dense(1)]
+
+        mhand = KerasModelHandler(input_keys=qcols,
+                                  target_keys=["Left_NOx"],
+                                  layers=layers)
+
+        ex.add_route((poller, mhand))
+        ex.setup()
+        ex.run()
 
 class MeasurementTests(unittest.TestCase):
 
