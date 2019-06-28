@@ -21,7 +21,7 @@ import pandas as pd
 from time import sleep
 import os
 import threading
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 import pprint
 import uuid
 
@@ -34,7 +34,7 @@ class SklearnTests(unittest.TestCase):
             idx = pickle.load(pickle_file)
 
         with open('..\\src\\data.pickle', 'rb') as pickle_file:
-            data = pickle.load(pickle_file)
+            data = pd.read_pickle(pickle_file)
 
         X = data[idx].to_numpy()[600:625]
         y = data["Left_NOx"].to_numpy()[600:625]
@@ -551,17 +551,47 @@ class ExperimentTests(unittest.TestCase):
 
 class OnlineBatchTrainableExperimentTests(unittest.TestCase):
 
+    def test_log_batch(self):
+        path = '{}.log'.format(str(uuid.uuid1()))
+        ex = OnlineBatchTrainableExperiment(log_path=path)
+
+        ts1 = str(dt.now())
+        ts2 = str(dt.now() + timedelta(seconds=5))
+        ts3 = str(dt.now() + timedelta(seconds=10))
+        ts4 = str(dt.now() + timedelta(seconds=15))
+
+        meas1 = Measurement({"timestamp": ts1, "faa": 4, "fuu": 5, "fee": 6})
+        meas2 = Measurement({"timestamp": ts2, "faa": 65, "fuu": 323, "fee": 123})
+        meas3 = Measurement({"timestamp": ts3, "faa": 43, "fuu": 43, "fee": 654})
+        meas4 = Measurement({"timestamp": ts4, "faa": 12, "fuu": 56, "fee": 78})
+        result = [44, 34, 76, 98]
+        timestamp_key = "timestamp"
+        groundtruth_key = "fee"
+        data = [meas1, meas2, meas3, meas4]
+        headers = ["Timestamp", "Ground Truth", "Prediction"]
+        ex.initiate_logging(path=ex.log_path, headers=headers)
+        ex.log_batch(data, groundtruth_key, timestamp_key, result, debug=True)
+        ex.terminate_logging()
+
+        with open(path, 'r') as f:
+            self.assertEqual(f.readline(), 'Timestamp,Ground Truth,Prediction\n')
+            self.assertEqual(f.readline(), ts1 + ',6,44\n')
+            self.assertEqual(f.readline(), ts2 + ',123,34\n')
+            self.assertEqual(f.readline(), ts3 + ',654,76\n')
+            self.assertEqual(f.readline(), ts4 + ',78,98\n')
+
+        os.remove(path)
+
     def test_run(self):
         # TODO Fix the test so it terminates in finite time
-        return
         # consumer
         with open('..\\src\\nox_idx.pickle', 'rb') as f:
             qcols = pickle.load(f)
 
-        ex = OnlineBatchTrainableExperiment(batch_size=60)
+        ex = OnlineBatchTrainableExperiment(batch_size=60,logging=True)
 
         start_time = dt(2019, 5, 10, 11, 18, 33)
-        stop_time = dt(2019, 5, 10, 11, 19, 3)
+        stop_time = dt(2019, 5, 10, 12, 18, 33)
 
         poller = IncomingMeasurementBatchPoller(db_uri='sqlite:///..\\src\\data.db',
                                                 query_path='data_query',

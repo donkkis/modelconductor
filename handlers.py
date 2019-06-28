@@ -190,7 +190,8 @@ class OnlineBatchTrainableExperiment(Experiment):
                  runtime=10,
                  logging=False,
                  log_path=None,
-                 batch_size=10):
+                 batch_size=10,
+                 timestamp_key=None):
 
         super().__init__(start_time,
                          routes,
@@ -198,25 +199,26 @@ class OnlineBatchTrainableExperiment(Experiment):
                          logging)
         self.batch_size = batch_size
         self.log_path = log_path
+        self.timestamp_key = timestamp_key
 
-    def log_batch(self, data, logged_key, result,):
+    def log_batch(self, data, groundtruth_key, timestamp_key, results, debug=False):
         """
 
         Args:
-            data List[Measurement]:
-            result List:
+            data (List[Measurement]):
+            result (List):
+            groundtruth_key (str):
+            timestamp_key (str):
 
         Returns:
 
         """
-        for datum, result in zip(data, result):
-            timestamp_key = "Time"
-
-            row = [str(data[timestamp_key]),
-                   str(data[0][logged_key]),
-                   str(result[0])]
-
-            # print(row) #  debug
+        for datum, result in zip(data, results):
+            row = [str(datum[timestamp_key]),
+                   str(datum[groundtruth_key]),
+                   str(result)]
+            if debug:
+                print(row)
             self.log_row(row)
 
     def run(self):
@@ -239,7 +241,7 @@ class OnlineBatchTrainableExperiment(Experiment):
 
         # Whenever new data is received, feed-forward to model
         while dt.now() < self.stop_time:
-            print(src.buffer.qsize())  #  debug
+            # print(src.buffer.qsize())  #  debug
             # Check that new batch is available and the model is ready
             if src.buffer.qsize() >= self.batch_size and mdl.status == "Ready":
                 # simulation step
@@ -251,15 +253,19 @@ class OnlineBatchTrainableExperiment(Experiment):
                     warn("ModelHandler.pull called on empty buffer", UserWarning)
                     continue
                 # debug
-                print(data)
+                # print(data)
 
                 _, res = mdl.step_fit_batch(data)  # _, List
-                print(res)  # debug
+                # print(res)  # debug
                 self.results += res
 
                 if self.logging:
                     # TODO implement and test batch logging
-                    pass
+                    self.log_batch(data=data,
+                                   groundtruth_key=mdl.target_keys[0],
+                                   timestamp_key=self.timestamp_key,
+                                   results=res,
+                                   debug=True)
             else:
                 continue
 
@@ -323,6 +329,10 @@ class ModelHandler:
         """
         res = [source.give_batch(batch_size=batch_size) for source in self.sources]
         return res
+
+    @abc.abstractmethod
+    def step_batch(self):
+        """Feed-forward the associated model with a batch of (consecutive) inputs"""
 
     @abc.abstractmethod
     def step(self):
@@ -499,20 +509,22 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         assert(self.conn.closed is False)
 
         # debug
-        # print("Polling database connection at " + str(self.conn) + " at " + str(
-        #     self.polling_interval) + " s interval, CTRL+C to stop")
+        print("Polling database connection at " + str(self.conn) + " at " + str(
+             self.polling_interval) + " s interval, CTRL+C to stop")
         try:
             while not isinstance(self._stopevent, type(threading.Event())):
-                sleep(self.polling_interval)
                 try:
+                    print("Excecuting query...")
                     self.poll_batch()
                     self.update_timestamps()
+                    print("Done")
                 except IndexError:
                     print("No more records available, sleeping...")
                     sleep(0.5)
                 except sqlite3.OperationalError:
                     print("Waiting for database to become operational...")
                     sleep(5)
+                # sleep(self.polling_interval)
         except Exception:
             raise Exception("Unknown error")
         print("Polling thread excited due to stopevent")
@@ -616,33 +628,47 @@ class SklearnModelHandler(TrainableModelHandler):
         raise NotImplementedError
 
     def step_fit_batch(self, measurements):
-        raise NotImplementedError
+        # Maintain compatibility
+        self.status = "Busy"
+        results = []
+        for measurement in measurements:
+            results.append(self.step(measurement))
+        self.status = "Ready"
+        return self.model, results
 
     def step(self, X):
         # X is dict when calling from run
         self.status = "Busy"
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
+        print(X)
+        if isinstance(X, dict):
+            X = Measurement(X)
+        for k, v in X.items():
+            if v is None:
+                X[k] = 0  # TODO Ugly!
         X = X.to_numpy(self.input_keys)
+        # print(X)
         result = list(self.model.predict(X))
         self.status = "Ready"
         # print(result)
         return result
 
+    def step_batch(self, X):
+        raise NotImplementedError
+
     def fit(self, X):
         # TODO need something like partial_fit from scickit-multiflow
-        pass
+        raise NotImplementedError
 
     def spawn(self):
         self.status = "Ready"
 
-
     def destroy(self):
-        pass
+        raise NotImplementedError
 
 
 class KerasModelHandler(TrainableModelHandler):
-
 
     def __init__(self,
                  sources=None,
@@ -690,9 +716,9 @@ class KerasModelHandler(TrainableModelHandler):
         if isinstance(X, dict):
             X = Measurement(X)
         X = X.to_numpy(self.input_keys)
-        result = list(self.model.predict(X))
+        result = self.model.predict(X)[0][0]
         self.status = "Ready"
-        print(result)
+        # print(result)  # debug
         return result
 
 
@@ -758,7 +784,6 @@ class KerasModelHandler(TrainableModelHandler):
         self.status = "Busy"
         # TODO fix ugly hack
         if isinstance(measurements[0], dict):
-            print("jee")
             measurements = [Measurement(measurement) for measurement in measurements]
         X, y = self.measurements_to_numpy(measurements)
         self.model.train_on_batch(X, y)
@@ -821,6 +846,9 @@ class FMUModelHandler(ModelHandler):
         response = self.fmu.getReal(vr_input + vr_output)
         print(response)
         return response
+
+    def step_batch(self):
+        raise NotImplementedError
 
     def destroy(self):
         self.fmu.terminate()
