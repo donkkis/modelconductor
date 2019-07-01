@@ -1,5 +1,7 @@
 .idea/
 .cache/
+.test_resources/
 customtests.py
 test_query
 dummy_query
+test.db

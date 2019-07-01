@@ -6,15 +6,15 @@ import os
 import numpy as np
 import sqlalchemy
 from keras.layers import Dense, Activation
-from handlers import SklearnModelHandler, FMUModelHandler, IncomingMeasurementListener, KerasModelHandler, Measurement, \
-    OnlineBatchTrainableExperiment
-from handlers import Experiment
-from handlers import ModelHandler
-from handlers import IncomingMeasurementPoller
-from handlers import OnlineOneToOneExperiment
-from handlers import MeasurementStreamHandler
-from handlers import MeasurementStreamPoller
-from handlers import IncomingMeasurementBatchPoller
+from measurementhandler import IncomingMeasurementListener, Measurement
+from experiment import Experiment
+from experiment import OnlineBatchTrainableExperiment
+from modelhandler import ModelHandler, SklearnModelHandler, FMUModelHandler, KerasModelHandler
+from measurementhandler import IncomingMeasurementPoller
+from experiment import OnlineOneToOneExperiment
+from measurementhandler import MeasurementStreamHandler
+from measurementhandler import MeasurementStreamPoller
+from measurementhandler import IncomingMeasurementBatchPoller
 from matplotlib import pyplot as plt
 import sqlalchemy as sqla
 import pandas as pd
@@ -34,7 +34,7 @@ class SklearnTests(unittest.TestCase):
             idx = pickle.load(pickle_file)
 
         with open('..\\src\\data.pickle', 'rb') as pickle_file:
-            data = pd.read_pickle(pickle_file)
+            data = pickle.load(pickle_file)
 
         X = data[idx].to_numpy()[600:625]
         y = data["Left_NOx"].to_numpy()[600:625]
@@ -510,9 +510,10 @@ class ExperimentTests(unittest.TestCase):
         data = pd.read_csv("..\\src\\NRTC_laskenta\\Raakadata_KAIKKI\\nrtc1_ref_10052019.csv", delimiter=";")
         print(data.head())
 
+        engine = sqla.create_engine('sqlite:///test.db')
+        conn = engine.connect()
         def simulate_writes():
-            engine = sqla.create_engine('sqlite:///test.db')
-            conn = engine.connect()
+
 
             def write_row(row: pd.DataFrame):
                 row.to_sql('data', con=conn, if_exists='append')
@@ -548,6 +549,10 @@ class ExperimentTests(unittest.TestCase):
                 self.assertGreater(len(f.readline()), 10)
                 self.assertGreater(len(f.readline()), 10)
                 self.assertGreater(len(f.readline()), 10)
+            exp.logger.close()
+            os.remove(exp.log_path)
+            conn.close()
+            os.remove('test.db')
 
 class OnlineBatchTrainableExperimentTests(unittest.TestCase):
 
@@ -588,13 +593,13 @@ class OnlineBatchTrainableExperimentTests(unittest.TestCase):
         with open('..\\src\\nox_idx.pickle', 'rb') as f:
             qcols = pickle.load(f)
 
-        ex = OnlineBatchTrainableExperiment(batch_size=60,logging=True)
+        ex = OnlineBatchTrainableExperiment(batch_size=60,logging=False,timestamp_key="Time", runtime=0.5)
 
         start_time = dt(2019, 5, 10, 11, 18, 33)
-        stop_time = dt(2019, 5, 10, 12, 18, 33)
+        stop_time = dt(2019, 5, 10, 11, 28, 3)
 
         poller = IncomingMeasurementBatchPoller(db_uri='sqlite:///..\\src\\data.db',
-                                                query_path='data_query',
+                                                query_path='test_resources\\data_query',
                                                 polling_interval=1,
                                                 polling_window=1,
                                                 start_time=start_time,
@@ -616,6 +621,9 @@ class OnlineBatchTrainableExperimentTests(unittest.TestCase):
         ex.add_route((poller, mhand))
         ex.setup()
         ex.run()
+        sleep(45)
+        os.remove(ex.log_path)
+
 
 class MeasurementTests(unittest.TestCase):
 
