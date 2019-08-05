@@ -1,3 +1,4 @@
+__package__ = "modelconductor"
 import abc
 import os
 import threading
@@ -5,9 +6,8 @@ import uuid
 from datetime import datetime as dt
 from datetime import timedelta
 from warnings import warn
-
-from measurementhandler import MeasurementStreamHandler
-from modelhandler import ModelHandler
+from .measurementhandler import MeasurementStreamHandler
+from .modelhandler import ModelHandler
 
 
 class Experiment:
@@ -99,10 +99,18 @@ class Experiment:
 
     def setup(self):
         for route in self.routes:
-            src = route[0]  # type: MeasurementStreamHandler
-            mdl = route[1]  # type: ModelHandler
-            src.add_consumer(mdl)
-            mdl.add_source(src)
+            source = route[0]  # type: MeasurementStreamHandler
+            consumer = route[1]  # type: ModelHandler
+
+            if not isinstance(consumer, ModelHandler):
+                t = str(type(consumer))
+                raise TypeError("Expected a ModelHandler type, got {}".format(t))
+            source.add_consumer(consumer)
+
+            if not isinstance(source, MeasurementStreamHandler):
+                t = str(type(source))
+                raise TypeError("Expected a MeasurementStreamHandler type, got {} instead".format(t))
+            consumer.add_source(source)
 
     def add_route(self, route):
         if not isinstance(route[0], MeasurementStreamHandler) or not isinstance(route[1], ModelHandler):
@@ -148,7 +156,7 @@ class OnlineOneToOneExperiment(Experiment):
                 # print(data)
 
                 res = mdl.step(data[0])
-                # print(res)  # debug
+                # print("Got response from model: ", res)  # debug
                 self.results.append(res)
 
                 if self.logging:

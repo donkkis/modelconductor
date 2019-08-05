@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modelconductor-handlers.iml" filepath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modelconductor.iml" filepath="$PROJECT_DIR$/.idea/modelconductor.iml" />
     </modules>
   </component>
 </project>

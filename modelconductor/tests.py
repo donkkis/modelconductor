@@ -1,3 +1,4 @@
+__package__ = "modelconductor"
 import pickle
 import queue
 import unittest
@@ -6,15 +7,16 @@ import os
 import numpy as np
 import sqlalchemy
 from keras.layers import Dense, Activation
-from measurementhandler import IncomingMeasurementListener, Measurement
-from experiment import Experiment
-from experiment import OnlineBatchTrainableExperiment
-from modelhandler import ModelHandler, SklearnModelHandler, FMUModelHandler, KerasModelHandler
-from measurementhandler import IncomingMeasurementPoller
-from experiment import OnlineOneToOneExperiment
-from measurementhandler import MeasurementStreamHandler
-from measurementhandler import MeasurementStreamPoller
-from measurementhandler import IncomingMeasurementBatchPoller
+from .utils import Measurement
+from .measurementhandler import IncomingMeasurementListener
+from .experiment import Experiment
+from .experiment import OnlineBatchTrainableExperiment
+from .modelhandler import ModelHandler, SklearnModelHandler, FMUModelHandler, KerasModelHandler
+from .measurementhandler import IncomingMeasurementPoller
+from .experiment import OnlineOneToOneExperiment
+from .measurementhandler import MeasurementStreamHandler
+from .measurementhandler import MeasurementStreamPoller
+from .measurementhandler import IncomingMeasurementBatchPoller
 from matplotlib import pyplot as plt
 import sqlalchemy as sqla
 import pandas as pd
@@ -30,17 +32,17 @@ import uuid
 class SklearnTests(unittest.TestCase):
 
     def test_iterate_and_plot(self):
-        with open('..\\src\\nox_idx.pickle', 'rb') as pickle_file:
+        with open('test_resources\\nox_idx.pickle', 'rb') as pickle_file:
             idx = pickle.load(pickle_file)
 
-        with open('..\\src\\data.pickle', 'rb') as pickle_file:
+        with open('test_resources\\data.pickle', 'rb') as pickle_file:
             data = pickle.load(pickle_file)
 
         X = data[idx].to_numpy()[600:625]
         y = data["Left_NOx"].to_numpy()[600:625]
 
         sk_hand = SklearnModelHandler(
-            model_filename='..\\src\\nox_rfregressor.pickle')
+            model_filename='test_resources\\nox_rfregressor.pickle')
 
         def step_iterate(X, y):
             fig = plt.figure()
@@ -72,13 +74,12 @@ class SklearnTests(unittest.TestCase):
                 plt.pause(0.001)
 
         step_iterate(X, y)
-        sk_hand.destroy()
 
 
 class FmuTests(unittest.TestCase):
     def some_test(self):
         fmu_hand = FMUModelHandler(
-            fmu_filename='C:\\Users\\paho\\Dropbox\\Opiskelu\\Diplomityö\\src\\fmi_simulink_demo\\compute_power_5_2.fmu',
+            fmu_filename='test_resources\\compute_power_5_2.fmu',
             start_time=0.0,
             threshold=2.0,
             stop_time=1238,
@@ -101,10 +102,11 @@ class ModelHandlerTests(unittest.TestCase):
         self.assertTrue(len(mh.sources) == 1)
         self.assertEqual(meas_hand, mh.sources[0])
 
-    def test_add_source_raises_typeerror(self):
-        mh = ModelHandler()
-        with self.assertRaises(TypeError):
-            mh.add_source("jou")
+# TODO Deprecated, Type Check is now done in experiment.setup()
+#    def test_add_source_raises_typeerror(self):
+#        mh = ModelHandler()
+#        with self.assertRaises(TypeError):
+#            mh.add_source("jou")
 
     def test_remove_source(self):
         mh = ModelHandler()
@@ -472,15 +474,15 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(len(ex.routes[0][1].sources) == 1) # ModelHandler
 
     def test_single_source_and_consumer_run(self):
-        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+        with open('test_resources\\nox_idx.pickle', 'rb') as f:
             qcols = pickle.load(f)
             qcols_string = ', '.join('"{0}"'.format(qcol) for qcol in qcols)
 
         lstnr = IncomingMeasurementPoller(polling_interval=0.1,
-                                          db_uri='..\\src\\data_small.db',
+                                          db_uri='test_resources\\data_small.db',
                                           query_cols=qcols_string,
                                           first_unseen_pk=5000)
-        mdel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle', input_keys=qcols)
+        mdel = SklearnModelHandler(model_filename='test_resources\\nox_rfregressor.pickle', input_keys=qcols)
 
         # print("now", dt.now())  #  debug
         exp = OnlineOneToOneExperiment(runtime=0.5)
@@ -495,19 +497,19 @@ class ExperimentTests(unittest.TestCase):
 
     def test_concurrent_read_write_ops(self):
         # consumer
-        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+        with open('test_resources\\nox_idx.pickle', 'rb') as f:
             qcolss = pickle.load(f)
             qcolss_string = ', '.join('"{}"'.format(qcol) for qcol in qcolss)
 
         qcolss_string += ', "Left_NOx", "Time"'
 
         # TODO implement timestamp field generalization
-        mdeel = SklearnModelHandler(model_filename='..\\src\\nox_rfregressor.pickle',
+        mdeel = SklearnModelHandler(model_filename='test_resources\\nox_rfregressor.pickle',
                                     input_keys=qcolss,
                                     target_keys=["Left_NOx"])
 
         # source
-        data = pd.read_csv("..\\src\\NRTC_laskenta\\Raakadata_KAIKKI\\nrtc1_ref_10052019.csv", delimiter=";")
+        data = pd.read_csv("test_resources\\nrtc1_ref_10052019.csv", delimiter=";")
         print(data.head())
 
         engine = sqla.create_engine('sqlite:///test.db')
@@ -552,7 +554,6 @@ class ExperimentTests(unittest.TestCase):
             exp.logger.close()
             os.remove(exp.log_path)
             conn.close()
-            os.remove('test.db')
 
 class OnlineBatchTrainableExperimentTests(unittest.TestCase):
 
@@ -590,7 +591,7 @@ class OnlineBatchTrainableExperimentTests(unittest.TestCase):
     def test_run(self):
         # TODO Fix the test so it terminates in finite time
         # consumer
-        with open('..\\src\\nox_idx.pickle', 'rb') as f:
+        with open('test_resources\\nox_idx.pickle', 'rb') as f:
             qcols = pickle.load(f)
 
         ex = OnlineBatchTrainableExperiment(batch_size=60,logging=False,timestamp_key="Time", runtime=0.5)
@@ -598,7 +599,7 @@ class OnlineBatchTrainableExperimentTests(unittest.TestCase):
         start_time = dt(2019, 5, 10, 11, 18, 33)
         stop_time = dt(2019, 5, 10, 11, 28, 3)
 
-        poller = IncomingMeasurementBatchPoller(db_uri='sqlite:///..\\src\\data.db',
+        poller = IncomingMeasurementBatchPoller(db_uri='sqlite:///test_resources\\data.db',
                                                 query_path='test_resources\\data_query',
                                                 polling_interval=1,
                                                 polling_window=1,
@@ -621,8 +622,6 @@ class OnlineBatchTrainableExperimentTests(unittest.TestCase):
         ex.add_route((poller, mhand))
         ex.setup()
         ex.run()
-        sleep(45)
-        os.remove(ex.log_path)
 
 
 class MeasurementTests(unittest.TestCase):

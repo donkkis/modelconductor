@@ -1,3 +1,4 @@
+__package__ = "modelconductor"
 from abc import ABCMeta, abstractmethod
 from typing import List
 from fmpy import read_model_description, extract
@@ -18,36 +19,13 @@ from keras import Sequential
 from warnings import warn
 import os.path
 import uuid
-
-from exceptions import ExperimentDurationExceededException
-from modelhandler import ModelHandler
+from .utils import Measurement
+from .exceptions import ExperimentDurationExceededException
+from .modelhandler import ModelHandler
 
 # --- Static variables ---
 # TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
-
-
-class Measurement(dict):
-    """
-    A key-value mapping representing a dataframe measured at a single point in time
-    from a data source
-    """
-
-    def to_numpy(self, keys=None):
-        """
-
-        Args:
-            keys: Ordered list, a subset of the Measurement object's dict keys
-            to be taken in to account when creating the numpy array
-
-        Returns:
-            numpy_meas: A subset of the measurement as a numpy array
-
-        """
-        if keys is None:
-            keys = self.keys()
-        numpy_meas = np.array([self[k] for k in keys], ndmin=2)
-        return numpy_meas
 
 
 class MeasurementStreamHandler:
@@ -72,9 +50,6 @@ class MeasurementStreamHandler:
             consumer (ModelHandler): a ModelHandler instance who is to consume the data
             in current buffer
         """
-        if not isinstance(consumer, ModelHandler):
-            t = str(type(consumer))
-            raise TypeError("Expected a ModelHandler type, got {}".format(t))
         self.consumers.append(consumer)
         return consumer
 
@@ -262,6 +237,7 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
 
     def poll_batch(self):
         # avoid threading errors
+        print("Excecuting:", self.query)
         result = self.c.execute(self.query)
         query_keys = [col[0] for col in result.description]
         result = Measurement(dict(zip(query_keys, result.fetchall()[0])))

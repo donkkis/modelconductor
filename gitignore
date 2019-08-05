@@ -1,7 +1,10 @@
+modelconductor.egg-info/
+.pytest_cache/
 .idea/
-.cache/
-.test_resources/
-customtests.py
-test_query
-dummy_query
-test.db
+modelconductor/.idea/
+modelconductor/.cache/
+modelconductor/.test_resources/
+modelconductor/customtests.py
+modelconductor/test_query
+modelconductor/dummy_query
+modelconductor/test.db

@@ -1,3 +1,4 @@
+__package__ = "modelconductor"
 import abc
 import pickle
 import shutil
@@ -6,7 +7,7 @@ import numpy as np
 from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
 from keras import Sequential
-import measurementhandler as mhand
+from .utils import Measurement
 
 
 class ModelHandler:
@@ -30,9 +31,6 @@ class ModelHandler:
         Returns:
             self.sources:
         """
-        if not isinstance(source, mhand.MeasurementStreamHandler):
-            t = str(type(source))
-            raise TypeError("Expected a MeasurementStreamHandler type, got {} instead".format(t))
         self.sources.append(source)
         return source
 
@@ -136,7 +134,7 @@ class SklearnModelHandler(TrainableModelHandler):
         # to make sure input is in format that the model expects
         print(X)
         if isinstance(X, dict):
-            X = mhand.Measurement(X)
+            X = Measurement(X)
         for k, v in X.items():
             if v is None:
                 X[k] = 0  # TODO Ugly!
@@ -207,7 +205,7 @@ class KerasModelHandler(TrainableModelHandler):
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
         if isinstance(X, dict):
-            X = mhand.Measurement(X)
+            X = Measurement(X)
         X = X.to_numpy(self.input_keys)
         result = self.model.predict(X)[0][0]
         self.status = "Ready"
@@ -277,7 +275,7 @@ class KerasModelHandler(TrainableModelHandler):
         self.status = "Busy"
         # TODO fix ugly hack
         if isinstance(measurements[0], dict):
-            measurements = [mhand.Measurement(measurement) for measurement in measurements]
+            measurements = [Measurement(measurement) for measurement in measurements]
         X, y = self.measurements_to_numpy(measurements)
         self.model.train_on_batch(X, y)
         self.status = "Ready"
@@ -297,8 +295,8 @@ class FMUModelHandler(ModelHandler):
     """Loads and executes FMU binary modules
     """
 
-    def __init__(self, fmu_filename, start_time, threshold, stop_time, step_size):
-        super(FMUModelHandler, self).__init__()
+    def __init__(self, fmu_filename, start_time, threshold, stop_time, step_size, target_keys=None, input_keys=None,):
+        super(FMUModelHandler, self).__init__(target_keys=target_keys, input_keys=input_keys)
         self.model_description = read_model_description(fmu_filename)
         self.fmu_filename = fmu_filename
         self.start_time = start_time
@@ -323,9 +321,18 @@ class FMUModelHandler(ModelHandler):
         self.fmu.setupExperiment(startTime=self.start_time)
         self.fmu.enterInitializationMode()
         self.fmu.exitInitializationMode()
+        self.status = "Ready"
 
 
-    def step(self, vr_input, vr_output, data, time, step_size=None):
+    def step(self, X, step_size=None):
+        self.status = "Busy"
+
+        # TODO Fix!
+        vr_input = [self.vrs['Speed'], self.vrs['Torque']]
+        vr_output = [self.vrs['Output']]
+        data = [X['Speed'], X['Torque']]
+        time = X['Time']
+
         if step_size == None:
             step_size = self.step_size
         # set the input
@@ -336,8 +343,10 @@ class FMUModelHandler(ModelHandler):
 
         # get the values for 'inputs' and 'outputs'
         response = self.fmu.getReal(vr_input + vr_output)
-        print(response)
-        return response
+        print("Got response from model", response)
+        self.status = "Ready"
+        # TODO Fix
+        return [response[2]]
 
     def step_batch(self):
         raise NotImplementedError
