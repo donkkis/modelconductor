@@ -79,7 +79,7 @@ class SklearnTests(unittest.TestCase):
 class FmuTests(unittest.TestCase):
     def some_test(self):
         fmu_hand = FMUModelHandler(
-            fmu_filename='test_resources\\compute_power_5_2.fmu',
+            fmu_path='test_resources\\compute_power_5_2._fmu',
             start_time=0.0,
             threshold=2.0,
             stop_time=1238,

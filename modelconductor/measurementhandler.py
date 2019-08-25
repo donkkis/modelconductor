@@ -24,8 +24,8 @@ from .exceptions import ExperimentDurationExceededException
 from .modelhandler import ModelHandler
 
 # --- Static variables ---
-# TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
-TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
+TIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+# TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
 
 
 class MeasurementStreamHandler:
@@ -43,6 +43,9 @@ class MeasurementStreamHandler:
         # DO NOT use mutable types as default arguments
         self.buffer = buffer if buffer is not None else Queue()
         self.consumers = consumers if consumers is not None else []
+        self.global_idx = 0
+        self.validation_strategy = "last_datapoint"
+        self.last_measurement = None
 
     def add_consumer(self, consumer):
         """
@@ -62,7 +65,10 @@ class MeasurementStreamHandler:
         Args:
             measurement (Measurement): A single datapoint dict
         """
+        if "index" not in measurement.keys():
+            measurement["index"] = self.global_idx
         self.buffer.put_nowait(measurement)
+        self.global_idx = self.global_idx + 1
 
     def receive_batch(self, measurements):
         """
@@ -70,6 +76,22 @@ class MeasurementStreamHandler:
         Args:
             measurements (list[Measurement]):  A list of measurement datapoints
         """
+        for measurement in measurements:
+            if "index" not in measurement.keys():
+                measurement["index"] = self.global_idx
+                self.global_idx = self.global_idx + 1
+
+        if self.validation_strategy == "last_datapoint":
+            for measurement in measurements:
+                if self.last_measurement is None:
+                    self.last_measurement = measurement
+                for k, v in measurement.items():
+                    if v is None:
+                        try:
+                            measurement[k] = self.last_measurement[k]
+                        except Exception:
+                            raise Exception("Nonevalue encountered but no last datapoint was available")
+
         [self.buffer.put_nowait(measurement) for measurement in measurements]
 
     @abc.abstractmethod
@@ -81,6 +103,7 @@ class MeasurementStreamHandler:
         """
         try:
             measurement = self.buffer.get_nowait()
+            self.last_measurement = measurement
             return measurement
         except Empty:
             return None
@@ -119,7 +142,7 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         # TODO should inherit this from Experiment
         self.start_time = dt.now() if start_time is None else start_time
         # TODO should inherit this from Experiment
-        self.stop_time = self.start_time + timedelta(minutes=10) if stop_time is None else stop_time
+        self.stop_time = self.start_time + timedelta(minutes=120) if stop_time is None else stop_time
         # TODO is this even needed?
         self.query_cols = query_cols
         self.polling_window = polling_window
@@ -156,7 +179,9 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
                 except sqlite3.OperationalError:
                     print("Waiting for database to become operational...")
                     sleep(5)
-                # sleep(self.polling_interval)
+                sleep(self.polling_interval)
+        except KeyboardInterrupt:
+            "Process exited per user request"
         except Exception:
             raise Exception("Unknown error")
         finally:
@@ -167,7 +192,7 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
     def poll_batch(self):
         # avoid threading errors
         q = self.query.format(self.polling_start_timestamp, self.polling_stop_timestamp)
-        # print(q)  # debug
+        print(q[:50])  # debug
         res = self.conn.execute(q) # sqlalchemy.engine.ResultProxy
         data = res.fetchall()
         data = [dict(zip(tuple(res.keys()), datum)) for datum in data]
@@ -237,7 +262,7 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
 
     def poll_batch(self):
         # avoid threading errors
-        print("Excecuting:", self.query)
+        # print("Excecuting:", self.query)
         result = self.c.execute(self.query)
         query_keys = [col[0] for col in result.description]
         result = Measurement(dict(zip(query_keys, result.fetchall()[0])))

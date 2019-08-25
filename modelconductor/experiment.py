@@ -136,10 +136,12 @@ class OnlineOneToOneExperiment(Experiment):
         # Initiate logging if applicable
         if self.logging:
             # TODO should move most of this stuff to initiate_logging?
-            assert(len(mdl.target_keys) == 1)
-            gt_title = "{}_meas".format(mdl.target_keys[0])
-            pred_title = "{}_pred".format(mdl.target_keys[0])
-            self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
+            # assert(len(mdl.target_keys) == 1)
+            # gt_title = "{}_meas".format(mdl.target_keys[0])
+            # pred_title = "{}_pred".format(mdl.target_keys[0])
+            headers = ["timestamp"] + mdl.input_keys + mdl.target_keys + mdl.control_keys
+            print(headers)
+            self.logger = self.initiate_logging(headers=headers, path=self.log_path)
 
         # Whenever new data is received, feed-forward to model
         # print("now ", dt.now())  # debug
@@ -161,11 +163,8 @@ class OnlineOneToOneExperiment(Experiment):
 
                 if self.logging:
                     # TODO need to generalize the measurement timestamp
-                    timestamp_key = "Time"
-
-                    row = [str(data[0][timestamp_key]),
-                           str(data[0][mdl.target_keys[0]]),
-                           str(res[0])]
+                    # TODO will fail with more than one control key!
+                    row = [str(dt.now())] + [str(item) for item in res[0]] + [str(data[0][mdl.control_keys[0]])]
 
                     # print(row) #  debug
                     self.log_row(row)
@@ -173,6 +172,7 @@ class OnlineOneToOneExperiment(Experiment):
                 continue
 
         src._stopevent = threading.Event()
+        mdl.destroy()
         print("Process exited due to experiment time out")
         return True
 
@@ -227,7 +227,7 @@ class OnlineBatchTrainableExperiment(Experiment):
         # Initiate logging if applicable
         if self.logging:
             # TODO should move most of this stuff to initiate_logging?
-            assert(len(mdl.target_keys) == 1)
+            # assert(len(mdl.target_keys) == 1)
             gt_title = "{}_meas".format(mdl.target_keys[0])
             pred_title = "{}_pred".format(mdl.target_keys[0])
             self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)

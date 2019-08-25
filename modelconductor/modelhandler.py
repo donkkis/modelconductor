@@ -8,18 +8,26 @@ from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
 from keras import Sequential
 from .utils import Measurement
+from uuid import uuid1
 
 
 class ModelHandler:
 
-    def __init__(self, sources=None, input_keys=None, target_keys=None):
-        """
+    def __init__(self, sources=None, input_keys=None, target_keys=None,
+                 control_keys=None):
+        """A base class for ModelHandler objects
+
         Args:
-            sources (List[MeasurementStreamHandler]): A list of MeasurementStreamHandler objects
-            associated with this ModelHandler instance
+            sources (List[MeasurementStreamHandler]): A list of
+                MeasurementStreamHandler objects associated with this
+                ModelHandler instance
+            input_keys (List[str]):
+            target_keys (List[str]):
+            control_keys (List[str]):
         """
         self.input_keys = input_keys
         self.target_keys = target_keys
+        self.control_keys = control_keys
         self.sources = sources if sources is not None else []
         self.status = None
 
@@ -39,8 +47,7 @@ class ModelHandler:
         return source
 
     def pull(self):
-        """
-        Request the next FIFO-queued datapoint from each of the sources
+        """Request the next FIFO-queued data point from each source
         TODO: should be able to handle subsets of sources
         Returns: List[Measurement]
 
@@ -50,33 +57,31 @@ class ModelHandler:
         return res
 
     def pull_batch(self, batch_size):
-        """
+        """Request the next batch_size queued data points each source
 
         Args:
-            batch_size: Request the next batch_size FIFO-queued datapoints
-            from each of the sources
+            batch_size:
 
         Returns: List[List[Measurement]]
-
         """
         res = [source.give_batch(batch_size=batch_size) for source in self.sources]
         return res
 
     @abc.abstractmethod
     def step_batch(self):
-        """Feed-forward the associated model with a batch of (consecutive) inputs"""
+        """Feed-forward the model with batch of (consecutive) inputs"""
 
     @abc.abstractmethod
     def step(self):
-        """Feed-forward the associated model with the latest datapoint and return the response"""
+        """Feed-forward the model with the latest data point"""
 
     @abc.abstractmethod
     def spawn(self):
-        """Instantiate the associated model so that steps can be executed"""
+        """Instantiate the model so that steps can be executed"""
 
     @abc.abstractmethod
     def destroy(self):
-        """Remove the model instance from the current configuration and delete self"""
+        """Remove the model instance from the current experiment"""
 
 
 class TrainableModelHandler(ModelHandler):
@@ -292,67 +297,108 @@ class KerasModelHandler(TrainableModelHandler):
 
 
 class FMUModelHandler(ModelHandler):
-    """Loads and executes FMU binary modules
-    """
 
-    def __init__(self, fmu_filename, start_time, threshold, stop_time, step_size, target_keys=None, input_keys=None,):
-        super(FMUModelHandler, self).__init__(target_keys=target_keys, input_keys=input_keys)
-        self.model_description = read_model_description(fmu_filename)
-        self.fmu_filename = fmu_filename
+    def __init__(self, fmu_path, step_size, start_time=None, stop_time=None,
+                 target_keys=None, input_keys=None, control_keys=None):
+        """Loads and executes Functional Mockup Unit (FMU) modules
+
+        Handles FMU archives adhering to the Functional Mockup Interface
+        standard 2.0 as a part of a digital twin experiment. We make
+        extensive use of the excellent FMPY library. The full FMI spec
+        can be found at https://fmi-standard.org/
+
+        Args:
+            fmu_path (str): Path to the FMI-compliant zip-archive
+            start_time (float): Value of time variable supplied to the
+                FMU at the first timestep of the simulation. None (def)
+                translates to 0.0
+            stop_time (float): (Optional) final value of the time
+                variable in the simulation. A valid FMU will report an
+                error state if master tries to simulate past stop_time
+            step_size (float): The default communication step size for
+                the model. Can be be overridden in individual calls to
+                step method to accommodate dynamical stepping
+            target_keys (List(str)): Dependent variable names in the
+                simulation
+            input_keys (List(str)): Independent variable names in the
+                simulation
+            control_keys (List(str)): (Optional) Variable names e.g. for
+                validating the simulation output, in meas-vs-sim style
+        """
+        super(FMUModelHandler, self).__init__(target_keys=target_keys,
+                                              input_keys=input_keys,
+                                              control_keys=control_keys)
+        self.model_description = read_model_description(fmu_path)
+        self.fmu_filename = fmu_path
         self.start_time = start_time
-        self.threshold = threshold
         self.stop_time = stop_time
         self.step_size = step_size
-        self.unzipdir = extract(fmu_filename)
-        self.fmu = None
+        self.unzipdir = extract(fmu_path)
         self.vrs = {}
+        self._fmu = None
+        self._vr_input = None
+        self._vr_output = None
+        self._get_variable_dict()
+        self._get_value_references()
 
-        for variable in self.model_description.modelVariables:
-            self.vrs[variable.name] = variable.valueReference
+    def _get_variable_dict(self):
+        for var in self.model_description.modelVariables:
+            if var.causality not in self.vrs.keys():
+                self.vrs[var.causality] = {}
+            self.vrs[var.causality][var.name] = var.valueReference
+
+    def _get_value_references(self):
+        # integer pointers to input variables in FMU
+        self._vr_input = \
+            [self.vrs["input"][k] for k, v in self.vrs["input"].items()]
+        # integer pointers to output variables in FMU
+        self._vr_output = \
+            [self.vrs["output"][k] for k, v in self.vrs["output"].items()]
 
     def spawn(self):
 
-        self.fmu = FMU2Slave(
-            guid=self.model_description.guid,
-            unzipDirectory=self.unzipdir,
-            modelIdentifier=self.model_description.coSimulation.modelIdentifier,
-            instanceName='instance1')
-        self.fmu.instantiate()
-        self.fmu.setupExperiment(startTime=self.start_time)
-        self.fmu.enterInitializationMode()
-        self.fmu.exitInitializationMode()
-        self.status = "Ready"
+        guid = self.model_description.guid
+        unzipdir = self.unzipdir
+        model_id = self.model_description.coSimulation.modelIdentifier
+        inst_name = model_id[:8] + str(uuid1())[:8]  # Unique 16-char FMU ID
 
+        self._fmu = FMU2Slave(guid=guid, unzipDirectory=unzipdir,
+                              modelIdentifier=model_id, instanceName=inst_name)
+        self._fmu.instantiate()
+        self._fmu.setupExperiment(startTime=self.start_time,
+                                  stopTime=self.stop_time)
+        self._fmu.enterInitializationMode()
+        self._fmu.exitInitializationMode()
+        self.status = "Ready"
 
     def step(self, X, step_size=None):
         self.status = "Busy"
 
-        # TODO Fix!
-        vr_input = [self.vrs['Speed'], self.vrs['Torque']]
-        vr_output = [self.vrs['Output']]
-        data = [X['Speed'], X['Torque']]
-        time = X['Time']
+        data = [X[k] for k in self.vrs["input"].keys()]
+        time = X['index']
 
-        if step_size == None:
-            step_size = self.step_size
+        step_size = self.step_size if step_size is None else step_size
         # set the input
-        self.fmu.setReal(vr_input, data)
+        print("stepping:")  # debug
+        print(data)  # debug
+        self._fmu.setReal(self.vr_input, data)
 
         # perform one step
-        self.fmu.doStep(currentCommunicationPoint=time, communicationStepSize=step_size)
+        self._fmu.doStep(currentCommunicationPoint=time,
+                         communicationStepSize=step_size)
 
         # get the values for 'inputs' and 'outputs'
-        response = self.fmu.getReal(vr_input + vr_output)
+        response = self._fmu.getReal(self.vr_input + self.vr_output)
         print("Got response from model", response)
         self.status = "Ready"
         # TODO Fix
-        return [response[2]]
+        return [response]
 
     def step_batch(self):
         raise NotImplementedError
 
     def destroy(self):
-        self.fmu.terminate()
-        self.fmu.freeInstance()
+        self._fmu.terminate()
+        self._fmu.freeInstance()
         # clean up
         shutil.rmtree(self.unzipdir)

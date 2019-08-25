@@ -2,47 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.cache/v/cache/lastfailed" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/dictionaries/paho.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/modelconductor-handlers.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/customtests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/experiment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/measurementhandler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/modelhandler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/compute_power_5_2.fmu" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/data.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/data.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/data_query" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/data_small.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/dummy_query" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/nox_idx.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/nox_rfregressor.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/nrtc1_ref_10052019.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/test_resources/test_query" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/modelconductor/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.cache/v/cache/lastfailed" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modelconductor-handlers.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiment.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/measurementhandler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modelhandler.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/experiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/measurementhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/measurementhandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/modelhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/modelhandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/tests.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -83,14 +48,16 @@
     <session id="-381741950">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="13" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.5" value="5" />
           <entry key="project.open.time.6" value="3" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="13" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -101,14 +68,14 @@
           <entry key="dummy" value="40" />
           <entry key="gitignore" value="190" />
           <entry key="md" value="1141" />
-          <entry key="py" value="28476" />
+          <entry key="py" value="31878" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Markdown" value="1141" />
           <entry key="PLAIN_TEXT" value="247" />
-          <entry key="Python" value="29602" />
+          <entry key="Python" value="33004" />
           <entry key="SQL" value="39" />
         </counts>
       </usages-collector>
@@ -122,7 +89,7 @@
           <entry key="log" value="14" />
           <entry key="log151859e2-" value="1" />
           <entry key="md" value="1" />
-          <entry key="py" value="23" />
+          <entry key="py" value="26" />
           <entry key="test_query" value="1" />
         </counts>
       </usages-collector>
@@ -130,7 +97,7 @@
         <counts>
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="20" />
-          <entry key="Python" value="23" />
+          <entry key="Python" value="26" />
           <entry key="SQL" value="1" />
         </counts>
       </usages-collector>
@@ -138,11 +105,15 @@
     <session id="-1052910200">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -150,14 +121,14 @@
           <entry key="Python Console" value="1657" />
           <entry key="dummy_query" value="54" />
           <entry key="gitignore" value="42" />
-          <entry key="py" value="8056" />
+          <entry key="py" value="10471" />
           <entry key="test_query" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="42" />
-          <entry key="Python" value="9713" />
+          <entry key="Python" value="12128" />
           <entry key="SQL" value="61" />
         </counts>
       </usages-collector>
@@ -166,138 +137,124 @@
           <entry key="csv" value="1" />
           <entry key="dummy_query" value="2" />
           <entry key="gitignore" value="2" />
-          <entry key="log" value="15" />
+          <entry key="log" value="16" />
           <entry key="py" value="5" />
           <entry key="pyi" value="1" />
-          <entry key="test_query" value="2" />
+          <entry key="test_query" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="18" />
+          <entry key="PLAIN_TEXT" value="19" />
           <entry key="Python" value="5" />
           <entry key="PythonStub" value="1" />
-          <entry key="SQL" value="4" />
+          <entry key="SQL" value="5" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.19773096">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/experiment.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2848">
-                  <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
-                  <folding>
-                    <element signature="e#31#41#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/gitignore">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="34">
-                  <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1377">
-                  <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/utils.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="102">
-                  <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/__init__.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="34">
-                  <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/exceptions.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="51">
-                  <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3349">
-                  <caret line="219" column="28" selection-start-line="219" selection-start-column="28" selection-end-line="219" selection-end-column="28" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-10042">
-                  <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/README.md">
-              <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-                <state split_layout="SPLIT">
-                  <first_editor relative-caret-position="51">
-                    <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-                  </first_editor>
-                  <second_editor />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/LICENSE">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="21" selection-start-line="21" selection-end-line="21" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/setup.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="21" selection-start-line="21" selection-end-line="21" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/experiment.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="312">
+              <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="52" />
+              <folding>
+                <element signature="e#31#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="533">
+              <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
+              <folding>
+                <element signature="e#31#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-8970">
+              <caret line="86" column="9" lean-forward="true" selection-start-line="86" selection-start-column="9" selection-end-line="86" selection-end-column="9" />
+              <folding>
+                <element signature="e#31#44#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/fmpy/fmi2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1292">
+              <caret line="79" column="15" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/fmpy/fmi1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1683">
+              <caret line="103" column="6" selection-start-line="103" selection-start-column="6" selection-end-line="103" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/exceptions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1292">
+              <caret line="98" selection-start-line="98" selection-end-line="98" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -319,6 +276,11 @@
       <find>MeasurementStreamHandler</find>
       <find>ModelHandler</find>
       <find>mhand</find>
+      <find>execut</find>
+      <find>Execut</find>
+      <find>threshold</find>
+      <find>thr</find>
+      <find>uuid</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -344,19 +306,33 @@
         <option value="$PROJECT_DIR$/modelconductor/exceptions.py" />
         <option value="$PROJECT_DIR$/modelconductor/utils.py" />
         <option value="$PROJECT_DIR$/modelconductor/tests.py" />
+        <option value="$PROJECT_DIR$/gitignore" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/modelconductor/customtests.py" />
         <option value="$PROJECT_DIR$/modelconductor/measurementhandler.py" />
         <option value="$PROJECT_DIR$/modelconductor/experiment.py" />
         <option value="$PROJECT_DIR$/modelconductor/modelhandler.py" />
-        <option value="$PROJECT_DIR$/gitignore" />
-        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
     <option name="width" value="960" />
     <option name="height" value="1040" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State />
+          <State>
+            <id>Python</id>
+          </State>
+          <State>
+            <id>RegExp</id>
+          </State>
+        </expanded-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -391,7 +367,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/modelconductor" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -419,34 +395,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Python tests.Unittests in tests.py">
-    <configuration name="Unittests for tests.ExperimentTests.test_add_route" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="modelconductor" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_add_route&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="modelconductor" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.ExperimentTests.test_concurrent_read_write_ops&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Unittests in tests.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="modelconductor" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -461,33 +409,63 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for modelconductor.tests.ExperimentTests.test_add_route" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="modelconductor" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;modelconductor.tests.ExperimentTests.test_add_route&quot;" />
+      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="modelconductor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="modelconductor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python tests.Unittests in tests.py" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" />
-      <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_add_route" />
-      <item itemvalue="Python tests.pytest for modelconductor.tests.ExperimentTests.test_add_route" />
+      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" />
+      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" />
+      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Unittests in tests.py" />
-        <item itemvalue="Python tests.pytest for modelconductor.tests.ExperimentTests.test_add_route" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_add_route" />
-        <item itemvalue="Python tests.Unittests for tests.ExperimentTests.test_concurrent_read_write_ops" />
+        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" />
+        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" />
+        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" />
       </list>
     </recent_temporary>
   </component>
@@ -505,34 +483,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_add_route - 2019.07.02 at 12h 34m 10s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_add_route" configurationId="tests" />
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 16h 01m 25s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_tests_ExperimentTests_test_add_route - 2019.07.02 at 12h 34m 28s.xml">
-      <configuration name="Unittests for tests.ExperimentTests.test_add_route" configurationId="tests" />
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 16h 02m 23s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.07.02 at 12h 41m 00s.xml">
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_can_be_instantiated - 2019.08.12 at 16h 04m 04s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_can_be_instantiated - 2019.08.12 at 16h 04m 31s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_can_be_instantiated - 2019.08.12 at 16h 04m 45s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 16h 06m 03s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_icel_experiment - 2019.08.12 at 16h 06m 14s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_icel_experiment - 2019.08.12 at 16h 10m 22s.xml">
+      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_tests_py - 2019.08.25 at 23h 49m 14s.xml">
       <configuration name="Unittests in tests.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.07.02 at 12h 45m 53s.xml">
-      <configuration name="Unittests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.08.05 at 21h 26m 30s.xml">
-      <configuration name="Unittests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.08.05 at 21h 26m 56s.xml">
-      <configuration name="Unittests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_for_modelconductor_tests_ExperimentTests_test_add_route - 2019.08.05 at 21h 27m 19s.xml">
-      <configuration name="pytest for modelconductor.tests.ExperimentTests.test_add_route" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.08.05 at 21h 28m 21s.xml">
-      <configuration name="Unittests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.08.05 at 21h 28m 25s.xml">
-      <configuration name="Unittests in tests.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_tests_py - 2019.08.05 at 21h 38m 40s.xml">
+    <history-entry file="Unittests_in_tests_py - 2019.08.25 at 23h 55m 01s.xml">
       <configuration name="Unittests in tests.py" configurationId="tests" />
     </history-entry>
   </component>
@@ -547,20 +525,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.73778504" visible="true" weight="0.1601686" />
-      <window_info id="Structure" order="1" sideWeight="0.262215" side_tool="true" visible="true" weight="0.1601686" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7300813" visible="true" weight="0.16280295" />
+      <window_info active="true" id="Structure" order="1" sideWeight="0.2699187" side_tool="true" visible="true" weight="0.16280295" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.12351029" />
-      <window_info anchor="bottom" x="71" y="487" width="1603" height="444" id="Run" order="2" sideWeight="0.49841937" visible="true" weight="0.3347779" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.49729145" />
+      <window_info anchor="bottom" x="71" y="487" width="1603" height="444" id="Run" order="2" sideWeight="0.49841937" visible="true" weight="0.3336945" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3954496" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32827735" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32629558" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015806" side_tool="true" weight="0.3347779" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015806" side_tool="true" weight="0.33406836" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.33109406" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -577,11 +556,6 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_test_exp_6bdf982c-9779-11e9-a65a-005056c00008.log" />
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_21-33-14.log" />
-    <entry file="file://$PROJECT_DIR$/experiment_2019-06-25_22-04-39.log151859e2-" />
-    <entry file="file://$PROJECT_DIR$/d1d579e8-experiment_2019-06-25_22-09-56.log" />
-    <entry file="file://$PROJECT_DIR$/d1caf274-experiment_2019-06-25_22-09-56.log" />
     <entry file="file://$PROJECT_DIR$/_test_exp_287a6148-983b-11e9-9e7f-005056c00008.log" />
     <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/site-packages/keras/engine/sequential.py" />
     <entry file="file://$PROJECT_DIR$/_test_exp_08e14eec-990e-11e9-8cb8-005056c00008.log" />
@@ -619,27 +593,89 @@
     <entry file="file://$PROJECT_DIR$/customtests.py" />
     <entry file="file://$PROJECT_DIR$/test_resources/test_query" />
     <entry file="file://$PROJECT_DIR$/experiment_2019-06-28_12-19-42.csv" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="152" selection-start-line="152" selection-end-line="152" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/loader.py" />
     <entry file="file://$PROJECT_DIR$/exceptions.py" />
     <entry file="file://$PROJECT_DIR$/modelhandler.py" />
     <entry file="file://$PROJECT_DIR$/experiment.py" />
     <entry file="file://$PROJECT_DIR$/tests.py" />
     <entry file="file://$PROJECT_DIR$/measurementhandler.py" />
     <entry file="file://$PROJECT_DIR$/__init__.py" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/case.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/case.py" />
+    <entry file="file://$PROJECT_DIR$/LICENCE" />
+    <entry file="file://$PROJECT_DIR$/modelconductor/gitignore" />
+    <entry file="file://$PROJECT_DIR$/modelconductor/customtests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="604" selection-start-line="604" selection-end-line="604" />
+        <state relative-caret-position="1123">
+          <caret line="131" column="23" selection-start-line="131" selection-start-column="23" selection-end-line="131" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LICENCE" />
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="320">
+            <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modelconductor/test_resources/test_query">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="848">
+          <caret line="165" selection-start-line="165" selection-end-line="165" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modelconductor/experiment_2019-08-12_16-06-39.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="821">
+          <caret line="228" column="43" selection-start-line="228" selection-start-column="43" selection-end-line="228" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/fmpy/fmi2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1292">
+          <caret line="79" column="15" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/fmpy/fmi1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1683">
+          <caret line="103" column="6" selection-start-line="103" selection-start-column="6" selection-end-line="103" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modelconductor/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modelconductor/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -656,77 +692,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3349">
-          <caret line="219" column="28" selection-start-line="219" selection-start-column="28" selection-end-line="219" selection-end-column="28" />
+        <state relative-caret-position="1292">
+          <caret line="98" selection-start-line="98" selection-end-line="98" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
+    <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1377">
-          <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+        <state relative-caret-position="-8970">
+          <caret line="86" column="9" lean-forward="true" selection-start-line="86" selection-start-column="9" selection-end-line="86" selection-end-column="9" />
+          <folding>
+            <element signature="e#31#44#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modelconductor/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2848">
-          <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
+        <state relative-caret-position="312">
+          <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="52" />
           <folding>
             <element signature="e#31#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gitignore">
+    <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10042">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LICENSE">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="51">
-            <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          </first_editor>
-          <second_editor />
+        <state relative-caret-position="533">
+          <caret line="404" lean-forward="true" selection-start-line="404" selection-end-line="404" />
+          <folding>
+            <element signature="e#31#41#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
