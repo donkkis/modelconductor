@@ -140,7 +140,8 @@ class OnlineOneToOneExperiment(Experiment):
             # gt_title = "{}_meas".format(mdl.target_keys[0])
             # pred_title = "{}_pred".format(mdl.target_keys[0])
             headers = ["timestamp"] + mdl.input_keys + mdl.target_keys + mdl.control_keys
-            print(headers)
+            # debug
+            # print(headers)
             self.logger = self.initiate_logging(headers=headers, path=self.log_path)
 
         # Whenever new data is received, feed-forward to model

@@ -1,3 +1,5 @@
+import queue
+
 __package__ = "modelconductor"
 from abc import ABCMeta, abstractmethod
 from typing import List
@@ -22,10 +24,14 @@ import uuid
 from .utils import Measurement
 from .exceptions import ExperimentDurationExceededException
 from .modelhandler import ModelHandler
+from modelconductor import server
+from threading import Thread
+import json
 
 # --- Static variables ---
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 # TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
+PORT = 8080
 
 
 class MeasurementStreamHandler:
@@ -121,7 +127,34 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
     """Should distribute the incoming
     signals to the relevant simulation models
     """
-    pass
+
+    def receive(self): pass
+
+    def listen(self):
+
+        e = threading.Event()
+        q = queue.Queue()
+
+        # def wait_for_event(e):
+        #    """Wait for the event to be set before doing anything"""
+        #    print('wait_for_event starting')
+        #    event_is_set = e.wait()
+        #    print('event set: %s', event_is_set)
+        #    e.clear()
+
+        t = Thread(target=server.run, args=(e,q))
+        t.start()
+
+        while True:
+            item = q.get()
+            if item is None:
+                continue
+            # expect dict
+            data = json.loads(item.decode('utf-8'))
+            data = Measurement(data)
+            self.receive_single(data)
+            print(self.buffer.qsize())
+
 
 class MeasurementStreamPoller(MeasurementStreamHandler):
 
@@ -246,14 +279,26 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
             self.polling_interval) + " s interval, CTRL+C to stop")
         try:
             while not isinstance(self._stopevent, type(threading.Event())):
-                sleep(self.polling_interval)
                 try:
+                    # wait for the remaining period in polling_interval
+                    # if applicable
+                    sleep(self.polling_interval - query_duration)
+                except Exception:
+                    pass
+                try:
+                    tic = dt.now()
                     self.poll_batch()
+                    toc = dt.now()
+                    # query cost in seconds
+                    query_duration = ((toc - tic).seconds * 10**6 +
+                                      (toc - tic).microseconds) / 10**6
                 except IndexError:
-                    print("No more records available, sleeping...")
-                    sleep(0.5)
+                    # debug
+                    # print("No more records available, sleeping...")
+                    query_duration = 0
                 except sqlite3.OperationalError:
                     print("Waiting for database to become operational...")
+                    query_duration = 0
                     sleep(5)
         except Exception:
             raise Exception("Unknown error")

@@ -113,10 +113,12 @@ class SklearnModelHandler(TrainableModelHandler):
                  model_filename,
                  input_keys=None,
                  target_keys=None,
+                 control_keys=None,
                  sources=None):
         super().__init__(sources=sources,
                          input_keys=input_keys,
-                         target_keys=target_keys)
+                         target_keys=target_keys,
+                         control_keys=control_keys)
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
 
@@ -137,18 +139,19 @@ class SklearnModelHandler(TrainableModelHandler):
         self.status = "Busy"
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
-        print(X)
+        # print(X)
         if isinstance(X, dict):
             X = Measurement(X)
         for k, v in X.items():
             if v is None:
-                X[k] = 0  # TODO Ugly!
+                X[k] = 0
         X = X.to_numpy(self.input_keys)
         # print(X)
-        result = list(self.model.predict(X))
+        result = list(X[0]) + list(self.model.predict(X))
+        # debug
+        # print("Got response from model", str(result)[0:20], "...", "[Message has been truncated]")
         self.status = "Ready"
-        # print(result)
-        return result
+        return [result]
 
     def step_batch(self, X):
         raise NotImplementedError
@@ -161,7 +164,7 @@ class SklearnModelHandler(TrainableModelHandler):
         self.status = "Ready"
 
     def destroy(self):
-        raise NotImplementedError
+        pass
 
 
 class KerasModelHandler(TrainableModelHandler):
@@ -170,6 +173,7 @@ class KerasModelHandler(TrainableModelHandler):
                  sources=None,
                  input_keys=None,
                  target_keys=None,
+                 control_keys=None,
                  model=None,
                  layers=None):
         """
@@ -186,7 +190,10 @@ class KerasModelHandler(TrainableModelHandler):
             Activation('softmax'),]
 
         """
-        super().__init__(sources=sources, input_keys=input_keys, target_keys=target_keys)
+        super().__init__(sources=sources,
+                         input_keys=input_keys,
+                         target_keys=target_keys,
+                         control_keys=control_keys)
         if model is None and layers is None:
             raise Exception("Keras model or layer description excpected")
         if model:
@@ -212,10 +219,10 @@ class KerasModelHandler(TrainableModelHandler):
         if isinstance(X, dict):
             X = Measurement(X)
         X = X.to_numpy(self.input_keys)
-        result = self.model.predict(X)[0][0]
+        result = [list(X), self.model.predict(X)[0][0]]
         self.status = "Ready"
         # print(result)  # debug
-        return result
+        return [result]
 
 
     def spawn(self):
@@ -381,14 +388,14 @@ class FMUModelHandler(ModelHandler):
         # set the input
         print("stepping:")  # debug
         print(data)  # debug
-        self._fmu.setReal(self.vr_input, data)
+        self._fmu.setReal(self._vr_input, data)
 
         # perform one step
         self._fmu.doStep(currentCommunicationPoint=time,
                          communicationStepSize=step_size)
 
         # get the values for 'inputs' and 'outputs'
-        response = self._fmu.getReal(self.vr_input + self.vr_output)
+        response = self._fmu.getReal(self._vr_input + self._vr_output)
         print("Got response from model", response)
         self.status = "Ready"
         # TODO Fix
