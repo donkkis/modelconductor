@@ -8,6 +8,8 @@ from datetime import timedelta
 from warnings import warn
 from .measurementhandler import MeasurementStreamHandler
 from .modelhandler import ModelHandler
+from functools import wraps
+
 
 
 class Experiment:
@@ -15,23 +17,23 @@ class Experiment:
     A base class for Experiments
     """
 
-    def __init__(self, start_time=None,
+    def __init__(self,
                  routes=None,
                  runtime=10,
                  logging=False,
                  log_path=None):
         """
         Args:
-            routes (List(tuple(MeasurementStreamHandler, ModelHandler)): Mappings between data sources and data
-            sinks
-            runtime (int): Time in minutes after which the experiment is terminated and all associated
-            threads are terminated as well
-            logging (Boolean): If the experiment results should be output to a file
-            log_path (str): The filepath where to output the results. Has no effect is logging is False
+            routes: List of (MeasurementStreamHandler, ModelHandler) tuples),
+                defining one-to-one mappings from data sources to destinations
+            runtime: Integer time in minutes after which the experiment is
+                terminated and all associated threads are killed
+            logging: Boolean, if True experiment results are output to a file
+            log_path: The file_path string where to output the results.
+                Has no effect is logging is False
         """
-
-        self.start_time = start_time if start_time is not None else dt.now()
-        self.stop_time = self.start_time + timedelta(minutes=runtime)
+        self.stop_time = None
+        self.runtime = runtime
         self.routes = routes if routes is not None else []
         self.results = []
         self.log_path = log_path
@@ -41,15 +43,26 @@ class Experiment:
     def __str__(self):
         return str(type(self))
 
+    @abc.abstractmethod
+    def run(self): pass
+
+    def _run(run):
+        @wraps(run)
+        def wrapper(inst, *args, **kwargs):
+            inst.stop_time = dt.now() + timedelta(minutes=inst.runtime)
+            return run(inst, *args, **kwargs)
+        return wrapper
+
+
     def initiate_logging(self, path=None, headers=None):
-        """
+        """Instantiate the log file and write headers
 
         Args:
-            path (String): Path where the outfile will be written
-            headers (List[String]): Headers for the generated csv file
+            path: Path string of where the outfile will be written
+            headers: List of strings, headers for the generated csv file
 
         Returns:
-
+            The file handle to the instantiated logfile
         """
         tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
         if path is None:
@@ -65,13 +78,12 @@ class Experiment:
         return f
 
     def terminate_logging(self, file=None):
-        """
+        """Stop logging and finalize the file handle object
 
         Args:
-            file (file object): File object instance to be finalized
-
+            file: File handle object instance to be finalized
         Returns:
-
+            The finalized file handle
         """
         if file is None:
             file = self.logger
@@ -79,13 +91,11 @@ class Experiment:
         return file
 
     def log_row(self, row):
-        """
+        """Write a single row to log file
 
         Args:
-            row (List(String)):
-
-        Returns:
-
+            row (List(String)): List of strings that will be output to
+                new row in file as comma separated values
         """
         try:
             print(",".join(row), file=self.logger)
@@ -93,11 +103,14 @@ class Experiment:
         except Exception:
             warn("Log file could not be written", ResourceWarning)
 
-    @abc.abstractmethod
-    def run(self):
-        pass
-
     def setup(self):
+        """Setup the routes
+
+        Go through each tuple in routes and add source to consumer and
+        consumer to source
+
+        # TODO This can probably be called directly from run and not by user
+        """
         for route in self.routes:
             source = route[0]  # type: MeasurementStreamHandler
             consumer = route[1]  # type: ModelHandler
@@ -109,20 +122,31 @@ class Experiment:
 
             if not isinstance(source, MeasurementStreamHandler):
                 t = str(type(source))
-                raise TypeError("Expected a MeasurementStreamHandler type, got {} instead".format(t))
+                raise TypeError("Expected a MeasurementStreamHandler type, "
+                                "got {} instead".format(t))
             consumer.add_source(source)
 
     def add_route(self, route):
-        if not isinstance(route[0], MeasurementStreamHandler) or not isinstance(route[1], ModelHandler):
-            raise TypeError
+        """Add a data route to the current experiment
+
+        Args:
+            route: A (MeasurementStreamHandler, ModelHandler) object
+        """
+        if not isinstance(route[0], MeasurementStreamHandler):
+            raise TypeError("Route position 0 is not a valid "
+                            "MeasurementStreamHandler object")
+        if not isinstance(route[1], ModelHandler):
+            raise TypeError("Route position 1 is not a valid "
+                            "ModelHandler object")
         self.routes.append(route)
+
 
 class OnlineOneToOneExperiment(Experiment):
     """
     Online single-source, single model experiment
     """
 
-
+    @Experiment._run
     def run(self):
         assert(len(self.routes) == 1)
         # Initiate model
@@ -131,17 +155,18 @@ class OnlineOneToOneExperiment(Experiment):
 
         # Start polling
         src = self.routes[0][0]  # type: MeasurementStreamHandler
-        threading.Thread(target=src.poll).start()
+        threading.Thread(target=src.receive).start()
 
         # Initiate logging if applicable
         if self.logging:
             # TODO should move most of this stuff to initiate_logging?
-            # assert(len(mdl.target_keys) == 1)
-            # gt_title = "{}_meas".format(mdl.target_keys[0])
-            # pred_title = "{}_pred".format(mdl.target_keys[0])
-            headers = ["timestamp"] + mdl.input_keys + mdl.target_keys + mdl.control_keys
-            # debug
-            # print(headers)
+            headers = ["timestamp"]
+            if mdl.input_keys:
+                headers += mdl.input_keys
+            if mdl.target_keys:
+                headers += mdl.target_keys
+            if mdl.control_keys:
+                headers += mdl.control_keys
             self.logger = self.initiate_logging(headers=headers, path=self.log_path)
 
         # Whenever new data is received, feed-forward to model
@@ -165,7 +190,9 @@ class OnlineOneToOneExperiment(Experiment):
                 if self.logging:
                     # TODO need to generalize the measurement timestamp
                     # TODO will fail with more than one control key!
-                    row = [str(dt.now())] + [str(item) for item in res[0]] + [str(data[0][mdl.control_keys[0]])]
+                    row = [str(dt.now())] + [str(item) for item in res[0]]
+                    if mdl.control_keys:
+                        row += [str(data[0][mdl.control_keys[0]])]
 
                     # print(row) #  debug
                     self.log_row(row)
@@ -176,6 +203,7 @@ class OnlineOneToOneExperiment(Experiment):
         mdl.destroy()
         print("Process exited due to experiment time out")
         return True
+
 
 class OnlineBatchTrainableExperiment(Experiment):
 
@@ -215,6 +243,7 @@ class OnlineBatchTrainableExperiment(Experiment):
                 print(row)
             self.log_row(row)
 
+    @Experiment._run
     def run(self):
         assert(len(self.routes) == 1)
         # Initiate model

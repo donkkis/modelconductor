@@ -29,6 +29,7 @@ import uuid
 
 # TODO cleanup generated dummy log and db files after testing
 
+
 class SklearnTests(unittest.TestCase):
 
     def test_iterate_and_plot(self):
@@ -72,6 +73,7 @@ class SklearnTests(unittest.TestCase):
                 plt.title('Engine-out NOx vs NRTC Cycle')
                 plt.xlabel('Time (s)')
                 plt.pause(0.001)
+            plt.close()
 
         step_iterate(X, y)
 
@@ -169,7 +171,6 @@ class ModelHandlerTests(unittest.TestCase):
         self.assertIs(res[0][1], data2)
 
 
-
 class MeasurementStreamHandlerTests(unittest.TestCase):
 
     def test_add_consumer(self):
@@ -189,6 +190,9 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
         self.assertIsInstance(meas_hand.consumers[0], ModelHandler)
         meas_hand.remove_consumer(mh)
         self.assertTrue(len(meas_hand.consumers) == 0)
+
+    def test_receive_single(self):
+        pass
 
     def test_receive_batch(self):
         data = [Measurement({'foo': 3, 'faa': 4}), Measurement({'foo': 6, 'faa': 7})]
@@ -217,6 +221,28 @@ class MeasurementStreamHandlerTests(unittest.TestCase):
         self.assertTrue(len(res) == batch_size)
         self.assertIs(res[0], data[0])
         self.assertIs(res[1], data[1])
+
+    def test_validate_measurement_on_last_datapoint_strategy(self):
+        mhand = MeasurementStreamHandler(validation_strategy='last_datapoint')
+        valid_data = Measurement({'foo': 3, 'faa': 4})
+        mhand.last_measurement = valid_data
+        data = Measurement({'foo': 14, 'faa': None})
+        data = mhand.validate_measurement(data)
+        expected_data = ({'foo': 14, 'faa': 4})
+        self.assertDictEqual(data, expected_data)
+
+    def test_validate_measurement_on_no_validation_strategy(self):
+        mhand = MeasurementStreamHandler(validation_strategy='no_validation')
+        valid_data = Measurement({'foo': 3, 'faa': 4})
+        mhand.last_measurement = valid_data
+        data = Measurement({'foo': 14, 'faa': None})
+        data = mhand.validate_measurement(data)
+        expected_data = ({'foo': 14, 'faa': None})
+        self.assertDictEqual(data, expected_data)
+
+
+
+
 
 
 class KerasModelHandlerTests(unittest.TestCase):
@@ -554,6 +580,7 @@ class ExperimentTests(unittest.TestCase):
             exp.logger.close()
             os.remove(exp.log_path)
             conn.close()
+
 
 class OnlineBatchTrainableExperimentTests(unittest.TestCase):
 

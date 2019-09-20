@@ -1,31 +1,21 @@
-import queue
-
 __package__ = "modelconductor"
-from abc import ABCMeta, abstractmethod
 from typing import List
-from fmpy import read_model_description, extract
-from fmpy.fmi2 import FMU2Slave
-import shutil
 from queue import Queue
 from queue import Empty
 from time import sleep
 from datetime import datetime as dt
 from datetime import timedelta
-import sqlite3
-import pickle
-import abc
-import threading
-import numpy as np
-import sqlalchemy
-from keras import Sequential
-from warnings import warn
-import os.path
-import uuid
 from .utils import Measurement
 from .exceptions import ExperimentDurationExceededException
 from .modelhandler import ModelHandler
 from modelconductor import server
 from threading import Thread
+from enum import Enum
+import queue
+import sqlite3
+import abc
+import threading
+import sqlalchemy
 import json
 
 # --- Static variables ---
@@ -33,93 +23,155 @@ TIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 # TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
 PORT = 8080
 
+class ValidationStrategy(Enum):
+    # Potentially dangerous
+    no_validation = 1
+    # If invalid value is encountered, re-uses the value from last
+    # available valid datapoint
+    last_datapoint = 2
+
+VAL_STRATS = {"no_validation": ValidationStrategy.no_validation,
+              "last_datapoint": ValidationStrategy.last_datapoint}
+
 
 class MeasurementStreamHandler:
 
-    def __init__(self, buffer=None, consumers=None):
-        """
+    def __init__(self, validation_strategy='no_validation',
+                 buffer=None, consumers=None):
+        """Creates a MeasurementStreamHandler.
 
         Args:
-            consumers (List[ModelHandler]): A list of ModelHandler objects associated with this
-            MeasurementStreamHandler instance
-            buffer (Queue) : A FIFO queue of measurement objects
+            validation_strategy: Action taken when an invalid value is
+                encountered. Must be one of the following strings:
+                'no_validation' - Do nothing. Might break things!
+                'last_datapoint' - Re-use the latest valid value
+            consumers: (Optional) A list of ModelHandler objects linked
+                with this MeasurementStreamHandler instance. If set to
+                None, consumers may be added later by calling setup().
+            buffer: (Optional) a Queue of measurement objects. Should
+                typically be set to None for other than testing purposes,
+                which results in an empty buffer being created in __init__.
         """
 
         # https://stackoverflow.com/questions/13525842/variable-scope-in-python-unittest
         # DO NOT use mutable types as default arguments
         self.buffer = buffer if buffer is not None else Queue()
         self.consumers = consumers if consumers is not None else []
-        self.global_idx = 0
-        self.validation_strategy = "last_datapoint"
+        self.validation_strategy = VAL_STRATS[validation_strategy]
         self.last_measurement = None
-
-    def add_consumer(self, consumer):
-        """
-        Args:
-            consumer (ModelHandler): a ModelHandler instance who is to consume the data
-            in current buffer
-        """
-        self.consumers.append(consumer)
-        return consumer
-
-    def remove_consumer(self, consumer):
-        self.consumers.remove(consumer)
-        return consumer
-
-    def receive_single(self, measurement):
-        """
-        Args:
-            measurement (Measurement): A single datapoint dict
-        """
-        if "index" not in measurement.keys():
-            measurement["index"] = self.global_idx
-        self.buffer.put_nowait(measurement)
-        self.global_idx = self.global_idx + 1
-
-    def receive_batch(self, measurements):
-        """
-
-        Args:
-            measurements (list[Measurement]):  A list of measurement datapoints
-        """
-        for measurement in measurements:
-            if "index" not in measurement.keys():
-                measurement["index"] = self.global_idx
-                self.global_idx = self.global_idx + 1
-
-        if self.validation_strategy == "last_datapoint":
-            for measurement in measurements:
-                if self.last_measurement is None:
-                    self.last_measurement = measurement
-                for k, v in measurement.items():
-                    if v is None:
-                        try:
-                            measurement[k] = self.last_measurement[k]
-                        except Exception:
-                            raise Exception("Nonevalue encountered but no last datapoint was available")
-
-        [self.buffer.put_nowait(measurement) for measurement in measurements]
 
     @abc.abstractmethod
     def receive(self): pass
 
+    def add_consumer(self, consumer):
+        """Adds a ModelHandler instance that will consume data in buffer.
+
+        Args:
+            consumer: The ModelHandler instance to be added.
+
+        Returns:
+            The consumer that was added.
+        """
+        self.consumers.append(consumer)
+        return consumer
+
+    def validate_measurement(self, measurement):
+        """Validate measurement before appending to buffer
+
+        Basic implementation of the validation rules imposed by the
+        chosen ValidationStrategy attribute. Subclasses could choose to
+        override these to better fit their specifc needs for data
+        validation.
+
+        Args:
+            measurement: The Measurement instance to be validated
+
+        Returns:
+            measurement: The validated Measurement
+        """
+        validation_done = False
+        if self.validation_strategy == ValidationStrategy.no_validation:
+            # Do nothing literally
+            pass
+
+        elif self.validation_strategy == ValidationStrategy.last_datapoint:
+            # Scan for Nones and if found, replace with last valid value
+            for k, v in measurement.items():
+                if v is None:
+                    try:
+                        measurement[k] = self.last_measurement[k]
+                    except Exception:
+                        raise Warning("No last meas available for replacement")
+
+        # the validated measurement becomes new last_measurement
+        self.last_measurement = measurement
+        return measurement
+
+    def remove_consumer(self, consumer):
+        """Removes a ModelHandler instance from current buffer.
+
+        Args:
+            consumer: a ModelHandler instance who is to be removed from
+                the current experiment.
+        Returns:
+            The ModelHandler instance that was just removed.
+        """
+        self.consumers.remove(consumer)
+        return consumer
+
+    def receive_single(self, measurement):
+        """Handle a single incoming Measurement object
+
+        Args:
+            measurement: A single Measurement instance to be added to
+                the buffer
+        Returns:
+            The Measurement that was just added
+        """
+        measurement = self.validate_measurement(measurement)
+        self.buffer.put_nowait(measurement)
+        return measurement
+
+    def receive_batch(self, measurements):
+        """Receive a batch of sequential measurements
+
+        Args:
+            measurements:  A list of Measurement instances
+        Returns:
+
+        """
+        # Will be true for the first measurement of the first batch
+        if self.last_measurement is None:
+            self.last_measurement = measurements[0]
+
+        for measurement in measurements:
+            measurement = self.validate_measurement(measurement)
+            self.buffer.put_nowait(measurement)
+
     def give(self):
         """
-        Get a single measurement element from the FIFO buffer
+        Returns:
+            measurement: The first Measurement element from buffer. None
+                if buffer is empty
         """
         try:
             measurement = self.buffer.get_nowait()
-            self.last_measurement = measurement
-            return measurement
         except Empty:
-            return None
+            measurement = None
+        return measurement
 
     def give_batch(self, batch_size):
-        """
-        Get a list of batch_size first measurement elements in the FIFO buffer
-        """
+        """Get a list of batch_size first measurement elements in the
+        FIFO buffer
 
-        measurements = [self.give() for i in range(batch_size)]
+        Args:
+            batch_size: The integer batch size to be retrieved
+
+        Returns:
+            measurements: A list of Measurement objects. Will contain
+                Nones if batch_size exceeds current buffer
+        """
+        measurements = [self.give() for _ in range(batch_size)]
         return measurements
 
 
@@ -128,7 +180,8 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
     signals to the relevant simulation models
     """
 
-    def receive(self): pass
+    def receive(self):
+        self.listen()
 
     def listen(self):
 
@@ -166,10 +219,18 @@ class MeasurementStreamPoller(MeasurementStreamHandler):
 
 class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
 
-
-    def __init__(self, db_uri, query_path, polling_interval=90, polling_window=60, start_time=None,
-                 stop_time=None, query_cols="*", buffer=None, consumers=None):
-        super().__init__(buffer, consumers)
+    def __init__(self,
+                 db_uri,
+                 query_path,
+                 polling_interval=90,
+                 polling_window=60,
+                 start_time=None,
+                 stop_time=None,
+                 query_cols="*",
+                 validation_strategy='no_validation',
+                 buffer=None,
+                 consumers=None):
+        super().__init__(validation_strategy, buffer, consumers)
         self.db_uri = db_uri
         self.polling_interval = polling_interval
         # TODO should inherit this from Experiment
@@ -260,8 +321,19 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
 
 
 class IncomingMeasurementPoller(MeasurementStreamPoller):
-    def __init__(self, polling_interval, db_uri, first_unseen_pk=0, query_cols="*", buffer=None, consumers=None):
-        super().__init__(buffer, consumers)
+
+    def receive(self):
+        self.poll()
+
+    def __init__(self,
+                 polling_interval,
+                 db_uri,
+                 first_unseen_pk=0,
+                 query_cols="*",
+                 validation_strategy='no_validation',
+                 buffer=None,
+                 consumers=None):
+        super().__init__(validation_strategy, buffer, consumers)
         self.db_uri = db_uri
         self.polling_interval = polling_interval
         self.conn = sqlite3.connect(db_uri)
