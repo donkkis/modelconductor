@@ -380,6 +380,12 @@ class KerasModelHandlerTests(unittest.TestCase):
 
 class ExperimentTests(unittest.TestCase):
 
+    def test_experiment_with_undefined_stoptime(self):
+        raise NotImplementedError
+
+    def test_experiment_with_defined_stoptime(self):
+        raise NotImplementedError
+
     def test_initiate_logging(self):
         tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
         path = "experiment_{}.log".format(tic)
@@ -390,6 +396,9 @@ class ExperimentTests(unittest.TestCase):
         log.close()
         self.assertTrue(log.closed)
         os.remove(path)
+
+    def test_initiate_logging_multiroute(self):
+        raise NotImplementedError
 
     def test_terminate_logging(self):
         tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -484,6 +493,16 @@ class ExperimentTests(unittest.TestCase):
         self.assertEqual(len(ex.routes), 1)
         self.assertListEqual(ex.routes, [(listen, mdl)])
 
+    def test_multiple_setup_calls_yields_warning(self):
+        listener = IncomingMeasurementListener()
+        model = ModelHandler()
+        ex = Experiment()
+        ex.add_route((listener, model))
+        status = ex.setup()
+        self.assertEqual(status, 0)
+        status = ex.setup()
+        self.assertEqual(status, 1)
+
     def test_single_source_and_consumer_setup(self):
         listener = IncomingMeasurementListener()
         model = ModelHandler()
@@ -560,6 +579,7 @@ class ExperimentTests(unittest.TestCase):
                                           query_cols=qcolss_string,
                                           first_unseen_pk=0)
 
+
         exp = OnlineOneToOneExperiment(runtime=0.5,
                                        logging=True,
                                        log_path="_test_exp_{}.log".format(str(uuid.uuid1())))
@@ -580,6 +600,7 @@ class ExperimentTests(unittest.TestCase):
             exp.logger.close()
             os.remove(exp.log_path)
             conn.close()
+            os.remove('test.db')
 
 
 class OnlineBatchTrainableExperimentTests(unittest.TestCase):
