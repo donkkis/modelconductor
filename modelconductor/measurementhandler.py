@@ -17,6 +17,7 @@ import abc
 import threading
 import sqlalchemy
 import json
+import os
 
 # --- Static variables ---
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
@@ -25,26 +26,26 @@ PORT = 8080
 
 class ValidationStrategy(Enum):
     # Potentially dangerous
-    no_validation = 1
+    NO_VALIDATION = 1
     # If invalid value is encountered, re-uses the value from last
     # available valid datapoint
-    last_datapoint = 2
+    LAST_DATAPOINT = 2
 
-VAL_STRATS = {"no_validation": ValidationStrategy.no_validation,
-              "last_datapoint": ValidationStrategy.last_datapoint}
+VAL_STRATS = {"NO_VALIDATION": ValidationStrategy.NO_VALIDATION,
+              "LAST_DATAPOINT": ValidationStrategy.LAST_DATAPOINT}
 
 
 class MeasurementStreamHandler:
 
-    def __init__(self, validation_strategy='no_validation',
+    def __init__(self, validation_strategy='NO_VALIDATION',
                  buffer=None, consumers=None):
         """Creates a MeasurementStreamHandler.
 
         Args:
             validation_strategy: Action taken when an invalid value is
                 encountered. Must be one of the following strings:
-                'no_validation' - Do nothing. Might break things!
-                'last_datapoint' - Re-use the latest valid value
+                'NO_VALIDATION' - Do nothing. Might break things!
+                'LAST_DATAPOINT' - Re-use the latest valid value
             consumers: (Optional) A list of ModelHandler objects linked
                 with this MeasurementStreamHandler instance. If set to
                 None, consumers may be added later by calling setup().
@@ -90,11 +91,11 @@ class MeasurementStreamHandler:
             measurement: The validated Measurement
         """
         validation_done = False
-        if self.validation_strategy == ValidationStrategy.no_validation:
+        if self.validation_strategy == ValidationStrategy.NO_VALIDATION:
             # Do nothing literally
             pass
 
-        elif self.validation_strategy == ValidationStrategy.last_datapoint:
+        elif self.validation_strategy == ValidationStrategy.LAST_DATAPOINT:
             # Scan for Nones and if found, replace with last valid value
             for k, v in measurement.items():
                 if v is None:
@@ -212,33 +213,63 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
 class MeasurementStreamPoller(MeasurementStreamHandler):
 
     @abc.abstractmethod
-    def poll(self): pass
+    def poll(self):
+        raise NotImplementedError("Abstract method not implemented")
+
     @abc.abstractmethod
-    def poll_batch(self): pass
+    def poll_batch(self):
+        raise NotImplementedError("Abstract method not implemented")
 
 
 class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
 
     def __init__(self,
                  db_uri,
-                 query_path,
+                 query,
                  polling_interval=90,
                  polling_window=60,
                  start_time=None,
                  stop_time=None,
-                 query_cols="*",
-                 validation_strategy='no_validation',
+                 validation_strategy='NO_VALIDATION',
                  buffer=None,
                  consumers=None):
+        """Creates an IncomingMeasurementBatchPoller.
+
+        Args:
+            db_uri: SQLAlchemy compatible URI string of the format:
+                dialect+driver://username:password@host:port/database
+
+                Examples:
+                'mysql+pymysql://scott:tiger@localhost/foo'
+                'sqlite:///foo.db'
+
+                See https://docs.sqlalchemy.org/en/13/core/engines.html
+            query: An SQL query String or path to text file where the
+                executed query is located
+            polling_interval: The approximate minimum interval at which
+                consecutive queries are executed. The actual interval will be
+                taken as max of polling_interval and actual query cost
+            polling_window: Sliding window size for batch polling in seconds
+            start_time: A datetime.datetime object, global starting timestamp
+                for polling
+            stop_time: A datetime.datetime object, global ending timestamp
+                for polling
+            validation_strategy: Action taken when an invalid value is
+                encountered. Must be one of the following strings:
+                'NO_VALIDATION' - Do nothing. Might break things!
+                'LAST_DATAPOINT' - Re-use the latest valid value
+            consumers: (Optional) A list of ModelHandler objects linked
+                with this MeasurementStreamHandler instance. If set to
+                None, consumers may be added later by calling setup().
+            buffer: (Optional) a Queue of measurement objects. Should
+                typically be set to None for other than testing purposes,
+                which results in an empty buffer being created in __init__.
+        """
         super().__init__(validation_strategy, buffer, consumers)
         self.db_uri = db_uri
         self.polling_interval = polling_interval
-        # TODO should inherit this from Experiment
         self.start_time = dt.now() if start_time is None else start_time
-        # TODO should inherit this from Experiment
         self.stop_time = self.start_time + timedelta(minutes=120) if stop_time is None else stop_time
-        # TODO is this even needed?
-        self.query_cols = query_cols
         self.polling_window = polling_window
         self._stopevent = None
         self.engine = None
@@ -246,16 +277,29 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         self.polling_start_timestamp = self.start_time.strftime(TIME_FORMAT)
         self.polling_stop_timestamp = \
             (self.start_time + timedelta(seconds=self.polling_window)).strftime(TIME_FORMAT)
-        with open(query_path, 'rb') as f:
-            self.query = f.read().decode().replace("\r\n", " ")
+        self._parse_query(query)
+
+    def _parse_query(self, query):
+        if os.path.exists(query):
+            with open(query, 'rb') as f:
+                self.query = f.read().decode().replace("\r\n", " ")
+        else:
+            self.query = query
+
+    def _connect(self):
+        self.engine = sqlalchemy.create_engine(self.db_uri)
+        self.conn = self.engine.connect()
+        try:
+            assert(self.conn.closed is False)
+        except AssertionError:
+            raise AssertionError("Db connection failed")
 
     def receive(self):
         self.poll()
 
     def poll(self):
-        self.engine = sqlalchemy.create_engine(self.db_uri)
-        self.conn = self.engine.connect()
-        assert(self.conn.closed is False)
+        if not self.conn or self.conn.closed:
+            self._connect()
 
         # debug
         print("Polling database connection at " + str(self.conn) + " at " + str(
@@ -263,17 +307,28 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         try:
             while not isinstance(self._stopevent, type(threading.Event())):
                 try:
+                    # wait for the remaining period in polling_interval
+                    # if applicable
+                    sleep(self.polling_interval - query_duration)
+                except Exception:
+                    pass
+                try:
                     print("Excecuting query...")
+                    tic = dt.now()
                     self.poll_batch()
+                    toc = dt.now()
+                    # query cost in seconds
+                    query_duration = ((toc - tic).seconds * 10**6 +
+                                      (toc - tic).microseconds) / 10**6
                     self.update_timestamps()
                     print("Done")
                 except IndexError:
                     print("No more records available, sleeping...")
-                    sleep(0.5)
+                    query_duration = 0
                 except sqlite3.OperationalError:
                     print("Waiting for database to become operational...")
+                    query_duration = 0
                     sleep(5)
-                sleep(self.polling_interval)
         except KeyboardInterrupt:
             "Process exited per user request"
         except Exception:
@@ -287,9 +342,9 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
         # avoid threading errors
         q = self.query.format(self.polling_start_timestamp, self.polling_stop_timestamp)
         print(q[:50])  # debug
-        res = self.conn.execute(q) # sqlalchemy.engine.ResultProxy
+        res = self.conn.execute(q)  # sqlalchemy.engine.ResultProxy
         data = res.fetchall()
-        data = [dict(zip(tuple(res.keys()), datum)) for datum in data]
+        data = [Measurement(dict(zip(tuple(res.keys()), d))) for d in data]
         self.receive_batch(data)
         # print(data)  # debug
         return data
@@ -330,7 +385,7 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
                  db_uri,
                  first_unseen_pk=0,
                  query_cols="*",
-                 validation_strategy='no_validation',
+                 validation_strategy='NO_VALIDATION',
                  buffer=None,
                  consumers=None):
         super().__init__(validation_strategy, buffer, consumers)
@@ -339,9 +394,16 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
         self.conn = sqlite3.connect(db_uri)
         self.first_unseen_pk = first_unseen_pk
         self.c = self.conn.cursor()
-        self.query_cols = query_cols
+        self._parse_query_cols(query_cols)
         self.query = "SELECT " + self.query_cols + " FROM data WHERE `index`=" + str(self.first_unseen_pk)
         self._stopevent = None
+
+    def _parse_query_cols(self, query_cols):
+        # No validations here
+        if isinstance(query_cols, list):
+            self.query_cols = ",".join(query_cols)
+        else:
+            self.query_cols = query_cols
 
     def poll(self):
         self.conn = sqlite3.connect(self.db_uri)
@@ -374,8 +436,10 @@ class IncomingMeasurementPoller(MeasurementStreamPoller):
                     sleep(5)
         except Exception:
             raise Exception("Unknown error")
-        print("Polling thread excited due to stopevent")
-        return True
+        finally:
+            print("Polling thread excited due to stopevent")
+            self.conn.close()
+            return True
 
     def poll_batch(self):
         # avoid threading errors

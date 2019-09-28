@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="6616f984-8038-4774-b7bd-e51e34c9c018" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/exceptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/experiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/experiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/measurementhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/measurementhandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modelconductor/modelhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/modelhandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelconductor/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/modelconductor/tests.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,16 +103,17 @@
     <session id="-1052910200">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="8" />
+          <entry key="project.closed" value="11" />
           <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
-          <entry key="project.open.time.14" value="1" />
+          <entry key="project.open.time.14" value="2" />
+          <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -116,14 +121,15 @@
           <entry key="Python Console" value="1657" />
           <entry key="dummy_query" value="54" />
           <entry key="gitignore" value="42" />
-          <entry key="py" value="10486" />
+          <entry key="py" value="16067" />
           <entry key="test_query" value="7" />
+          <entry key="txt" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="42" />
-          <entry key="Python" value="12143" />
+          <entry key="PLAIN_TEXT" value="60" />
+          <entry key="Python" value="17724" />
           <entry key="SQL" value="61" />
         </counts>
       </usages-collector>
@@ -133,7 +139,7 @@
           <entry key="dummy_query" value="2" />
           <entry key="gitignore" value="2" />
           <entry key="log" value="16" />
-          <entry key="py" value="5" />
+          <entry key="py" value="13" />
           <entry key="pyi" value="1" />
           <entry key="test_query" value="3" />
         </counts>
@@ -141,12 +147,15 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="19" />
-          <entry key="Python" value="5" />
+          <entry key="Python" value="13" />
           <entry key="PythonStub" value="1" />
           <entry key="SQL" value="5" />
         </counts>
       </usages-collector>
     </session>
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="modelconductor" />
   </component>
   <component name="FileEditorManager">
     <splitter split-orientation="horizontal" split-proportion="0.45689112">
@@ -155,8 +164,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/modelconductor/experiment.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-4">
-                  <caret line="209" column="24" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
+                <state relative-caret-position="928">
+                  <caret line="232" column="53" selection-start-line="232" selection-start-column="53" selection-end-line="232" selection-end-column="53" />
                   <folding>
                     <element signature="e#31#41#0" expanded="true" />
                   </folding>
@@ -173,11 +182,25 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="602">
-                  <caret line="383" column="32" selection-start-line="383" selection-start-column="32" selection-end-line="383" selection-end-column="32" />
+                <state relative-caret-position="4256">
+                  <caret line="266" column="42" selection-start-line="266" selection-start-column="42" selection-end-line="266" selection-end-column="42" />
+                  <folding>
+                    <element signature="e#31#41#0" expanded="true" />
+                    <marker date="1569586311737" expanded="true" signature="326:378" ph="..." />
+                    <marker date="1569586311737" expanded="true" signature="3964:3969" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/fmpy/fmi2.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="292">
+                  <caret line="337" column="18" selection-start-line="337" selection-start-column="18" selection-end-line="337" selection-end-column="18" />
                 </state>
               </provider>
             </entry>
@@ -203,17 +226,21 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/modelconductor/exceptions.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="48">
-                  <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
+                <state relative-caret-position="112">
+                  <caret line="7" selection-start-line="7" selection-end-line="7" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1372">
-                  <caret line="200" column="19" lean-forward="true" selection-start-line="200" selection-start-column="19" selection-end-line="200" selection-end-column="19" />
+                <state relative-caret-position="544">
+                  <caret line="277" selection-start-line="277" selection-end-line="277" />
+                  <folding>
+                    <element signature="e#31#54#0" expanded="true" />
+                    <marker date="1569586999903" expanded="true" signature="10070:10076" ph="..." />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -225,23 +252,21 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-3648">
-                  <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+                <state relative-caret-position="321">
+                  <caret line="640" column="30" lean-forward="true" selection-start-line="640" selection-start-column="30" selection-end-line="640" selection-end-column="30" />
                   <folding>
                     <element signature="e#31#44#0" expanded="true" />
+                    <marker date="1569587207049" expanded="true" signature="2501:2506" ph="..." />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/README.md">
-              <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-                <state split_layout="SPLIT">
-                  <first_editor relative-caret-position="320">
-                    <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
-                  </first_editor>
-                  <second_editor />
+            <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/random.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="667">
+                  <caret line="655" column="8" selection-start-line="655" selection-start-column="8" selection-end-line="655" selection-end-column="8" />
                 </state>
               </provider>
             </entry>
@@ -249,8 +274,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/modelconductor/customtests.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-300">
-                  <caret line="23" selection-start-line="23" selection-end-line="23" />
+                <state relative-caret-position="16">
+                  <caret line="8" selection-start-line="8" selection-end-line="8" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
@@ -259,19 +284,10 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/test_resources/test_query">
+            <entry file="file://$PROJECT_DIR$/modelconductor/test_resources/old/test_query">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="2640">
                   <caret line="165" selection-start-line="165" selection-end-line="165" selection-end-column="46" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/modelconductor/experiment_2019-08-12_16-06-39.log">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3648">
-                  <caret line="228" column="43" selection-start-line="228" selection-start-column="43" selection-end-line="228" selection-end-column="43" />
                 </state>
               </provider>
             </entry>
@@ -321,6 +337,9 @@
       <find>execut</find>
       <find>Execut</find>
       <find>threshold</find>
+      <find>self.status</find>
+      <find>status</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -343,20 +362,20 @@
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/LICENSE" />
         <option value="$PROJECT_DIR$/modelconductor/__init__.py" />
-        <option value="$PROJECT_DIR$/modelconductor/exceptions.py" />
         <option value="$PROJECT_DIR$/modelconductor/utils.py" />
-        <option value="$PROJECT_DIR$/modelconductor/tests.py" />
         <option value="$PROJECT_DIR$/gitignore" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/modelconductor/customtests.py" />
         <option value="$PROJECT_DIR$/modelconductor/experiment.py" />
-        <option value="$PROJECT_DIR$/modelconductor/measurementhandler.py" />
+        <option value="$PROJECT_DIR$/modelconductor/exceptions.py" />
         <option value="$PROJECT_DIR$/modelconductor/modelhandler.py" />
+        <option value="$PROJECT_DIR$/modelconductor/measurementhandler.py" />
+        <option value="$PROJECT_DIR$/modelconductor/tests.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="75" />
+    <option name="x" value="315" />
     <option name="y" value="-8" />
     <option name="width" value="977" />
     <option name="height" value="1038" />
@@ -388,7 +407,7 @@
               <item name="modelconductor" type="b2602c69:ProjectViewProjectNode" />
               <item name="modelconductor" type="462c0819:PsiDirectoryNode" />
               <item name="modelconductor" type="462c0819:PsiDirectoryNode" />
-              <item name="test_resources" type="462c0819:PsiDirectoryNode" />
+              <item name="24a4cdb4-e120-11e9-901c-34f39ac8f966" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -399,7 +418,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/modelconductor" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -411,6 +430,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\paho\Dropbox\Opiskelu\Diplomityö\modelconductor\modelconductor\test_resources\old" />
       <recent name="E:\Dropbox\Opiskelu\Diplomityö\modelconductor\test_resources" />
     </key>
   </component>
@@ -426,8 +446,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment">
-    <configuration name="Unittests in tests.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.tests">
+    <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="modelconductor" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modelconductor/tests.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests in tests.py" type="tests" factoryName="Unittests" nameIsGenerated="true">
       <module name="modelconductor" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -441,63 +482,13 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="modelconductor" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor/" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="modelconductor" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor/" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="modelconductor" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modelconductor/" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python tests.Unittests in tests.py" />
-      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" />
-      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" />
-      <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" />
+      <item itemvalue="Python.tests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" />
-        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" />
-        <item itemvalue="Python tests.pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_can_be_instantiated" />
-        <item itemvalue="Python tests.Unittests in tests.py" />
+        <item itemvalue="Python.tests" />
       </list>
     </recent_temporary>
   </component>
@@ -515,12 +506,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 15h 57m 29s.xml">
-      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 15h 58m 52s.xml">
-      <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
-    </history-entry>
     <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests - 2019.08.12 at 16h 01m 25s.xml">
       <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests" configurationId="tests" />
     </history-entry>
@@ -545,6 +530,12 @@
     <history-entry file="pytest_for_modelconductor_customtests_IncomingMeasurementBatchPollerTests_test_icel_experiment - 2019.08.12 at 16h 10m 22s.xml">
       <configuration name="pytest for modelconductor.customtests.IncomingMeasurementBatchPollerTests.test_icel_experiment" configurationId="tests" />
     </history-entry>
+    <history-entry file="pytest_for_modelconductor_tests_SklearnTests - 2019.09.27 at 09h 30m 48s.xml">
+      <configuration name="pytest for modelconductor.tests.SklearnTests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_modelconductor_tests_SklearnTests - 2019.09.27 at 09h 31m 37s.xml">
+      <configuration name="pytest for modelconductor.tests.SklearnTests" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -558,16 +549,16 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7322457" visible="true" weight="0.16280295" />
-      <window_info id="Structure" order="1" sideWeight="0.26775432" side_tool="true" visible="true" weight="0.16280295" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7293666" visible="true" weight="0.16280295" />
+      <window_info id="Structure" order="1" sideWeight="0.2706334" side_tool="true" visible="true" weight="0.16280295" />
+      <window_info id="Favorites" order="2" sideWeight="0.27089337" side_tool="true" weight="0.16280295" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.12351029" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.12284069" />
       <window_info anchor="bottom" x="71" y="487" width="1603" height="444" id="Run" order="2" sideWeight="0.49841937" weight="0.33397314" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3954496" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39539346" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32827735" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32821497" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32629558" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5015806" side_tool="true" weight="0.3347779" />
@@ -587,14 +578,6 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/d1d579e8-experiment_2019-06-25_22-09-56.log" />
-    <entry file="file://$PROJECT_DIR$/d1caf274-experiment_2019-06-25_22-09-56.log" />
-    <entry file="file://$PROJECT_DIR$/_test_exp_287a6148-983b-11e9-9e7f-005056c00008.log" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/site-packages/keras/engine/sequential.py" />
-    <entry file="file://$PROJECT_DIR$/_test_exp_08e14eec-990e-11e9-8cb8-005056c00008.log" />
-    <entry file="file://$PROJECT_DIR$/_test_exp_27c9c398-9977-11e9-b1fc-34f39ac8f969.log" />
-    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/unittest/case.py" />
-    <entry file="file://$PROJECT_DIR$/test_resources/dummy_query" />
     <entry file="file://$PROJECT_DIR$/test_resources/data_query" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_import_hook.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -636,6 +619,59 @@
     <entry file="file://$USER_HOME$/Anaconda3/envs/tfdeeplearning/Lib/unittest/case.py" />
     <entry file="file://$PROJECT_DIR$/LICENCE" />
     <entry file="file://$PROJECT_DIR$/modelconductor/gitignore" />
+    <entry file="file://$PROJECT_DIR$/modelconductor/experiment_2019-08-12_16-06-39.log" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pycharm/_jb_pytest_runner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="11" column="26" lean-forward="true" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="320">
+            <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/sqlalchemy/dialects/sqlite/pysqlite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="358" selection-start-line="358" selection-end-line="358" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/sqlalchemy/engine/strategies.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/sqlalchemy/engine/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="423" selection-start-line="423" selection-end-line="423" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/importlib/_bootstrap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="221" selection-start-line="221" selection-end-line="221" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/scipy/_lib/_numpy_compat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -657,27 +693,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="320">
-            <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/modelconductor/exceptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/test_resources/test_query">
+    <entry file="file://$PROJECT_DIR$/modelconductor/customtests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modelconductor/test_resources/old/test_query">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2640">
           <caret line="165" selection-start-line="165" selection-end-line="165" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/experiment_2019-08-12_16-06-39.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3648">
-          <caret line="228" column="43" selection-start-line="228" selection-start-column="43" selection-end-line="228" selection-end-column="43" />
         </state>
       </provider>
     </entry>
@@ -695,54 +731,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/customtests.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/site-packages/fmpy/fmi2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-300">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="292">
+          <caret line="337" column="18" selection-start-line="337" selection-start-column="18" selection-end-line="337" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/anaconda3/envs/tfdeeplearning/Lib/random.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3648">
-          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
-          <folding>
-            <element signature="e#31#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/exceptions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
+        <state relative-caret-position="667">
+          <caret line="655" column="8" selection-start-line="655" selection-start-column="8" selection-end-line="655" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modelconductor/experiment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4">
-          <caret line="209" column="24" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
+        <state relative-caret-position="928">
+          <caret line="232" column="53" selection-start-line="232" selection-start-column="53" selection-end-line="232" selection-end-column="53" />
           <folding>
             <element signature="e#31#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
+    <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1372">
-          <caret line="200" column="19" lean-forward="true" selection-start-line="200" selection-start-column="19" selection-end-line="200" selection-end-column="19" />
+        <state relative-caret-position="4256">
+          <caret line="266" column="42" selection-start-line="266" selection-start-column="42" selection-end-line="266" selection-end-column="42" />
+          <folding>
+            <element signature="e#31#41#0" expanded="true" />
+            <marker date="1569586311737" expanded="true" signature="326:378" ph="..." />
+            <marker date="1569586311737" expanded="true" signature="3964:3969" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modelconductor/modelhandler.py">
+    <entry file="file://$PROJECT_DIR$/modelconductor/measurementhandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="383" column="32" selection-start-line="383" selection-start-column="32" selection-end-line="383" selection-end-column="32" />
+        <state relative-caret-position="544">
+          <caret line="277" selection-start-line="277" selection-end-line="277" />
+          <folding>
+            <element signature="e#31#54#0" expanded="true" />
+            <marker date="1569586999903" expanded="true" signature="10070:10076" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modelconductor/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="640" column="30" lean-forward="true" selection-start-line="640" selection-start-column="30" selection-end-line="640" selection-end-column="30" />
+          <folding>
+            <element signature="e#31#44#0" expanded="true" />
+            <marker date="1569587207049" expanded="true" signature="2501:2506" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

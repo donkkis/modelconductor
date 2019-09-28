@@ -6,11 +6,13 @@ from threading import Thread
 
 _EVENT = None
 _QUEUE = None
+_SERVER = None
+
 
 def accept_incoming_connections():
     """Sets up handling for incoming clients."""
     while True:
-        client, client_address = SERVER.accept()
+        client, client_address = _SERVER.accept()
         print("%s:%s has connected." % client_address)
         addresses[client] = client_address
         Thread(target=handle_client, args=(client,)).start()
@@ -55,17 +57,18 @@ BUFSIZ = 64
 ADDR = (HOST, PORT)
 HEADERSIZE = 10
 
-SERVER = socket(AF_INET, SOCK_STREAM)
-SERVER.bind(ADDR)
 
 def run(event, queue):
     global _EVENT
     global _QUEUE
+    global _SERVER
     _EVENT = event
     _QUEUE = queue
-    SERVER.listen(5)
+    _SERVER = socket(AF_INET, SOCK_STREAM)
+    _SERVER.bind(ADDR)
+    _SERVER.listen(5)
     print("Waiting for connection...")
     ACCEPT_THREAD = Thread(target=accept_incoming_connections)
     ACCEPT_THREAD.start()
     ACCEPT_THREAD.join()
-    SERVER.close()
+    _SERVER.close()

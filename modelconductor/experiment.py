@@ -8,6 +8,7 @@ from datetime import timedelta
 from warnings import warn
 from .measurementhandler import MeasurementStreamHandler
 from .modelhandler import ModelHandler
+from .modelhandler import ModelStatus
 from functools import wraps
 
 
@@ -182,10 +183,12 @@ class OnlineOneToOneExperiment(Experiment):
     Online single-source, single model experiment
     """
 
-    def _stopping_condition(self):
+    def _stopping_condition(self, event=None):
         """Determine if main loop will proceed to next iteration"""
         if self.stop_time:
             return dt.now() >= self.stop_time
+        elif isinstance(self._stopevent, type(threading.Event())):
+            return True
         return False
 
     def _model_loop(self, src, mdl):
@@ -196,7 +199,7 @@ class OnlineOneToOneExperiment(Experiment):
             mdl: A ModelHandler instance
         """
         while not self._stopping_condition():
-            if not src.buffer.empty() and mdl.status == "Ready":
+            if not src.buffer.empty() and mdl.status == ModelStatus.READY:
                 # simulation step
                 data = mdl.pull()
                 try:
@@ -242,97 +245,5 @@ class OnlineOneToOneExperiment(Experiment):
 
         src._stopevent = threading.Event()
         mdl.destroy()
-        print("Process exited due to experiment time out")
-        return True
-
-
-class OnlineBatchTrainableExperiment(Experiment):
-
-    def __init__(self, start_time=None,
-                 routes=None,
-                 runtime=10,
-                 logging=False,
-                 log_path=None,
-                 batch_size=10,
-                 timestamp_key=None):
-
-        super().__init__(start_time,
-                         routes,
-                         runtime,
-                         logging)
-        self.batch_size = batch_size
-        self.log_path = log_path
-        self.timestamp_key = timestamp_key
-
-    def log_batch(self, data, groundtruth_key, timestamp_key, results, debug=False):
-        """
-
-        Args:
-            data (List[Measurement]):
-            result (List):
-            groundtruth_key (str):
-            timestamp_key (str):
-
-        Returns:
-
-        """
-        for datum, result in zip(data, results):
-            row = [str(datum[timestamp_key]),
-                   str(datum[groundtruth_key]),
-                   str(result)]
-            if debug:
-                print(row)
-            self.log_row(row)
-
-    @Experiment._run
-    def run(self):
-        assert(len(self.routes) == 1)
-        # Initiate model
-        mdl = self.routes[0][1]  # type: TrainableModelHandler
-        mdl.spawn()
-
-        # Start polling
-        src = self.routes[0][0]  # type: IncomingMeasurementBatchPoller
-        threading.Thread(target=src.poll).start()
-
-        # Initiate logging if applicable
-        if self.logging:
-            # TODO should move most of this stuff to initiate_logging?
-            # assert(len(mdl.target_keys) == 1)
-            gt_title = "{}_meas".format(mdl.target_keys[0])
-            pred_title = "{}_pred".format(mdl.target_keys[0])
-            self.logger = self.initiate_logging(headers=["timestamp", gt_title, pred_title], path=self.log_path)
-
-        # Whenever new data is received, feed-forward to model
-        while dt.now() < self.stop_time:
-            # print(src.buffer.qsize())  #  debug
-            # Check that new batch is available and the model is ready
-            if src.buffer.qsize() >= self.batch_size and mdl.status == "Ready":
-                # simulation step
-                data = mdl.pull_batch(self.batch_size)  # List[List[Measurement]]
-                data = data[0]  # List[Measurement]
-                try:
-                    assert(data is not None)
-                except AssertionError:
-                    warn("ModelHandler.pull called on empty buffer", UserWarning)
-                    continue
-                # debug
-                # print(data)
-
-                _, res = mdl.step_fit_batch(data)  # _, List
-                # print(res)  # debug
-                self.results += res
-
-                if self.logging:
-                    # TODO implement and test batch logging
-                    self.log_batch(data=data,
-                                   groundtruth_key=mdl.target_keys[0],
-                                   timestamp_key=self.timestamp_key,
-                                   results=res,
-                                   debug=True)
-            else:
-                continue
-
-        src._stopevent = threading.Event()
         print("Process exited due to experiment time out")
         return True
