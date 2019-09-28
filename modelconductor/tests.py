@@ -104,6 +104,77 @@ class SklearnTests(unittest.TestCase):
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 100)
 
+class MockFmuModelHandlerTests(unittest.TestCase):
+
+    def setUp(self):
+        self.out_path = str(uuid.uuid1())
+        os.mkdir(self.out_path)
+        os.chdir(self.out_path)
+        self.fmu_filename = 'CoupledClutches.fmu'
+        self.test_file = download_test_file('2.0',
+                                            'CoSimulation',
+                                            'MapleSim',
+                                            '2016.2',
+                                            'CoupledClutches',
+                                            self.fmu_filename)
+        # fmpydump(self.fmu_filename)  # debug
+        self.input_keys = ['inputs']
+        self.target_keys = ['outputs[1]',
+                            'outputs[2]',
+                            'outputs[3]',
+                            'outputs[4]']
+        self.model = FMUModelHandler(self.fmu_filename,
+                                     step_size=0.01,
+                                     stop_time=1.5,
+                                     timestamp_key='index')
+
+        class MockFMU:
+            def instantiate(self, *args, **kwargs): pass
+
+            def setupExperiment(self, *args, **kwargs): pass
+
+            def enterInitializationMode(self, *args, **kwargs): pass
+
+            def exitInitializationMode(self, *args, **kwargs): pass
+
+            def setReal(self, *args, **kwargs): pass
+
+            def doStep(self, *args, **kwargs): pass
+
+            def terminate(self, *args, **kwargs): pass
+
+            def freeInstance(self, *args, **kwargs): pass
+
+            def getReal(self, *args, **kwargs):
+                # from ModelDescription.xml
+                vr_dict = {17: ('inputs', 1),
+                           2: ('outputs[1]', 2),
+                           4: ('outputs[2]', 3),
+                           6: ('outputs[3]', 4),
+                           8: ('outputs[4]', 5)}
+                return [vr_dict[i][1] for i in args[0]]
+
+        self.model._fmu = MockFMU()
+
+    def tearDown(self):
+        os.chdir('..')
+        try:
+            self.model.destroy()
+        except OSError:  # nothing left to destroy
+            pass
+        shutil.rmtree(self.out_path, ignore_errors=True)
+
+    def test_build_response(self):
+        exp_res = {'inputs': 1,
+                   'outputs[1]': 2,
+                   'outputs[2]': 3,
+                   'outputs[3]': 4,
+                   'outputs[4]': 5}
+        res = self.model.step({'index': 1, 'inputs': 1})
+        self.assertDictEqual(res[0], exp_res)
+
+
+
 
 class FmuModelHandlerTests(unittest.TestCase):
 
@@ -119,6 +190,11 @@ class FmuModelHandlerTests(unittest.TestCase):
                                             'CoupledClutches',
                                             self.fmu_filename)
         # fmpydump(self.fmu_filename)  # debug
+        self.input_keys = ['inputs']
+        self.target_keys = ['outputs[1]',
+                            'outputs[2]',
+                            'outputs[3]',
+                            'outputs[4]']
         self.model = FMUModelHandler(self.fmu_filename,
                                 step_size=0.01,
                                 stop_time=1.5,
@@ -132,7 +208,6 @@ class FmuModelHandlerTests(unittest.TestCase):
             pass
         shutil.rmtree(self.out_path, ignore_errors=True)
 
-
     def test_fmu_model_loaded_succesfully(self):
         self.assertIs(self.model.status, ModelStatus.NOT_INITIATED)
         self.model.spawn()
@@ -142,18 +217,20 @@ class FmuModelHandlerTests(unittest.TestCase):
         self.model.spawn()
 
         x = {'index': 0, 'inputs': 0.5}
-        expected_res = [0.5,
-                        9.900000031706817,
-                        0.09999996829318347,
-                        0.0,
-                        0.0]
+        expected_res = {'inputs': 0.5,
+                        'outputs[2]': 0.09999996829318347,
+                        'outputs[3]': 0.0,
+                        'outputs[1]': 9.900000031706817,
+                        'outputs[4]': 0.0}
+
         response = self.model.step(x)
         self.assertIsInstance(response, list)
-        self.assertIsInstance(response[0], list)
+        self.assertIsInstance(response[0], dict)
         self.assertEqual(len(response), 1)
         self.assertEqual(len(response[0]), 5)
-        for r, ex_r in zip(response[0], expected_res):
-            self.assertAlmostEqual(r, ex_r)
+        self.assertTrue(response[0].keys() == expected_res.keys())
+        for k in response[0].keys():
+            self.assertAlmostEqual(response[0][k], expected_res[k])
 
     def test_multiple_steps(self):
         self.model.spawn()
@@ -161,7 +238,7 @@ class FmuModelHandlerTests(unittest.TestCase):
             x = {'index': i/100, 'inputs': random()}
             response = self.model.step(x)
             self.assertIsInstance(response, list)
-            self.assertIsInstance(response[0], list)
+            self.assertIsInstance(response[0], dict)
             self.assertEqual(len(response), 1)
             self.assertEqual(len(response[0]), 5)
 
@@ -181,6 +258,7 @@ class FmuModelHandlerTests(unittest.TestCase):
         self.model.spawn()
         self.model.destroy()
         self.assertFalse(os.path.exists(self.model.unzipdir))
+
 
 class IncominmgMeasurementTests(unittest.TestCase):
 
@@ -346,8 +424,7 @@ class ExperimentTests(unittest.TestCase):
         self.target_keys = ['pm']
 
     def test_initiate_logging(self):
-        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
-        path = "experiment_{}.log".format(tic)
+        path = str(uuid.uuid1())
         ex = Experiment()
         log = ex.initiate_logging(path=path)
         self.assertIsInstance(log, TextIOWrapper)
@@ -357,8 +434,7 @@ class ExperimentTests(unittest.TestCase):
         os.remove(path)
 
     def test_terminate_logging(self):
-        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
-        path = "experiment_{}.log".format(tic)
+        path = str(uuid.uuid1())
         ex = Experiment()
         log = ex.initiate_logging(path=path)
         self.assertIsInstance(log, TextIOWrapper)
@@ -368,8 +444,7 @@ class ExperimentTests(unittest.TestCase):
         os.remove(path)
 
     def test_headers_are_written_correctly(self):
-        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
-        path = "experiment_{}.log".format(tic)
+        path = str(uuid.uuid1())
         headers = ["meas1", "meas2", "meas3"]
         ex = Experiment()
         log = ex.initiate_logging(path=path, headers=headers)
@@ -382,8 +457,7 @@ class ExperimentTests(unittest.TestCase):
         os.remove(path)
 
     def test_log_row(self):
-        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
-        path = "experiment_{}.log".format(tic)
+        path = str(uuid.uuid1())
         ex = Experiment()
         log = ex.initiate_logging(path=path)
         self.assertIsInstance(log, TextIOWrapper)
@@ -403,8 +477,7 @@ class ExperimentTests(unittest.TestCase):
         os.remove(ex.log_path)
 
     def test_log_row_with_headers(self):
-        tic = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
-        path = "experiment_{}.log".format(tic)
+        path = str(uuid.uuid1())
         headers = ["timestamp", "meas1", "meas2", "meas3"]
         ex = Experiment()
         log = ex.initiate_logging(path=path, headers=headers)

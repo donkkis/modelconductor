@@ -6,6 +6,7 @@ from enum import Enum
 from fmpy import read_model_description, extract
 from fmpy.fmi2 import FMU2Slave
 from .utils import Measurement
+from .utils import ModelResponse
 from uuid import uuid1
 from abc import abstractmethod
 from .exceptions import ModelStepException
@@ -240,6 +241,7 @@ class FMUModelHandler(ModelHandler):
 
     def _get_value_references(self):
         # Get variable dictionary
+        # TODO should use OrderedDict
         for var in self.model_description.modelVariables:
             if var.causality not in self.vrs.keys():
                 self.vrs[var.causality] = {}
@@ -267,6 +269,13 @@ class FMUModelHandler(ModelHandler):
         self._fmu.exitInitializationMode()
         self.status = ModelStatus.READY
 
+    def _build_response(self, r):
+        """Attach variable names to response list"""
+        keys = list(self.vrs['input'].keys()) + list(self.vrs['output'].keys())
+        response = {k: v for k, v in zip(keys, r)}
+        response = ModelResponse(response)
+        return response
+
     def step(self, X, step_size=None):
         self.status = ModelStatus.BUSY
 
@@ -285,6 +294,7 @@ class FMUModelHandler(ModelHandler):
 
         # get the values for 'inputs' and 'outputs'
         response = self._fmu.getReal(self._vr_input + self._vr_output)
+        response = self._build_response(response)
         print("Got response from model", response)
         self.status = ModelStatus.READY
         # TODO Fix
