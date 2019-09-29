@@ -15,15 +15,12 @@ def accept_incoming_connections():
         client, client_address = _SERVER.accept()
         print("%s:%s has connected." % client_address)
         addresses[client] = client_address
-        Thread(target=handle_client, args=(client,)).start()
+        t = Thread(target=handle_client, args=(client,), daemon=True)
+        t.start()
 
 
 def handle_client(client):  # Takes client socket as argument.
     """Handles a single client connection."""
-
-    # name = client.recv(BUFSIZ).decode("utf8")
-    # clients[client] = name
-
     while True:
         headers = b''
         msg = b''
@@ -68,7 +65,7 @@ def run(event, queue):
     _SERVER.bind(ADDR)
     _SERVER.listen(5)
     print("Waiting for connection...")
-    ACCEPT_THREAD = Thread(target=accept_incoming_connections)
+    ACCEPT_THREAD = Thread(target=accept_incoming_connections, daemon=True)
     ACCEPT_THREAD.start()
     ACCEPT_THREAD.join()
     _SERVER.close()

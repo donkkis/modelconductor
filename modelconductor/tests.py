@@ -14,11 +14,13 @@ from .measurementhandler import MeasurementStreamHandler
 from .measurementhandler import IncomingMeasurementBatchPoller
 from .exceptions import ExperimentDurationExceededException, ModelStepException
 from .modelhandler import ModelStatus
+from .test_utils import MockFMU
+from .test_utils import MockModelHandler
 import sqlalchemy as sqla
 import pandas as pd
 from time import sleep
 import os
-import threading
+from threading import Thread
 from datetime import datetime as dt
 import uuid
 import shutil
@@ -32,8 +34,8 @@ from fmpy import read_model_description
 from fmpy.util import download_test_file
 from fmpy import dump as fmpydump
 from random import random
+from socket import AF_INET, socket, SOCK_STREAM
 
-# TODO cleanup generated dummy log and db files after testing
 
 
 class SklearnTests(unittest.TestCase):
@@ -69,6 +71,7 @@ class SklearnTests(unittest.TestCase):
 
     def tearDown(self):
         os.chdir('..')
+        sleep(5)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_can_be_spawned(self):
@@ -128,31 +131,7 @@ class MockFmuModelHandlerTests(unittest.TestCase):
                                      stop_time=1.5,
                                      timestamp_key='index')
 
-        class MockFMU:
-            def instantiate(self, *args, **kwargs): pass
 
-            def setupExperiment(self, *args, **kwargs): pass
-
-            def enterInitializationMode(self, *args, **kwargs): pass
-
-            def exitInitializationMode(self, *args, **kwargs): pass
-
-            def setReal(self, *args, **kwargs): pass
-
-            def doStep(self, *args, **kwargs): pass
-
-            def terminate(self, *args, **kwargs): pass
-
-            def freeInstance(self, *args, **kwargs): pass
-
-            def getReal(self, *args, **kwargs):
-                # from ModelDescription.xml
-                vr_dict = {17: ('inputs', 1),
-                           2: ('outputs[1]', 2),
-                           4: ('outputs[2]', 3),
-                           6: ('outputs[3]', 4),
-                           8: ('outputs[4]', 5)}
-                return [vr_dict[i][1] for i in args[0]]
 
         self.model._fmu = MockFMU()
 
@@ -162,6 +141,7 @@ class MockFmuModelHandlerTests(unittest.TestCase):
             self.model.destroy()
         except OSError:  # nothing left to destroy
             pass
+        sleep(5)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_build_response(self):
@@ -206,6 +186,7 @@ class FmuModelHandlerTests(unittest.TestCase):
             self.model.destroy()
         except OSError:  # nothing left to destroy
             pass
+        sleep(5)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_fmu_model_loaded_succesfully(self):
@@ -258,12 +239,6 @@ class FmuModelHandlerTests(unittest.TestCase):
         self.model.spawn()
         self.model.destroy()
         self.assertFalse(os.path.exists(self.model.unzipdir))
-
-
-class IncominmgMeasurementTests(unittest.TestCase):
-
-    def some_test(self):
-        meas_hand = IncomingMeasurementListener()
 
 
 class ModelHandlerTests(unittest.TestCase):
@@ -476,6 +451,62 @@ class ExperimentTests(unittest.TestCase):
 
         os.remove(ex.log_path)
 
+    def test_log_row_with_dict_input(self):
+        path = str(uuid.uuid1())
+        ex = Experiment()
+        log = ex.initiate_logging(path=path)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+
+        row1 = {'i1': "1", 'o2': "2", 'o3': "3", 'c4': "4"}
+        row2 = {'i1': "5", 'o2': "6", 'o3': "7", 'c4': "8"}
+        input_keys = ['i1']
+        target_keys = ['o2', 'o3']
+        control_keys = ['c4']
+        model = MockModelHandler(input_keys=input_keys,
+                                 target_keys=target_keys,
+                                 control_keys=control_keys)
+        ex.log_row(row1, model=model)
+        ex.log_row(row2, model=model)
+        log.close()
+        self.assertTrue(log.closed)
+
+        with open(ex.log_path, 'r') as f:
+            self.assertEqual(f.readline(), "1,2,3,4\n")
+            self.assertEqual(f.readline(), "5,6,7,8\n")
+
+        os.remove(ex.log_path)
+
+    def test_log_row_with_dict_header_input(self):
+        path = str(uuid.uuid1())
+        ex = Experiment()
+
+        row1 = {'i1': "1", 'o2': "2", 'o3': "3", 'c4': "4"}
+        row2 = {'i1': "5", 'o2': "6", 'o3': "7", 'c4': "8"}
+        input_keys = ['i1']
+        target_keys = ['o2', 'o3']
+        control_keys = ['c4']
+        headers = input_keys + target_keys + control_keys
+
+        log = ex.initiate_logging(path=path, headers=headers)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+
+        model = MockModelHandler(input_keys=input_keys,
+                                 target_keys=target_keys,
+                                 control_keys=control_keys)
+        ex.log_row(row1, model=model)
+        ex.log_row(row2, model=model)
+        log.close()
+        self.assertTrue(log.closed)
+
+        with open(ex.log_path, 'r') as f:
+            self.assertEqual(f.readline(), "i1,o2,o3,c4\n")
+            self.assertEqual(f.readline(), "1,2,3,4\n")
+            self.assertEqual(f.readline(), "5,6,7,8\n")
+
+        os.remove(ex.log_path)
+
     def test_log_row_with_headers(self):
         path = str(uuid.uuid1())
         headers = ["timestamp", "meas1", "meas2", "meas3"]
@@ -615,7 +646,7 @@ class ExperimentTests(unittest.TestCase):
         exp.setup()
 
         try:
-            threading.Thread(target=exp.run).start()
+            Thread(target=exp.run).start()
             simulate_writes()
         except Exception:
             raise RuntimeError("Something went horribly wrong")
@@ -698,6 +729,7 @@ class IncomingMeasurementBatchPollerTests(unittest.TestCase):
         os.chdir('..')
         if self.poller.conn and not self.poller.conn.closed:
             self.poller.conn.close()
+        sleep(5)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_can_be_instantiated(self):
@@ -767,6 +799,74 @@ class IncomingMeasurementBatchPollerTests(unittest.TestCase):
         with self.assertRaises(ExperimentDurationExceededException):
             new_start, new_stop = self.poller.update_timestamps()
 
+    def test_parse_query_with_path(self):
+        rand_dir = str(uuid.uuid1())
+        rand_str = str(uuid.uuid1())
+        os.mkdir(rand_dir)
+        rand_path = './{}/file'.format(rand_dir)
+        with open(rand_path, 'w') as f:
+            f.write(rand_str)
+        self.poller._parse_query(query=rand_path)
+        expect = rand_str
+        actual = self.poller._parse_query(query=rand_path)
+        self.assertEqual(expect, actual)
+
+    def test_parse_query_with_string(self):
+        rand_str = str(uuid.uuid1())
+        self.poller._parse_query(query=rand_str)
+        expect = rand_str
+        actual = self.poller._parse_query(query=rand_str)
+        self.assertEqual(expect, actual)
+
+
+
+    def test_connect(self):
+        pass
+
+    def test_receive(self):
+        self.poller = \
+            IncomingMeasurementBatchPoller(self.db_uri,
+                                           self.query,
+                                           polling_interval=0.5,
+                                           polling_window=3600,
+                                           start_time=dt(2016, 7, 1, 0, 0, 0),
+                                           stop_time=dt(2016, 7, 1, 23, 59, 59))
+
+        exit_status = self.poller.receive()
+        self.assertTrue(exit_status)
+        self.assertTrue(self.poller.buffer.qsize() == 24*60)
+
+
+
+
+
+class IncomingMeasurementListenerTests(unittest.TestCase):
+    def test_listen(self):
+        listener = IncomingMeasurementListener()
+        exit_status = listener.listen(timeout=15)
+        self.assertTrue(exit_status)
+
+    def test_receive_single_json_string(self):
+        listener = IncomingMeasurementListener()
+        t = Thread(target=listener.listen,
+                   kwargs={'timeout': 15},
+                   daemon=True)
+        t.start()
+        message = "{\"var1\": 1, \"var2\": 2, \"var3\": 3}"
+        message = "{:<10}".format(str(len(message))) + message
+        print(message)
+
+        host = "127.0.0.1"
+        port = 33003
+        addr = (host, port)
+
+        client_socket = socket(AF_INET, SOCK_STREAM)
+        client_socket.connect(addr)
+        client_socket.send(bytes(message, "utf8"))
+        client_socket.close()
+        expected = Measurement({'var1': 1, 'var2': 2, 'var3': 3})
+        actual = listener.buffer.get()
+        self.assertDictEqual(expected, actual)
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,7 @@ import abc
 import os
 import threading
 import uuid
+from pandas import DataFrame
 from datetime import datetime as dt
 from datetime import timedelta
 from warnings import warn
@@ -102,6 +103,7 @@ class Experiment:
         self.logger = f
         if headers:
             print(",".join(headers), file=f)
+            f.flush()
         return f
 
     def terminate_logging(self, file=None):
@@ -117,13 +119,19 @@ class Experiment:
         file.close()
         return file
 
-    def log_row(self, row):
+    def log_row(self, row, model=None):
         """Write a single row to log file
 
         Args:
-            row (List(String)): List of strings that will be output to
-                new row in file as comma separated values
+            row: List or dict containing the headers as keys of strings
+                that will be output to new row in file as csv
+            model: The associated ModelHandler instance
         """
+        if isinstance(row, dict):
+            ordered_keys =\
+                model.input_keys + model.target_keys + model.control_keys
+            row = DataFrame(row, index=[1])
+            row = list(row[ordered_keys].loc[1])
         try:
             print(",".join(row), file=self.logger)
             self.logger.flush()

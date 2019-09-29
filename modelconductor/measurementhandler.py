@@ -184,30 +184,33 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
     def receive(self):
         self.listen()
 
-    def listen(self):
+    def listen(self, timeout=None):
+        """Start the listening service
+        Args:
+            timeout: time to listen in seconds
+        Returns:
+            Boolean if process exited succesfully
+        """
 
         e = threading.Event()
         q = queue.Queue()
+        timeout = dt.now() + timedelta(seconds=timeout)
 
-        # def wait_for_event(e):
-        #    """Wait for the event to be set before doing anything"""
-        #    print('wait_for_event starting')
-        #    event_is_set = e.wait()
-        #    print('event set: %s', event_is_set)
-        #    e.clear()
-
-        t = Thread(target=server.run, args=(e,q))
+        t = Thread(target=server.run, args=(e, q), daemon=True)
         t.start()
 
         while True:
-            item = q.get()
-            if item is None:
+            if dt.now() >= timeout:
+                return True
+            try:
+                item = q.get(timeout=10)
+            except Empty:
                 continue
             # expect dict
             data = json.loads(item.decode('utf-8'))
             data = Measurement(data)
             self.receive_single(data)
-            print(self.buffer.qsize())
+            print("Current buffer: ", self.buffer.qsize())
 
 
 class MeasurementStreamPoller(MeasurementStreamHandler):
@@ -285,6 +288,7 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
                 self.query = f.read().decode().replace("\r\n", " ")
         else:
             self.query = query
+        return self.query
 
     def _connect(self):
         self.engine = sqlalchemy.create_engine(self.db_uri)
@@ -295,7 +299,7 @@ class IncomingMeasurementBatchPoller(MeasurementStreamPoller):
             raise AssertionError("Db connection failed")
 
     def receive(self):
-        self.poll()
+        return self.poll()
 
     def poll(self):
         if not self.conn or self.conn.closed:
