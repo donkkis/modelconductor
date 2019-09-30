@@ -1,5 +1,4 @@
 __package__ = "modelconductor"
-from typing import List
 from queue import Queue
 from queue import Empty
 from time import sleep
@@ -7,7 +6,6 @@ from datetime import datetime as dt
 from datetime import timedelta
 from .utils import Measurement
 from .exceptions import ExperimentDurationExceededException
-from .modelhandler import ModelHandler
 from modelconductor import server
 from threading import Thread
 from enum import Enum

@@ -35,7 +35,7 @@ from fmpy.util import download_test_file
 from fmpy import dump as fmpydump
 from random import random
 from socket import AF_INET, socket, SOCK_STREAM
-
+from .testresources.train import prepare_dataset
 
 
 class SklearnTests(unittest.TestCase):
@@ -44,9 +44,16 @@ class SklearnTests(unittest.TestCase):
         self.out_path = str(uuid.uuid1())
         os.mkdir(self.out_path)
         os.chdir(self.out_path)
-        self.model_path = '..\\test_resources\\pmsm.pickle'
-        self.data_path = '..\\test_resources\\pmsm_temperature_sample.csv'
-        data = pd.read_csv(self.data_path)
+        self.model_path = '..\\testresources\\pmsm.pickle'
+        self.sample_path = '..\\testresources\\pmsm_temperature_sample.csv'
+        self.data_path = '..\\testresources\\pmsm_temperature_data.csv'
+        conds = [os.path.exists(self.model_path),
+                 os.path.exists(self.sample_path),
+                 os.path.exists(self.data_path)]
+        if not all(conds):
+            prepare_dataset()
+
+        data = pd.read_csv(self.sample_path)
         rand_idx = randint(1, len(data) - 101)
         self.mock_X = data.iloc[rand_idx]  # pd.Series
         self.mock_X = self.mock_X.to_dict()
@@ -107,6 +114,7 @@ class SklearnTests(unittest.TestCase):
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 100)
 
+
 class MockFmuModelHandlerTests(unittest.TestCase):
 
     def setUp(self):
@@ -131,8 +139,6 @@ class MockFmuModelHandlerTests(unittest.TestCase):
                                      stop_time=1.5,
                                      timestamp_key='index')
 
-
-
         self.model._fmu = MockFMU()
 
     def tearDown(self):
@@ -152,8 +158,6 @@ class MockFmuModelHandlerTests(unittest.TestCase):
                    'outputs[4]': 5}
         res = self.model.step({'index': 1, 'inputs': 1})
         self.assertDictEqual(res[0], exp_res)
-
-
 
 
 class FmuModelHandlerTests(unittest.TestCase):
@@ -398,6 +402,24 @@ class ExperimentTests(unittest.TestCase):
                       'stator_winding']
         self.target_keys = ['pm']
 
+        self.out_path = str(uuid.uuid1())
+        os.mkdir(self.out_path)
+        os.chdir(self.out_path)
+        self.model_path = '..\\testresources\\pmsm.pickle'
+        self.sample_path = '..\\testresources\\pmsm_temperature_sample.csv'
+        self.data_path = '..\\testresources\\pmsm_temperature_data.csv'
+        conds = [os.path.exists(self.model_path),
+                 os.path.exists(self.sample_path),
+                 os.path.exists(self.data_path)]
+        if not all(conds):
+            prepare_dataset()
+
+    def tearDown(self):
+        os.chdir('..')
+        sleep(5)
+        shutil.rmtree(self.out_path, ignore_errors=True)
+
+
     def test_initiate_logging(self):
         path = str(uuid.uuid1())
         ex = Experiment()
@@ -579,7 +601,7 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(len(ex.routes[0][1].sources) == 1) # ModelHandler
 
     def test_single_source_and_consumer_run(self):
-        data = pd.read_csv("test_resources\\pmsm_temperature_sample.csv")
+        data = pd.read_csv("..\\testresources\\pmsm_temperature_sample.csv")
 
         # Populate test db in memory
         engine = sqla.create_engine('sqlite:///test.db')
@@ -593,7 +615,7 @@ class ExperimentTests(unittest.TestCase):
                                           db_uri='test.db',
                                           query_cols=qcols)
         # model
-        mdel = SklearnModelHandler(model_filename='test_resources\\pmsm.pickle',
+        mdel = SklearnModelHandler(model_filename='..\\testresources\\pmsm.pickle',
                                    input_keys=self.input_keys,
                                    target_keys=self.target_keys,
                                    control_keys=self.target_keys)
@@ -608,12 +630,12 @@ class ExperimentTests(unittest.TestCase):
     def test_concurrent_read_write_ops(self):
         # TODO implement timestamp field generalization
         print(os.getcwd())
-        mdeel = SklearnModelHandler(model_filename='test_resources\\pmsm.pickle',
+        mdeel = SklearnModelHandler(model_filename='..\\testresources\\pmsm.pickle',
                                     input_keys=self.input_keys,
                                     target_keys=self.target_keys,
                                     control_keys=self.target_keys)
         # source
-        data = pd.read_csv("test_resources\\pmsm_temperature_sample.csv")
+        data = pd.read_csv("..\\testresources\\pmsm_temperature_sample.csv")
 
         engine = sqla.create_engine('sqlite:///test.db')
         conn = engine.connect()
@@ -741,7 +763,7 @@ class IncomingMeasurementBatchPollerTests(unittest.TestCase):
             f.write(self.query)
         self.poller = IncomingMeasurementBatchPoller(
             db_uri=self.db_uri,
-            query='..\\test_resources\\{}'.format(query_path))
+            query='..\\testresources\\{}'.format(query_path))
         with open(query_path, 'r') as f:
             self.assertEqual(self.query.replace("\n", ""),
                              f.read().replace("\n", ""))

@@ -1,5 +1,4 @@
 __package__ = "modelconductor"
-import abc
 import pickle
 import shutil
 from enum import Enum
@@ -10,6 +9,7 @@ from .utils import ModelResponse
 from uuid import uuid1
 from abc import abstractmethod
 from .exceptions import ModelStepException
+
 
 class ModelStatus(Enum):
     READY = 1
