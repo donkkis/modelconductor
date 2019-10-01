@@ -11,7 +11,7 @@ from .measurementhandler import MeasurementStreamHandler
 from .modelhandler import ModelHandler
 from .modelhandler import ModelStatus
 from functools import wraps
-
+from .utils import ModelResponse
 
 class Experiment:
     """
@@ -127,12 +127,16 @@ class Experiment:
                 that will be output to new row in file as csv
             model: The associated ModelHandler instance
         """
-        if isinstance(row, dict):
+        if isinstance(row, (ModelResponse, dict)):
             ordered_keys =\
                 model.input_keys + model.target_keys + model.control_keys
             row = DataFrame(row, index=[1])
             row = list(row[ordered_keys].loc[1])
+            # append timestamp
+            row = list(str(dt.now())) + row
         try:
+            # ensure inputs are strings before writing
+            row = list(map(str, row))
             print(",".join(row), file=self.logger)
             self.logger.flush()
         except Exception:
@@ -223,11 +227,8 @@ class OnlineOneToOneExperiment(Experiment):
                 if self.logging:
                     # TODO need to generalize the measurement timestamp
                     # TODO will fail with more than one control key!
-                    row = [str(dt.now())] + [str(item) for item in res[0]]
-                    if mdl.control_keys:
-                        row += [str(data[0][mdl.control_keys[0]])]
-                    # print(row) #  debug
-                    self.log_row(row)
+                    # TODO Write integration test
+                    self.log_row(res)
 
     @Experiment._run
     def run(self):

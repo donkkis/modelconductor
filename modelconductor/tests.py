@@ -5,6 +5,7 @@ import unittest
 from io import TextIOWrapper
 import numpy as np
 from .utils import Measurement
+from .utils import ModelResponse
 from .measurementhandler import IncomingMeasurementListener
 from .experiment import Experiment
 from .modelhandler import ModelHandler, SklearnModelHandler, FMUModelHandler
@@ -190,6 +191,8 @@ class FmuModelHandlerTests(unittest.TestCase):
             self.model.destroy()
         except OSError:  # nothing left to destroy
             pass
+        except AttributeError:  # nothing left to destroy
+            pass
         sleep(5)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
@@ -243,6 +246,30 @@ class FmuModelHandlerTests(unittest.TestCase):
         self.model.spawn()
         self.model.destroy()
         self.assertFalse(os.path.exists(self.model.unzipdir))
+
+    def test_parse_current_comm_point_initial(self):
+        actual = self.model._parse_current_comm_point(X={'index': '2019-01-01 15:00:00'})
+        expect = 0
+        self.assertEqual(actual, expect)
+
+    def test_parse_current_comm_point(self):
+        initial = dt.strptime('2019-01-01 15:00:00', "%Y-%m-%d %H:%M:%S")
+        actual = self.model._parse_current_comm_point(X={'index': '2019-01-01 15:03:30'},
+                                                      _INITIAL_TIMESTAMP=initial)
+        expect = 210
+        self.assertEqual(actual, expect)
+
+    def test_parse_current_comm_point_dt_initial(self):
+        actual = self.model._parse_current_comm_point(X={'index': dt(2019, 1, 1, 15, 0, 0)})
+        expect = 0
+        self.assertEqual(actual, expect)
+
+    def test_parse_current_comm_point_dt(self):
+        initial = dt.strptime('2019-01-01 15:00:00', "%Y-%m-%d %H:%M:%S")
+        actual = self.model._parse_current_comm_point(X={'index': dt(2019, 1, 1, 15, 3, 30)},
+                                                      _INITIAL_TIMESTAMP=initial)
+        expect = 210
+        self.assertEqual(actual, expect)
 
 
 class ModelHandlerTests(unittest.TestCase):
@@ -468,8 +495,8 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(log.closed)
 
         with open(ex.log_path, 'r') as f:
-            self.assertEqual(f.readline(), "1,2,3,4\n")
-            self.assertEqual(f.readline(), "5,6,7,8\n")
+            self.assertIn("1,2,3,4\n", f.readline())
+            self.assertIn("5,6,7,8\n", f.readline())
 
         os.remove(ex.log_path)
 
@@ -494,8 +521,34 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(log.closed)
 
         with open(ex.log_path, 'r') as f:
-            self.assertEqual(f.readline(), "1,2,3,4\n")
-            self.assertEqual(f.readline(), "5,6,7,8\n")
+            self.assertIn("1,2,3,4\n", f.readline())
+            self.assertIn("5,6,7,8\n", f.readline())
+
+        os.remove(ex.log_path)
+
+    def test_log_row_with_modelresponse_input(self):
+        path = str(uuid.uuid1())
+        ex = Experiment()
+        log = ex.initiate_logging(path=path)
+        self.assertIsInstance(log, TextIOWrapper)
+        self.assertFalse(log.closed)
+
+        row1 = ModelResponse({'i1': "1", 'o2': "2", 'o3': "3", 'c4': "4"})
+        row2 = ModelResponse({'i1': "5", 'o2': "6", 'o3': "7", 'c4': "8"})
+        input_keys = ['i1']
+        target_keys = ['o2', 'o3']
+        control_keys = ['c4']
+        model = MockModelHandler(input_keys=input_keys,
+                                 target_keys=target_keys,
+                                 control_keys=control_keys)
+        ex.log_row(row1, model=model)
+        ex.log_row(row2, model=model)
+        log.close()
+        self.assertTrue(log.closed)
+
+        with open(ex.log_path, 'r') as f:
+            self.assertIn("1,2,3,4\n", f.readline())
+            self.assertIn("5,6,7,8\n", f.readline())
 
         os.remove(ex.log_path)
 
@@ -523,9 +576,9 @@ class ExperimentTests(unittest.TestCase):
         self.assertTrue(log.closed)
 
         with open(ex.log_path, 'r') as f:
-            self.assertEqual(f.readline(), "i1,o2,o3,c4\n")
-            self.assertEqual(f.readline(), "1,2,3,4\n")
-            self.assertEqual(f.readline(), "5,6,7,8\n")
+            self.assertIn("i1,o2,o3,c4\n", f.readline())
+            self.assertIn("1,2,3,4\n", f.readline())
+            self.assertIn("5,6,7,8\n", f.readline())
 
         os.remove(ex.log_path)
 
@@ -889,6 +942,7 @@ class IncomingMeasurementListenerTests(unittest.TestCase):
         expected = Measurement({'var1': 1, 'var2': 2, 'var3': 3})
         actual = listener.buffer.get()
         self.assertDictEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

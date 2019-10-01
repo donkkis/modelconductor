@@ -9,7 +9,11 @@ from .utils import ModelResponse
 from uuid import uuid1
 from abc import abstractmethod
 from .exceptions import ModelStepException
+from datetime import datetime as dt
+from datetime import timedelta
 
+_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+_INITIAL_TIMESTAMP = None
 
 class ModelStatus(Enum):
     READY = 1
@@ -148,7 +152,7 @@ class SklearnModelHandler(TrainableModelHandler):
             # print("Got response from model", str(result)[0:20], "...",
             #     "[Message has been truncated]")
             self.status = ModelStatus.READY
-            return [result]
+            return result
         except Exception:
             raise ModelStepException(
                 "Could not get a valid response from model")
@@ -276,11 +280,45 @@ class FMUModelHandler(ModelHandler):
         response = ModelResponse(response)
         return response
 
+    def _parse_current_comm_point(self, X, **kwargs):
+        """Figure out the elapsed time based on timestamp information
+
+        Args:
+            X: a Measurement instance. Int, float, or datetime is
+                accepted as the value of X[self.timestamp_key]
+
+        Returns:
+            Time in seconds elapsed since beginning of the experiment
+
+        """
+        # for testing
+        global _INITIAL_TIMESTAMP
+        if '_INITIAL_TIMESTAMP' in kwargs.keys():
+            _INITIAL_TIMESTAMP = kwargs['_INITIAL_TIMESTAMP']
+
+        current_timestamp = X[self.timestamp_key]
+        if isinstance(current_timestamp, str):
+            current_timestamp = dt.strptime(current_timestamp, _TIME_FORMAT)
+        elif isinstance(current_timestamp, float) or \
+                isinstance(current_timestamp, int):
+            return current_timestamp
+        elif not isinstance(current_timestamp, dt):
+            raise TypeError("String or datetime type expected")
+
+        if not _INITIAL_TIMESTAMP:
+            _INITIAL_TIMESTAMP = current_timestamp
+            return 0
+        else:
+            diff = current_timestamp - _INITIAL_TIMESTAMP
+            return diff.seconds
+
     def step(self, X, step_size=None):
         self.status = ModelStatus.BUSY
 
         data = [X[k] for k in self.vrs["input"].keys()]
-        time = X[self.timestamp_key]
+
+        # parse currentCommunicationpoint
+        time = self._parse_current_comm_point(X)
 
         step_size = self.step_size if step_size is None else step_size
         # set the input
