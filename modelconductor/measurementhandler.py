@@ -58,6 +58,7 @@ class MeasurementStreamHandler:
         self.consumers = consumers if consumers is not None else []
         self.validation_strategy = VAL_STRATS[validation_strategy]
         self.last_measurement = None
+        self._stopevent = None
 
     @abc.abstractmethod
     def receive(self): pass
@@ -182,24 +183,19 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
     def receive(self):
         self.listen()
 
-    def listen(self, timeout=None):
+    def listen(self):
         """Start the listening service
-        Args:
-            timeout: time to listen in seconds
         Returns:
             Boolean if process exited succesfully
         """
 
         e = threading.Event()
         q = queue.Queue()
-        timeout = dt.now() + timedelta(seconds=timeout)
 
         t = Thread(target=server.run, args=(e, q), daemon=True)
         t.start()
 
-        while True:
-            if dt.now() >= timeout:
-                return True
+        while not isinstance(self._stopevent, type(threading.Event())):
             try:
                 item = q.get(timeout=10)
             except Empty:
@@ -209,6 +205,7 @@ class IncomingMeasurementListener(MeasurementStreamHandler):
             data = Measurement(data)
             self.receive_single(data)
             print("Current buffer: ", self.buffer.qsize())
+        return True
 
 
 class MeasurementStreamPoller(MeasurementStreamHandler):

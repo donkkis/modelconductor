@@ -133,7 +133,7 @@ class Experiment:
             row = DataFrame(row, index=[1])
             row = list(row[ordered_keys].loc[1])
             # append timestamp
-            row = list(str(dt.now())) + row
+            row = [dt.now().strftime("%Y-%m-%d %H:%M:%S.%f")] + row
         try:
             # ensure inputs are strings before writing
             row = list(map(str, row))
@@ -228,7 +228,7 @@ class OnlineOneToOneExperiment(Experiment):
                     # TODO need to generalize the measurement timestamp
                     # TODO will fail with more than one control key!
                     # TODO Write integration test
-                    self.log_row(res)
+                    self.log_row(res, mdl)
 
     @Experiment._run
     def run(self):

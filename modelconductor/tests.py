@@ -22,6 +22,7 @@ import pandas as pd
 from time import sleep
 import os
 from threading import Thread
+from threading import Event
 from datetime import datetime as dt
 import uuid
 import shutil
@@ -79,7 +80,7 @@ class SklearnTests(unittest.TestCase):
 
     def tearDown(self):
         os.chdir('..')
-        sleep(5)
+        sleep(1)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_can_be_spawned(self):
@@ -94,7 +95,7 @@ class SklearnTests(unittest.TestCase):
                                     target_keys=self.target_keys)
         model.spawn()
         result = model.step(self.mock_X)
-        self.assertIsInstance(result, list)
+        self.assertIsInstance(result, ModelResponse)
 
     def test_step_with_incorrect_input_raises_error(self):
         self.input_keys = ['ambient']  # intentionally wrong number of keys
@@ -148,7 +149,7 @@ class MockFmuModelHandlerTests(unittest.TestCase):
             self.model.destroy()
         except OSError:  # nothing left to destroy
             pass
-        sleep(5)
+        sleep(1)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_build_response(self):
@@ -158,7 +159,7 @@ class MockFmuModelHandlerTests(unittest.TestCase):
                    'outputs[3]': 4,
                    'outputs[4]': 5}
         res = self.model.step({'index': 1, 'inputs': 1})
-        self.assertDictEqual(res[0], exp_res)
+        self.assertDictEqual(res, exp_res)
 
 
 class FmuModelHandlerTests(unittest.TestCase):
@@ -193,7 +194,7 @@ class FmuModelHandlerTests(unittest.TestCase):
             pass
         except AttributeError:  # nothing left to destroy
             pass
-        sleep(5)
+        sleep(1)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_fmu_model_loaded_succesfully(self):
@@ -212,23 +213,19 @@ class FmuModelHandlerTests(unittest.TestCase):
                         'outputs[4]': 0.0}
 
         response = self.model.step(x)
-        self.assertIsInstance(response, list)
-        self.assertIsInstance(response[0], dict)
-        self.assertEqual(len(response), 1)
-        self.assertEqual(len(response[0]), 5)
-        self.assertTrue(response[0].keys() == expected_res.keys())
-        for k in response[0].keys():
-            self.assertAlmostEqual(response[0][k], expected_res[k])
+        self.assertIsInstance(response, ModelResponse)
+        self.assertEqual(len(response.keys()), 5)
+        self.assertTrue(response.keys() == expected_res.keys())
+        for k in response.keys():
+            self.assertAlmostEqual(response[k], expected_res[k])
 
     def test_multiple_steps(self):
         self.model.spawn()
         for i in range(0, 11):
             x = {'index': i/100, 'inputs': random()}
             response = self.model.step(x)
-            self.assertIsInstance(response, list)
-            self.assertIsInstance(response[0], dict)
-            self.assertEqual(len(response), 1)
-            self.assertEqual(len(response[0]), 5)
+            self.assertIsInstance(response, ModelResponse)
+            self.assertEqual(len(response.keys()), 5)
 
     def test_get_variable_references(self):
         self.model.spawn()
@@ -443,7 +440,7 @@ class ExperimentTests(unittest.TestCase):
 
     def tearDown(self):
         os.chdir('..')
-        sleep(5)
+        sleep(1)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
 
@@ -677,7 +674,7 @@ class ExperimentTests(unittest.TestCase):
         exp.setup()
         exp_ok = exp.run()
         self.assertTrue(exp_ok)
-        sleep(5)
+        sleep(1)
         os.remove('test.db')
 
     def test_concurrent_read_write_ops(self):
@@ -749,7 +746,7 @@ class ExperimentTests(unittest.TestCase):
             exp.logger.close()
             os.remove(exp.log_path)
             conn.close()
-            sleep(5)
+            sleep(1)
             os.remove('test.db')
 
 
@@ -804,7 +801,7 @@ class IncomingMeasurementBatchPollerTests(unittest.TestCase):
         os.chdir('..')
         if self.poller.conn and not self.poller.conn.closed:
             self.poller.conn.close()
-        sleep(5)
+        sleep(1)
         shutil.rmtree(self.out_path, ignore_errors=True)
 
     def test_can_be_instantiated(self):
@@ -916,17 +913,31 @@ class IncomingMeasurementBatchPollerTests(unittest.TestCase):
 
 
 class IncomingMeasurementListenerTests(unittest.TestCase):
+
     def test_listen(self):
         listener = IncomingMeasurementListener()
-        exit_status = listener.listen(timeout=15)
+
+        def invoke_stopevent():
+            sleep(15)
+            listener._stopevent = Event()
+
+        t = Thread(target=invoke_stopevent, daemon=True)
+        t.start()
+        exit_status = listener.listen()
         self.assertTrue(exit_status)
 
     def test_receive_single_json_string(self):
         listener = IncomingMeasurementListener()
-        t = Thread(target=listener.listen,
-                   kwargs={'timeout': 15},
-                   daemon=True)
-        t.start()
+
+        def invoke_stopevent():
+            sleep(15)
+            listener._stopevent = Event()
+
+        t1 = Thread(target=invoke_stopevent, daemon=True)
+        t1.start()
+
+        t2 = Thread(target=listener.listen, daemon=True)
+        t2.start()
         message = "{\"var1\": 1, \"var2\": 2, \"var3\": 3}"
         message = "{:<10}".format(str(len(message))) + message
         print(message)

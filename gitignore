@@ -3,7 +3,8 @@ modelconductor.egg-info/
 .idea/
 modelconductor/.idea/
 modelconductor/.cache/
-modelconductor/.test_resources/
+modelconductor/.testresources/
+modelconductor/.customexamples/
 modelconductor/customtests.py
 modelconductor/test_query
 modelconductor/dummy_query

@@ -135,11 +135,25 @@ class SklearnModelHandler(TrainableModelHandler):
         with open(model_filename, 'rb') as pickle_file:
             self.model = pickle.load(pickle_file)
 
+    def _build_response(self, r, control_vals=None):
+        """Attach variable names to response list"""
+        keys = self.input_keys + self.target_keys
+        response = {k: v for k, v in zip(keys, r)}
+        if control_vals:
+            # in case of conflicting keys, control_vals values are preserved
+            response = {**response, **control_vals}
+        response = ModelResponse(response)
+        return response
+
     def step(self, X):
         # X is dict when calling from run
         self.status = ModelStatus.BUSY
         # convert to numpy and sort columns to same order as input_keys
         # to make sure input is in format that the model expects
+        if self.control_keys:
+            control_vals = {k: X[k] for k in self.control_keys}
+        else:
+            control_vals = None
         if isinstance(X, dict):
             X = Measurement(X)
         for k, v in X.items():
@@ -147,7 +161,9 @@ class SklearnModelHandler(TrainableModelHandler):
                 X[k] = 0
         X = X.to_numpy(self.input_keys)
         try:
+            # input + target
             result = list(X[0]) + list(self.model.predict(X))
+            result = self._build_response(result, control_vals)
             # debug
             # print("Got response from model", str(result)[0:20], "...",
             #     "[Message has been truncated]")
@@ -273,10 +289,23 @@ class FMUModelHandler(ModelHandler):
         self._fmu.exitInitializationMode()
         self.status = ModelStatus.READY
 
-    def _build_response(self, r):
-        """Attach variable names to response list"""
+    def _build_response(self, r, control_vals=None):
+        """Attach variable names to plain response list
+
+        Args:
+            r: A list of responses in the order input_keys, output_keys
+            control_vals: A dict of controlvalues. If control variables
+                are used, they must be present in response for logging
+
+        Returns:
+            A ModelResponse instance
+        """
+        # cannot use self.input_keys, order is dynamically determined by vrs
         keys = list(self.vrs['input'].keys()) + list(self.vrs['output'].keys())
         response = {k: v for k, v in zip(keys, r)}
+        if control_vals:
+            # in case of conflicting keys, control_vals values are preserved
+            response = {**response, **control_vals}
         response = ModelResponse(response)
         return response
 
@@ -316,6 +345,10 @@ class FMUModelHandler(ModelHandler):
         self.status = ModelStatus.BUSY
 
         data = [X[k] for k in self.vrs["input"].keys()]
+        if self.control_keys:
+            control_vals = {k: X[k] for k in self.control_keys}
+        else:
+            control_vals = None
 
         # parse currentCommunicationpoint
         time = self._parse_current_comm_point(X)
@@ -332,11 +365,11 @@ class FMUModelHandler(ModelHandler):
 
         # get the values for 'inputs' and 'outputs'
         response = self._fmu.getReal(self._vr_input + self._vr_output)
-        response = self._build_response(response)
+        response = self._build_response(response, control_vals)
         print("Got response from model", response)
         self.status = ModelStatus.READY
         # TODO Fix
-        return [response]
+        return response
 
     def step_batch(self):
         raise NotImplementedError
