@@ -5,7 +5,7 @@ clint==0.5.1
 FMPy==0.2.13
 idna==2.8
 joblib==0.13.2
-lxml==4.4.1
+lxml==4.6.2
 numpy==1.17.2
 pandas==0.25.1
 pathlib==1.0.1
