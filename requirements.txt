@@ -4,7 +4,7 @@ chardet==3.0.4
 clint==0.5.1
 FMPy==0.2.13
 idna==2.8
-joblib==0.13.2
+joblib==1.2.0
 lxml==4.6.5
 numpy==1.21.0
 pandas==0.25.1
